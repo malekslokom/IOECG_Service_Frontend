@@ -1,0 +1,59 @@
+.sidebar {
+  transition: width 0.3s ease-in-out;
+  width: 220px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+  margin-top: 74px;
+  }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px;
+  }
+
+  .sidebar .nav-item .nav.flex-column {
+    display: none;
+    position: absolute;
+    left: 80px;
+    top: 99px;
+    background-color: var(--background-color);
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px var(--shadow);
+    width: 200px;
+    z-index: 100;
+  }
+  .sidebar .nav-item:hover .nav.flex-column,
+  .sidebar .nav-item.active .nav.flex-column {
+    display: block;
+  }
+}
+
+a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+
+}
+
+.nav-link, .nav-link:link, .nav-link:visited,  .nav-link:hover, .nav-link:focus {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--primary-text-color) ;
+    text-decoration: none;
+}
+.nav-link:hover {
+  background-color: var(--sidebar-item-active);
+  
+}
+
+.nav-link svg, .nav-link .MuiSvgIcon-root {
+  margin-right: 8px;
+  color: var(--primary-text-color);
+  font-size: 1.25rem;
+}
+
+.expand-icon.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}

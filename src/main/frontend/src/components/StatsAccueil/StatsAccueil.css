@@ -1,0 +1,35 @@
+.StatsAccueil {
+    display: flex;
+    align-items: center;
+    background: var(--primary-bg); /* Couleur de fond de l'élément */
+    padding: 16px;
+    border-radius: 8px; /* Rayon de la bordure pour les coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère */
+    margin-bottom: 16px; /* Espace en dessous de chaque élément */
+  }
+  
+  .StatsAccueil-icon {
+    margin-right: 16px; /* Espace entre l'icône et le texte */
+  }
+  
+  .StatsAccueil-icon img {
+    width: 50px; /* Taille de l'icône */
+    height: auto; /* Pour maintenir le ratio de l'image */
+  }
+  
+  .StatsAccueil-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .StatsAccueil-title {
+    font-size: 1em;
+    color: var(--primary-text-color);
+    margin: 0 0 4px 0; 
+  }
+  
+  .StatsAccueil-count {
+    font-size: 0.85em; 
+    color: var(--primary-text-color); 
+  }
+  

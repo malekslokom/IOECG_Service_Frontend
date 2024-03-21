@@ -1,0 +1,36 @@
+.analyses{
+    border-radius: 3%;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+}
+
+.analyses table {
+    width: 100%;
+    height: 320px;
+    border-collapse: collapse;
+  }
+  
+  .analyses th, 
+  .analyses td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .analyses th {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .analyses tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .analyses tr:hover {
+    background-color: #eaeaea;
+  }
+
+  .table-container {
+    max-height: 280px; 
+    overflow-y: auto; /* Ajoute une barre de défilement verticale si la hauteur du tableau depasse max-height */
+  }
+  

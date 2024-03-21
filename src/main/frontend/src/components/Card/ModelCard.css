@@ -1,0 +1,36 @@
+.card-container {
+  perspective: 1500px;
+}
+
+.card {
+  
+  transition: transform 0.3s, box-shadow 0.3s, border 0.3s, padding 0.3s; 
+  transform-style: preserve-3d;
+  border: 1px solid #9A9A9A; 
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.card-title{
+  margin-top: 0%;
+}
+
+.card:hover {
+  transform: rotateY(5deg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.card-body * {
+  backface-visibility: hidden;
+}
+
+.tag {
+  background-color: #f3f6f9;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+

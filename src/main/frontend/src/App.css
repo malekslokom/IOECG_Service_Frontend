@@ -1,0 +1,12 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  background-color: var(--primary-bg);
+}
+
+
+.content {
+  flex-grow: 1; 
+  margin-top: 85px;
+  margin-left: 10px;
+}

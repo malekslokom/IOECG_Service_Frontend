@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: ioecg-app
+  config:
+    import: "optional:consul:"
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        register: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        prefer-ip-address: true
+        tags:
+          - "springboot"
+      config:
+        fail-fast: true
+        format: YAML
+        data-key: data
+        watch:
+          enabled: true
+          wait-time: 55
+          delay: 1000
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: datasets
+          uri: lb://datasets
+          predicates:
+            - Path=/api/datasets/**
+        - id: analyses
+          uri: lb://analyses
+          predicates:
+            - Path=/api/analyses/**
+        - id: projets
+          uri: lb://projets
+          predicates:
+            - Path=/api/projets/**
+        - id: models
+          uri: lb://models
+          predicates:
+            - Path=/api/models/**
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

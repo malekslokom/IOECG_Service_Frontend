@@ -1,0 +1,102 @@
+
+
+/* .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.modal-author {
+  font-size: 16px;
+  color: #888;
+} */
+/* 
+.modal-description {
+  font-size: 18px;
+  margin-bottom: 20px;
+} */
+
+.project-info {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.project-name,
+.architecture-name,
+.architecture-version,
+.architecture-description {
+  margin-bottom: 10px;
+}
+
+.additional-info {
+  margin-bottom: 20px;
+}
+
+
+.section-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  background-color: #f3f6f9;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+  
+}
+
+.modal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 10px;
+  
+}
+
+.project-name,
+.architecture-name,
+.architecture-version {
+  margin-right: 20px;
+}
+
+.project-description,
+.architecture-description {
+  margin-top: 10px;
+}
+
+.custom-button {
+  background-color: #E30613 !important;
+  border-color: #E30613 !important;
+  color: #fff !important;
+  
+}
+
+.custom-button:hover,
+.custom-button:focus {
+  background-color: #FF3D52 !important;
+  border-color: #FF3D52 !important;
+  color: #fff !important;
+}
+
+
+.tag-title {
+  margin: 0;
+}
