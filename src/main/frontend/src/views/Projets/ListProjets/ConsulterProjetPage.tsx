@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
-import "./ConsulterProjetPage.css";
+import { useParams, useNavigate } from "react-router-dom";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import InfosProjet from "../../../components/InfosProjet/InfosProjet";
+import { getProjectById } from "../../../services/ProjetService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import AnalysesExperiencesProjet from "../../../components/AnalysesExperiencesProjet/AnalysesExperiencesProjet";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getProjectById } from "../../../services/ProjetService";
-import { useParams } from "react-router-dom";
-let analysesData: {
-  key: number;
-  name: string;
-  dateCreation: string;
-  author: string;
-}[] = [];
-
-for (let i = 1; i < 8; i++) {
-  analysesData.push({
-    key: i,
-    name: "Analyse_1",
-    dateCreation: "10/12/2023",
-    author: "Andy",
-  });
-}
+import "./ConsulterProjetPage.css";
+import DatasetProjetPage from "../Datasets/DatasetProjetPage";
+import AnalyseProjetPage from "../Analyses/AnalyseProjetPage";
+import RapportProjetPage from "../Rapports/RapportProjetPage";
+import "./ConsulterProjetPage.css";
+// Remplacez les composants suivants par vos propres composants pour Datasets, Rapports, Modèles
 
 const ConsulterProjetPage = () => {
   const { id } = useParams();
-  const projectId = id ? parseInt(id, 10) : -1; // Convert to number and handle potential null
+  const projectId = id ? parseInt(id, 10) : -1;
   const navigate = useNavigate();
   const [project, setProjet] = useState<Projet>({
     dateCreation: "",
@@ -35,7 +25,7 @@ const ConsulterProjetPage = () => {
     version: "",
   });
   const handleGoBack = () => {
-    navigate("/home");
+    navigate(-1);
   };
   useEffect(() => {
     getProjectById(projectId)
@@ -44,32 +34,35 @@ const ConsulterProjetPage = () => {
   }, [projectId]);
 
   return (
-    <div className="Bloc">
-      <div>
-        <button>
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            className="fleche"
-            onClick={handleGoBack}
-          />
-        </button>
+    <>
+      <div className="navigation-link" onClick={handleGoBack}>
+        <strong className="navigation-text">Projets</strong>{" "}
+        <strong className="navigation-separator">&gt;</strong>
+        <strong>{project.nom}</strong>
       </div>
-      <div className="InfosProjet">
-        <InfosProjet project={project} />
+      <div className="consulter-projet-page">
+        <div className="InfosProjet">
+          <InfosProjet project={project} />
+        </div>
+
+        <Tabs>
+          <TabList>
+            <Tab>Analyses</Tab>
+            <Tab>Datasets</Tab>
+            <Tab>Rapports</Tab>
+          </TabList>
+          <TabPanel>
+            <AnalyseProjetPage />
+          </TabPanel>
+          <TabPanel>
+            <DatasetProjetPage />
+          </TabPanel>
+          <TabPanel>
+            <RapportProjetPage />
+          </TabPanel>
+        </Tabs>
       </div>
-      <div className="analyses">
-        <AnalysesExperiencesProjet
-          title="Analyses Récentes"
-          data={analysesData}
-        />
-      </div>
-      <div className="experiences">
-        <AnalysesExperiencesProjet
-          title="Expériences Récentes"
-          data={analysesData}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
 import CreateAnalyseModal from "../../../components/Modals/CreateAnalyseModal";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
-import { fetchAnalyses } from "../../../services/AnalyseService";
+import { fetchAnalyses ,getAnalysesWithFilter} from "../../../services/AnalyseService";
 
 const AnalyseProjetPage = () => {
   const [listAnalyses, setListAnalyses] = useState<Analyse[]>([]);
@@ -69,7 +69,18 @@ const AnalyseProjetPage = () => {
       console.log("Analyse supprimée");
     }
   };
-
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    searchTerm: "",
+  });
+  const handleFilter = (
+    startDate: string,
+    endDate: string,
+    searchTerm: string
+  ) => {
+    setFilters({ startDate, endDate, searchTerm });
+  };
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setSelectedAnalyse(null);
@@ -83,6 +94,7 @@ const AnalyseProjetPage = () => {
           bouton="Créer"
           boutonVisible={true}
           onClick={buttonClick}
+          onFilter={handleFilter}
         />
         <div
           className="position-absolute"

@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
-import { fetchDatasets } from "../../../services/DatasetService";
+import {
+  fetchDatasets,
+  getDatasetsWithFilter,
+} from "../../../services/DatasetService";
 
 const DatasetProjetPage = () => {
   const navigate = useNavigate();
@@ -22,6 +25,11 @@ const DatasetProjetPage = () => {
     "Description",
     "Type",
   ]);
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    searchTerm: "",
+  });
   const [newDatasetSearchModal, setNewDatasetSearchModal] =
     useState<boolean>(false);
 
@@ -38,7 +46,13 @@ const DatasetProjetPage = () => {
     navigate(`/projets/datasets/${index}/ecg`);
     console.log("Dataset ouvert !");
   };
-
+  const handleFilter = (
+    startDate: string,
+    endDate: string,
+    searchTerm: string
+  ) => {
+    setFilters({ startDate, endDate, searchTerm });
+  };
   /*Supprimer un dataset + demande de confirmation */
   const handleDeleteDataset = (index: number) => {
     setSelectedDataset(index);
@@ -71,6 +85,7 @@ const DatasetProjetPage = () => {
           bouton="Créer"
           boutonVisible={true}
           onClick={buttonClick}
+          onFilter={handleFilter}
         />
         <div
           className="position-absolute"

@@ -1,33 +1,56 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faFilter } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React, { useState } from "react";
+import moment from "moment";
+interface HeaderListProps {
+  onFilter: (startDate: string, endDate: string, searchTerm: string) => void;
+}
 
-const HeaderList: React.FC = () => {
-  const handleDateChange = () => {
-    // Logique pour le changement de date
-  };
-
-  const handleTypeChange = () => {
-    // Logique pour le changement de type
-  };
-
-  const handleVersionChange = () => {
-    // Logique pour le changement de version
-  };
+const HeaderList: React.FC<HeaderListProps> = ({ onFilter }) => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleFilterClick = () => {
-    // Logique pour le clic sur le bouton de filtre
+    const formattedStartDate = startDate
+      ? moment(startDate).format("DD-MM-YYYY")
+      : "";
+    const formattedEndDate = endDate
+      ? moment(endDate).format("DD-MM-YYYY")
+      : "";
+    onFilter(formattedStartDate, formattedEndDate, searchTerm);
   };
 
-  const handleSearch = (value: string) => {
-    // Logique pour la recherche
+  const handleResetFilters = () => {
+    // Réinitialiser les états des filtres
+    setStartDate("");
+    setEndDate("");
+    setSearchTerm("");
+    // Appeler onFilter avec des valeurs vides pour réinitialiser les filtres côté parent
+    onFilter("", "", "");
+  };
+
+  // Correction: Définition des fonctions handleDateChange et handleSearch
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    isStartDate: boolean
+  ) => {
+    if (isStartDate) {
+      setStartDate(e.target.value);
+    } else {
+      setEndDate(e.target.value);
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   return (
     <div className="filters" style={{ background: "var(--background-color)" }}>
       <div className="row align-items-center">
         <div className="col-auto">
-          <button className="btn">
+          <button className="btn" onClick={handleResetFilters}>
             <FontAwesomeIcon
               icon={faSync}
               style={{
@@ -41,7 +64,8 @@ const HeaderList: React.FC = () => {
         <div className="col">
           <input
             type="date"
-            onChange={handleDateChange}
+            value={startDate}
+            onChange={(e) => handleDateChange(e, true)}
             className="form-control"
             style={{
               background: "var(--background-color)",
@@ -52,7 +76,8 @@ const HeaderList: React.FC = () => {
         <div className="col">
           <input
             type="date"
-            onChange={handleDateChange}
+            value={endDate}
+            onChange={(e) => handleDateChange(e, false)}
             className="form-control"
             style={{
               background: "var(--background-color)",
@@ -64,13 +89,14 @@ const HeaderList: React.FC = () => {
           <input
             type="text"
             placeholder="chercher ...."
+            value={searchTerm}
+            onChange={handleSearch}
             className="form-control"
             style={{
               width: "100%",
               color: "var(--primary-text-color)",
               background: "var(--background-color)",
             }}
-            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
         <div className="col-auto">
@@ -79,7 +105,7 @@ const HeaderList: React.FC = () => {
             style={{
               background: "var(--background-color)",
               color: "var(--primary-text-color)",
-              border: "var(--primary-text-color)",
+              border: "1px solid var(--primary-text-color)",
             }}
             onClick={handleFilterClick}
           >
@@ -87,9 +113,9 @@ const HeaderList: React.FC = () => {
             Filtrer
           </button>
         </div>
-        {/* <hr className="my-3" style={{ color: "var(--background-color)" }} /> */}
       </div>
     </div>
   );
 };
+
 export default HeaderList;

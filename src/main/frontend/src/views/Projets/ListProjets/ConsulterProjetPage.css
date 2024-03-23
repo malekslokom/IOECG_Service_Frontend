@@ -1,48 +1,77 @@
-
-  .Bloc {
-    margin-top: 20px;
-    width: 97%;
-    height: 95%;
-    background-color: var(--background-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    display:flex;
-    flex-direction: column;
-
-  }
-
-  .InfosProjet {
-    width: 30%;
-  margin-top: 16;
-  display:flex;
-  flex-direction: column;
-  }
-
-  .analyses {
-    position: absolute;
-    margin-left: 16%;
-    margin-top: 2%;
-    width: 74%;
-    
-  display:flex;
-  flex-direction: column;
+.react-tabs {
+  flex-grow: 1;
+}
+.consulter-projet-page {
+  display: flex;
+  flex-direction: row;
+}
+.navigation-link {
+  cursor: pointer;
+  color: var(--navigation-header-text);
+  margin:10px
 }
 
-.experiences {
-    position: absolute;
-    margin-left: 16%;
-    margin-top: 23%;
-    width: 74%;
-
-  display:flex;
-  flex-direction: column;
+.navigation-text {
+  color: var(--navigation-header-text);
+  font-weight: bolder;
+}
+.react-tabs__tab-list {
+  border-bottom: 1px solid var(--background-color);
+  margin: 0 0 10px;
+    margin-left: 0px;
+  padding: 0;
+  width: 80%;
+}
+.navigation-separator {
+  margin: 0 5px;
+  color: var(--navigation-header-arrow);
+  font-weight: bolder;
+}
+.InfosProjet {
+  max-width: 300px;
 }
 
-.fleche {
-    position: absolute;
-    right: 3%;
-    font-size: 20px;
+.react-tabs__tab-list {
+  padding: 0;
+  margin-left:20px;
+  list-style: none;
+  display: flex;
+  justify-content: flex-start; 
 }
 
+.react-tabs__tab {
+  display: inline-block;
+  border:none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease; 
+  font-weight: 600; 
+  color:  var(--primary-text-color); 
+}
 
+.react-tabs__tab--selected {
+  background: var(--sidebar-item-active); 
+  color: var(--primary-text-color);
+  border: none;
+}
+
+.react-tabs__tab:hover {
+  background: var(--toggle-fg-after-hover);
+  color: var(--secondary-text-color);
+  border: none;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+  padding-left: 20px; 
+  padding-right: 20px; 
+  margin-top: -20px; 
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+  border: none;
+}

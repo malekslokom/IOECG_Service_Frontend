@@ -1,59 +1,72 @@
-
-
 .card-content {
-    padding: 5px;
-    background-color: var(--background-color);
-    border-radius: 10px; /* Bords arrondis */
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2); /* Ombre légère */
-    
-  }
+  padding: 10px;
+  background-color: var(--background-color);
+  border-radius: 15px; /* Increased border radius for a softer look */
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2); /* Increased shadow for depth */
+  margin: 20px;
+}
 
-  .Acceuil {
-    margin-top: 35px;
-    width: 97%;
-    background-color: var(--background-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    display:flex;
-    flex-direction: column;
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--background-color);
+}
+.card-header h2 {
+  color:var(--primary-text-color);
+  align-self: center;
+}
+.card-header img {
+  width: 80px; /* Adjusted width */
+  height: 80px; /* Adjusted height */
+  border-radius: 50%;
+  max-width: 100%; /* Ensures the image does not exceed container width */
+  max-height: 100%; /* Ensures the image does not exceed container height */
+}
 
-  }
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
 
-  .card-content hr{
-   position: absolute;
-    width: 24%;
-  }
-  
+.card-body p {
+  margin: 10px 0;
+}
+
+.project-description {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
   .card-header {
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px; /* Espace en dessous du header */
-    border-radius: 4%;
   }
-  
+  .card-header img {
+    margin: 0 0 10px 0;
+  }
+}
+.card-body .info-row {
+  display: flex;
+  justify-content: space-between; /* Aligns items to the left and right */
+  margin: 10px 0; /* Adds some vertical spacing between rows */
+}
 
-  
-  .project-description {
-    padding: 10px;
-    background-color: #f0f0f0; /* Pour le cadre de la description */
-    border-radius: 4px; /* Bords arrondis */
-    margin-top: 20px; /* Espace au-dessus du cadre */
-  }
+.card-body .info-row strong {
+  flex-basis: 20%; /* Adjust this value based on your needs */
+  text-align: left;
+  color:var(--header-array-text-color);
+}
 
- 
-  .card-header h2{  /* s'applique au h2 contenu dans .card-header*/
-    
-    margin-left: 15px;
-    margin-top: 0px;
-    
-  }
+.card-body .info-row span {
+  flex-basis: 80%; /* Adjust this value based on your needs */
+  text-align: right;
+  color:var(--primary-text-color);
 
-  .card-header img{  
-    width: 50px; 
-    height: 50px; 
-    border-radius: 50%; /* Pour rendre l'image ronde */
-    margin-left: 50%;
-    margin-top: 0%;
-  }
-  
+}
+.card-body .info-type strong {
+  color:var(--header-array-text-color);
+}

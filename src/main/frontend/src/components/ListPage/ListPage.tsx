@@ -4,13 +4,14 @@ interface ListPageProps {
   bouton: string;
   boutonVisible: boolean;
   onClick: () => void;
+  onFilter: (startDate: string, endDate: string, searchTerm: string) => void;
 }
-
 const ListPage: React.FC<ListPageProps> = ({
   title,
   bouton,
   boutonVisible,
   onClick,
+  onFilter,
 }) => {
   return (
     <div className="my-5">
@@ -47,7 +48,7 @@ const ListPage: React.FC<ListPageProps> = ({
           <hr style={{ color: "var(--primary-text-color)" }} />
         </div>
 
-        <HeaderList></HeaderList>
+        <HeaderList onFilter={onFilter} />
       </div>
     </div>
   );
