@@ -49,12 +49,25 @@ interface Model {
 
   }
   
+  // interface Dataset {
+  //   id: number;
+  //   name: string;
+  //   description: string;
+  //   type: string;
+  //   ecgs: ECG[];
+  // }
+  
   interface Dataset {
-    id: number;
-    name: string;
-    description: string;
-    type: string;
-    ecgs: ECG[];
+    idDataset: number;
+    created_at: string; 
+    nameDataset: string;
+    descriptionDataset: string | null;
+    typeDataset: 'search_results' | 'standard'; 
+    leads_name: string;
+    study_name: string;
+    study_details: string | null;
+    source_name: string;
+    source_details: string | null;
   }
   
 
