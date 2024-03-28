@@ -6,6 +6,8 @@ import CreateProjetModal from "../../../components/Modals/CreateProjetModal";
 import {
   fetchProjets,
   getProjectWithFilter,
+  deleteProjectById,
+  createProject
 } from "../../../services/ProjetService";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +26,7 @@ const ListProjetsPage = () => {
     "Nom",
     "Date Création",
     "Auteur",
-    "Version",
+    "Description",
     "Type",
   ]);
   const [filters, setFilters] = useState({
@@ -67,9 +69,10 @@ const ListProjetsPage = () => {
     console.log("Bouton Ajouter cliqué !");
   };
 
-  const handleCreateProjet = (newProjet: Projet) => {
-    console.log("Nouveau projet créé:", newProjet);
-    setListProjets([...listProjets, newProjet]);
+  const handleCreateProjet = async (newProjet: Projet) => {
+    const createdProjet = await createProject(newProjet);
+    console.log("Nouveau projet créé:", createdProjet);
+    setListProjets([...listProjets, createdProjet]);
   };
 
   const handleCloseModal = () => {
@@ -82,9 +85,11 @@ const ListProjetsPage = () => {
     console.log("Projet cliqué et supprimé");
   };
 
-  const handleConfirmDeleteProjet = () => {
+  const handleConfirmDeleteProjet = async () => {
     if (selectedProjet !== null) {
-      const updatedList = [...listProjets];
+      await deleteProjectById(selectedProjet);
+
+      const updatedList = [...listProjets];  //mise à jour de la liste
       updatedList.splice(selectedProjet, 1);
       setListProjets(updatedList);
 

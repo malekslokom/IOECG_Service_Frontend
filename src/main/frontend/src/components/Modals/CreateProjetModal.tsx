@@ -53,7 +53,7 @@ const CreateProjetModal: React.FC<CreateProjetModalProps> = ({
         <Modal.Title>Nouveau Projet</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} method="POST">
           <Form.Group controlId="Nom">
             <Form.Label>Nom *</Form.Label>
             <Form.Control
