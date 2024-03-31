@@ -50,12 +50,20 @@ interface Model {
 
   }
   
+  // interface Dataset {
+  //   id: number;
+  //   name: string;
+  //   description: string;
+  //   type: string;
+  //   ecgs: ECG[];
+  // }
+  
   interface Dataset {
     id_dataset? :number;
     created_at : string;
     name_dataset : string;
     description_dataset: string;
-    type_dataset : string;
+    type_dataset : 'search_results' | 'standard';
     leads_name : string;
     study_name?: string;
     study_details?: string;

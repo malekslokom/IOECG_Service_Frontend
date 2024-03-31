@@ -6,8 +6,6 @@ import CreateProjetModal from "../../../components/Modals/CreateProjetModal";
 import {
   fetchProjets,
   getProjectWithFilter,
-  deleteProjectById,
-  createProject,
 } from "../../../services/ProjetService";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +25,7 @@ const ListProjetsPage = () => {
     "Date Création",
     "Description",
     "Auteur",
+    "Version",
     "Type",
   ]);
 
@@ -70,17 +69,9 @@ const ListProjetsPage = () => {
     console.log("Bouton Ajouter cliqué !");
   };
 
-  const handleCreateProjet = async (newProjet: Projet) => {
-    try {
-      const createdProjet = await createProject(newProjet);
-      console.log("Nouveau projet créé:", createdProjet);
-
-      // Fetch the updated list of projects
-      const updatedProjets = await fetchProjets();
-      setListProjets(updatedProjets);
-    } catch (error) {
-      console.error("Error creating projet:", error);
-    }
+  const handleCreateProjet = (newProjet: Projet) => {
+    console.log("Nouveau projet créé:", newProjet);
+    setListProjets([...listProjets, newProjet]);
   };
 
   const handleCloseModal = () => {
@@ -95,10 +86,9 @@ const ListProjetsPage = () => {
 
   const handleConfirmDeleteProjet = async () => {
     if (selectedProjet !== null) {
-      await deleteProjectById(selectedProjet);
-
-      const updatedProjets = await fetchProjets();
-      setListProjets(updatedProjets);
+      const updatedList = [...listProjets];
+      updatedList.splice(selectedProjet, 1);
+      setListProjets(updatedList);
 
       setSelectedProjet(null);
       setShowConfirmationModal(false);

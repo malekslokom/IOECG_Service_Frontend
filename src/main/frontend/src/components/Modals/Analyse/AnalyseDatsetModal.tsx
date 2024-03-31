@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import datasets from './datasetFakeData';
+//import datasets from './datasetFakeData';
 import Table from 'react-bootstrap/Table';
 import HeaderDataset from '../../HeaderList/HeaderDataset';
 import PlotComponent from '../../Plots/PlotComponent';
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useParams } from 'react-router-dom';
 
 interface AnalyseDatsetModalProps {
   onClose: () =>void;
@@ -17,6 +18,36 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
   const [showNewDatasetModal, setShowNewDatasetModal] = useState<boolean>(false);
   const [newDatasetName, setNewDatasetName] = useState<string>('');
   const [newDatasetDescription, setNewDatasetDescription] = useState<string>('');
+  const [sectionVisibility, setSectionVisibility] = useState<{ [key: string]: boolean }>({});
+
+
+  const { id } = useParams(); // Extracting analysisId from URL params
+  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  console.log(id)
+  useEffect(() => {
+    const fetchDatasets = async () => {
+      try {
+        const response = await fetch(`/api/analyses/all`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch datasets');
+        }
+        const data = await response.json();
+        setDatasets(data);
+      } catch (error) {
+        console.error('Error fetching datasets:', error);
+      }
+    };
+
+    fetchDatasets();
+  }, [id]);
+  console.log(datasets)
+
+  const toggleSectionVisibility = (datasetId: number) => {
+    setSectionVisibility(prevVisibility => ({
+      ...prevVisibility,
+      [datasetId]: !prevVisibility[datasetId]
+    }));
+  };
 
   
   
@@ -34,11 +65,17 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
 
   const createDatasetFromECGs = (ecgs: ECG[],newDatasetName:string,newDatasetDescription:string): Dataset => {
     const newDataset: Dataset = {
-      id: Date.now(), 
-      description:newDatasetDescription,
-      type:"Recherche",
-      name: newDatasetName, 
-      ecgs: ecgs,
+      idDataset:4,
+      descriptionDataset:newDatasetDescription,
+      typeDataset: 'search_results',
+      nameDataset: newDatasetName, 
+      //ecgs: ecgs,
+      created_at: "string",
+      leads_name: "string",
+      study_name: "string",
+      study_details: null,
+      source_name: "string",
+      source_details: null
     };
     return newDataset;
   };
@@ -57,24 +94,27 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
   };
 
   const handleNewDatasetSubmit = () => {
-    if (newDatasetName.trim() !== '') {
-      const newDataset = createDatasetFromECGs(selectedECGs,newDatasetName,newDatasetDescription);
-      setSelectedDatasets([newDataset]);
-      onCreate([newDataset]);
-      setShowNewDatasetModal(false);
-      onClose();
-    }
+    // if (newDatasetName.trim() !== '') {
+    //   const newDataset = createDatasetFromECGs(selectedECGs,newDatasetName,newDatasetDescription);
+    //   setSelectedDatasets([newDataset]);
+    //   onCreate([newDataset]);
+    //   setShowNewDatasetModal(false);
+    //   onClose();
+    // }
   };
 
 
   const handleCheckboxChange = (dataset: Dataset) => {
-    if (selectedDatasets.includes(dataset)) {
-      // Dataset already exists, so remove it
-      setSelectedDatasets(prevSelectedDatasets => prevSelectedDatasets.filter(item => item !== dataset));
-    } else {
-      // Dataset doesn't exist, so add it
-      setSelectedDatasets(prevSelectedDatasets => [...prevSelectedDatasets, dataset]);
-    }
+    const newSelectedDatasets = selectedDatasets.includes(dataset)
+      ? selectedDatasets.filter(item => item !== dataset)
+      : [...selectedDatasets, dataset];
+  
+    setSelectedDatasets(newSelectedDatasets);
+  
+    setSectionVisibility(prevVisibility => ({
+      ...prevVisibility,
+      [dataset.idDataset]: newSelectedDatasets.includes(dataset)
+    }));
   };
   
   
@@ -86,17 +126,17 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
 
  
   return (
-    <><Modal show onHide={onClose} size="lg">
+    <><Modal show onHide={onClose} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>Datasets</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-4">
             <Table>
               <tbody>
                 {datasets.map(dataset => (
-                  <tr key={dataset.id} className={selectedDatasets.includes(dataset) ? 'selected' : ''}>
+                  <tr key={dataset.idDataset} className={selectedDatasets.includes(dataset) ? 'selected' : ''}>
                     <td style={{ width: '10px' }}>
                       <input
                         type="checkbox"
@@ -104,7 +144,7 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
                         checked={selectedDatasets.includes(dataset)} />
                     </td>
                     <td>
-                      <div style={{ whiteSpace: 'nowrap' }}>{dataset.name}</div>
+                      <div style={{ whiteSpace: 'nowrap' }}>{dataset.nameDataset}</div>
                     </td>
                   </tr>
                 ))}
@@ -112,28 +152,63 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
             </Table>
 
           </div>
-          <div className="col-md-9">
-            <HeaderDataset></HeaderDataset>
+          <div className="col-md-8">
+            {/* <HeaderDataset></HeaderDataset> */}
             {selectedDatasets.map(dataset => (
-              <div key={dataset.id}>
+              <div key={dataset.idDataset}>
                 <div className="modal-section">
-                  <p className="modal-section-title">Informations sur {dataset.name}</p>
+
+                <div className="modal-section-title" onClick={() => toggleSectionVisibility(dataset.idDataset)} style={{ display: 'flex', alignItems: 'center' }}>
+                  <p style={{ marginRight: '10px', marginBottom: '0' }}>
+                    Informations sur {dataset.nameDataset}
+                  </p>
+                  <ExpandMoreIcon/>
+                </div>
+
+                {sectionVisibility[dataset.idDataset] && (
                   <div className="section-box">
-                    <div className="input-group mb-3">
-                      <span className="input-group-text">Description</span>
-                      <input type="text" className="form-control" value={dataset.description} readOnly />
-                    </div>
-                    <div className="input-group mb-3">
-                      <span className="input-group-text">Type</span>
-                      <input type="text" className="form-control" value={dataset.type} readOnly />
-                    </div>
+               
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Description</span>
+                        <input type="text" className="form-control" value={dataset.descriptionDataset ?? 'Aucune description disponible'} readOnly />
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Type</span>
+                        <input type="text" className="form-control" value={dataset.typeDataset } readOnly />
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Noms des fils</span>
+                        <input type="text" className="form-control" value={dataset.leads_name } readOnly />
+
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Nom de l'étude</span>
+                        <input type="text" className="form-control" value={dataset.study_name } readOnly />
+
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Détails de l'étude</span>
+                        <input type="text" className="form-control" value={dataset.study_details ?? 'Aucun détail de l\'étude disponible'} readOnly />          
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Nom de la source</span>
+                        <input type="text" className="form-control" value={dataset.source_name } readOnly />
+
+                      </div>
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">Détails de la source</span>
+                        <input type="text" className="form-control" value={dataset.source_details ?? 'Aucun détail de la source disponible'} readOnly />
+
+                      </div>
+
+
 
                     <div className="input-group mb-3">
                       <span className="input-group-text col col-12">Les ECGs</span>
                     </div>
                     <div className="input-group mb-3">
 
-                      <Table>
+                      {/* <Table>
                         <tbody>
                           {dataset.ecgs.map(ecg => (
                             <tr key={ecg.id} className={selectedECGs.includes(ecg) ? 'selected' : ''}>
@@ -151,9 +226,10 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
                             </tr>
                           ))}
                         </tbody>
-                      </Table>
+                      </Table> */}
                     </div>
                   </div>
+                )}
                 </div>
               </div>
             ))}

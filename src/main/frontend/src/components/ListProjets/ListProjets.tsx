@@ -41,9 +41,6 @@ const ListProjets = ({ projects}:ListProjetsProps) => {
           <p><button>Créer</button></p>
           <br /> 
           <br/>
-          
-        
-          
             <div className="col-12">
             <hr/>
              <div className="custom-menu">
