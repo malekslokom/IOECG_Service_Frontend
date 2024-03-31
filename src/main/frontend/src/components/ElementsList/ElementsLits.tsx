@@ -20,7 +20,7 @@ const ElementsList: React.FC<ListProps> = ({
   onShow,
   onDelete,
 }) => {
-  const elementsPerPage = 5; // Nombre d'éléments par page
+  const elementsPerPage = 15; // Nombre d'éléments par page
   const [currentPage, setCurrentPage] = useState(0); // React Paginate utilise un index basé sur 0
   const onPageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);

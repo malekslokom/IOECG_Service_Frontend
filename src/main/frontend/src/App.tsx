@@ -19,6 +19,7 @@ import AccueilPage from "./views/Accueil/AccueilPage";
 import ConsulterProjetPage from "./views/Projets/ListProjets/ConsulterProjetPage";
 import ListEcgPage from "./views/Projets/Ecg/ListEcgPage";
 import ConsulterRapport from "./views/Projets/Rapports/ConsulterRapport";
+import MesAnalysePage from "./views/Analyses/MesAnalysePage";
 
 function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -51,6 +52,7 @@ function App() {
             />
             <Route path="/projets/rapports" element={<RapportProjetPage />} />
             <Route path="/mes-catalogues" element={<MesCataloguePage />} />
+            <Route path="/mes-analyses" element={<MesAnalysePage />} />
             <Route path="/projets/:id" element={<ConsulterProjetPage />} />
             <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/historique" element={<HistoriquePage />} />
