@@ -4,13 +4,18 @@ import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
 import CreateAnalyseModal from "../../../components/Modals/CreateAnalyseModal";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
-import { fetchAnalyses ,getAnalysesWithFilter} from "../../../services/AnalyseService";
-
-const AnalyseProjetPage = () => {
+import {
+  fetchAnalyseProjets,
+  getAnalyseProjetWithFilter,
+} from "../../../services/AnalyseProjetService";
+interface AnalyseProjetProps {
+  idProjet: number;
+}
+const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
   const [listAnalyses, setListAnalyses] = useState<Analyse[]>([]);
 
   useEffect(() => {
-    fetchAnalyses()
+    fetchAnalyseProjets(idProjet)
       .then((data) => setListAnalyses(data))
       .catch((error) => console.error("Error fetching analyses:", error));
   }, []);
@@ -47,7 +52,7 @@ const AnalyseProjetPage = () => {
 
   /*Ouvrir une analyse */
   const handleShowAnalyse = (index: number) => {
-    navigate(`/projets/analyses/${index}`);
+    navigate(`/projets/${index}/analyses/`);
     console.log("Analyse ouverte");
   };
 
@@ -81,6 +86,22 @@ const AnalyseProjetPage = () => {
   ) => {
     setFilters({ startDate, endDate, searchTerm });
   };
+  useEffect(() => {
+    if (filters.startDate || filters.endDate || filters.searchTerm) {
+      getAnalyseProjetWithFilter(
+        filters.startDate,
+        filters.endDate,
+        filters.searchTerm,
+        idProjet
+      )
+        .then(setListAnalyses)
+        .catch((error) => console.error("Error fetching analyses", error));
+    } else {
+      fetchAnalyseProjets(idProjet)
+        .then(setListAnalyses)
+        .catch((error) => console.error("Error fetching analyses:", error));
+    }
+  }, [filters]);
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setSelectedAnalyse(null);

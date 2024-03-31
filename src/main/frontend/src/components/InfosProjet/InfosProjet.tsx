@@ -4,11 +4,11 @@ import ecg from "./../../assets/ecg.jpg";
 
 interface Projet {
   project: {
-    dateCreation: string;
-    nom: string;
-    auteur: string;
-    type: string;
-    version: string;
+    created_at: string;
+    name_project: string;
+    created_by: string;
+    type_project: string;
+    description_project: string;
   };
 }
 
@@ -17,24 +17,24 @@ const InfosProjet = ({ project }: Projet) => {
     <div className="card-content card">
       <img className="card-img-top" src={ecg} alt="Card image cap"></img>
       <div className="card-header">
-        <h2>{project.nom}</h2>
+        <h2>{project.name_project}</h2>
       </div>
       <div className="card-body">
         <div className="info-row">
           <strong>Auteur</strong>
-          <span>{project.auteur}</span>
+          <span>{project.created_by}</span>
         </div>
         <div className="info-row">
           <strong>Date Création</strong>
-          <span>{project.dateCreation}</span>
+          <span>{project.created_at}</span>
         </div>
         <div className="info-row">
-          <strong>Version</strong>
-          <span>{project.version}</span>
+          <strong>Déscription</strong>
+          <span>{project.description_project}</span>
         </div>
         <div className="info-type">
           <strong>Type</strong>
-          <div className="project-description">{project.type}</div>
+          <div className="project-description">{project.type_project}</div>
         </div>
       </div>
     </div>

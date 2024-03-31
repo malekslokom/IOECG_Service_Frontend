@@ -15,14 +15,17 @@ import "./ConsulterProjetPage.css";
 
 const ConsulterProjetPage = () => {
   const { id } = useParams();
+  console.log(id);
   const projectId = id ? parseInt(id, 10) : -1;
   const navigate = useNavigate();
+
   const [project, setProjet] = useState<Projet>({
-    dateCreation: "",
-    nom: "",
-    auteur: "",
-    type: "",
-    version: "",
+    created_at: "",
+    name_project: "",
+    description_project: "",
+    created_by: "",
+    type_project:"",
+    id_project:0
   });
   const handleGoBack = () => {
     navigate(-1);
@@ -32,13 +35,12 @@ const ConsulterProjetPage = () => {
       .then((data) => setProjet(data))
       .catch((error) => console.error("Error fetching project", error));
   }, [projectId]);
-
   return (
     <>
       <div className="navigation-link" onClick={handleGoBack}>
         <strong className="navigation-text">Projets</strong>{" "}
         <strong className="navigation-separator">&gt;</strong>
-        <strong>{project.nom}</strong>
+        <strong>{project.name_project}</strong>
       </div>
       <div className="consulter-projet-page">
         <div className="InfosProjet">
@@ -52,10 +54,10 @@ const ConsulterProjetPage = () => {
             <Tab>Rapports</Tab>
           </TabList>
           <TabPanel>
-            <AnalyseProjetPage />
+            <AnalyseProjetPage idProjet={projectId} />
           </TabPanel>
           <TabPanel>
-            <DatasetProjetPage />
+            <DatasetProjetPage idProjet={projectId} />
           </TabPanel>
           <TabPanel>
             <RapportProjetPage />

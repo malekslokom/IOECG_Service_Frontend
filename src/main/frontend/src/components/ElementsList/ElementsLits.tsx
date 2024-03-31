@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
+import moment from "moment";
+
 interface ListProps {
   nameModule: string;
   columns: string[];
@@ -20,7 +22,6 @@ const ElementsList: React.FC<ListProps> = ({
 }) => {
   const elementsPerPage = 5; // Nombre d'éléments par page
   const [currentPage, setCurrentPage] = useState(0); // React Paginate utilise un index basé sur 0
-  console.log(elementsList);
   const onPageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };
@@ -46,34 +47,40 @@ const ElementsList: React.FC<ListProps> = ({
           </thead>
           <tbody>
             {paginatedElements.map((item, index) => (
-              <tr key={index}>
+              <tr
+                key={
+                  item.id_project ||
+                  item.id_analysis ||
+                  item.id_dataset ||
+                  index
+                }
+              >
                 {nameModule == "analyse" && (
                   <>
-                    <td>{item.nom}</td>
-                    <td>{item.dateCreation}</td>
-                    <td>{item.auteur}</td>
-                    <td>{item.description}</td>
+                    <td>{item.name_analysis}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td>{item.created_by}</td>
+                    <td>{item.description_analysis}</td>
                     <td></td>
                   </>
                 )}
                 {nameModule == "projet" && (
                   <>
-                    <td>{item.nom}</td>
-                    <td>{item.dateCreation}</td>
-                    <td>{item.auteur}</td>
-                    <td>{item.version}</td>
-                    <td>{item.type}</td>
+                    <td>{item.name_project}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td>{item.description_project}</td>
+                    <td>{item.created_by}</td>
+                    <td>{item.type_project}</td>
                     <td></td>
                   </>
                 )}
                 {nameModule == "dataset" && (
                   <>
-                    <td>{item.nom}</td>
-                    <td>{item.dateCreation}</td>
-                    <td>{item.auteur}</td>
-                    <td>{item.description}</td>
-                    <td>{item.type}</td>
-                    <td></td>
+                    <td>{item.name_dataset}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td>{item.description_dataset}</td>
+                    <td>{item.study_name}</td>
+                    <td>{item.source_name}</td>
                   </>
                 )}
 
@@ -92,7 +99,12 @@ const ElementsList: React.FC<ListProps> = ({
                   <FontAwesomeIcon
                     icon={faEye}
                     onClick={() =>
-                      onShow(index + currentPage * elementsPerPage)
+                      onShow(
+                        item.id_project ||
+                          item.id_analysis ||
+                          item.id_dataset ||
+                          index
+                      )
                     }
                     style={{ cursor: "pointer" }}
                   />
@@ -101,7 +113,12 @@ const ElementsList: React.FC<ListProps> = ({
                   <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() =>
-                      onDelete(index + currentPage * elementsPerPage)
+                      onDelete(
+                        item.id_project ||
+                          item.id_analysis ||
+                          item.id_dataset ||
+                          index
+                      )
                     }
                     style={{ cursor: "pointer" }}
                   />

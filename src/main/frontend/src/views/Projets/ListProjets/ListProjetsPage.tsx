@@ -6,6 +6,8 @@ import CreateProjetModal from "../../../components/Modals/CreateProjetModal";
 import {
   fetchProjets,
   getProjectWithFilter,
+  deleteProjectById,
+  createProject,
 } from "../../../services/ProjetService";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +25,11 @@ const ListProjetsPage = () => {
   const [columns, setColumns] = useState([
     "Nom",
     "Date Création",
+    "Description",
     "Auteur",
-    "Version",
     "Type",
   ]);
+
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
@@ -67,9 +70,17 @@ const ListProjetsPage = () => {
     console.log("Bouton Ajouter cliqué !");
   };
 
-  const handleCreateProjet = (newProjet: Projet) => {
-    console.log("Nouveau projet créé:", newProjet);
-    setListProjets([...listProjets, newProjet]);
+  const handleCreateProjet = async (newProjet: Projet) => {
+    try {
+      const createdProjet = await createProject(newProjet);
+      console.log("Nouveau projet créé:", createdProjet);
+
+      // Fetch the updated list of projects
+      const updatedProjets = await fetchProjets();
+      setListProjets(updatedProjets);
+    } catch (error) {
+      console.error("Error creating projet:", error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -82,11 +93,12 @@ const ListProjetsPage = () => {
     console.log("Projet cliqué et supprimé");
   };
 
-  const handleConfirmDeleteProjet = () => {
+  const handleConfirmDeleteProjet = async () => {
     if (selectedProjet !== null) {
-      const updatedList = [...listProjets];
-      updatedList.splice(selectedProjet, 1);
-      setListProjets(updatedList);
+      await deleteProjectById(selectedProjet);
+
+      const updatedProjets = await fetchProjets();
+      setListProjets(updatedProjets);
 
       setSelectedProjet(null);
       setShowConfirmationModal(false);
@@ -99,9 +111,7 @@ const ListProjetsPage = () => {
     setSelectedProjet(null);
   };
   /*Ouvrir une analyse */
-  const handleShowProjet = (index: number) => {
-    console.log(index);
-    let id = index + 1;
+  const handleShowProjet = (id: number) => {
     navigate(`/projets/${id}`);
     console.log("Projet ouverte");
   };

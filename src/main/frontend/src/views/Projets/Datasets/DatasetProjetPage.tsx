@@ -1,30 +1,32 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
-import {
-  fetchDatasets,
-  getDatasetsWithFilter,
-} from "../../../services/DatasetService";
+import { getDatasetsWithFilter } from "../../../services/DatasetService";
+import { fetchDatasetProjets } from "../../../services/DatasetProjetService";
 
-const DatasetProjetPage = () => {
+interface DatasetProjetProps {
+  idProjet: number;
+}
+const DatasetProjetPage: React.FC<DatasetProjetProps> = ({ idProjet }) => {
   const navigate = useNavigate();
 
   const [listDatasets, setListDatasets] = useState<Dataset[]>([]);
   useEffect(() => {
-    fetchDatasets()
+    fetchDatasetProjets(idProjet)
       .then((data) => setListDatasets(data))
       .catch((error) => console.error("Error fetching datasets:", error));
   }, []);
-  const [columns, setColumns] = useState([
-    "Nom",
-    "Date Création",
 
-    "Auteur",
+  const [columns, setColumns] = useState([
+    "Date création",
+    "Nom",
     "Description",
-    "Type",
+    "Nom étude",
+    "Nom source",
   ]);
+
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
@@ -36,7 +38,21 @@ const DatasetProjetPage = () => {
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
   const [selectedDataset, setSelectedDataset] = useState<number | null>(null);
-
+  useEffect(() => {
+    if (filters.startDate || filters.endDate || filters.searchTerm) {
+      getDatasetsWithFilter(
+        filters.startDate,
+        filters.endDate,
+        filters.searchTerm
+      )
+        .then(setListDatasets)
+        .catch((error) => console.error("Error fetching dataset", error));
+    } else {
+      fetchDatasetProjets(idProjet)
+        .then(setListDatasets)
+        .catch((error) => console.error("Error fetching datasets:", error));
+    }
+  }, [filters]);
   const buttonClick = () => {
     setNewDatasetSearchModal(true);
     console.log("Bouton Créer cliqué !");
@@ -46,6 +62,7 @@ const DatasetProjetPage = () => {
     navigate(`/projets/datasets/${index}/ecg`);
     console.log("Dataset ouvert !");
   };
+
   const handleFilter = (
     startDate: string,
     endDate: string,

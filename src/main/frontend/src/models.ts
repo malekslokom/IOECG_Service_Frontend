@@ -23,17 +23,18 @@ interface Model {
     dateCreation: string ;
     nom: string;
     auteur: string;
-    description: string;    
+    description: string;
+    id_analysis:number;    
   };
   
   interface Projet {
-    dateCreation: string;
-    nom: string ;
-    auteur: string;
-    type: string; 
-    version:string;
+    created_at: string;
+    name_project: string ;
+    description_project: string;
+    created_by: string; 
+    type_project:string;
+    id_project?: number; 
   }
-
   interface ECG {
     id: number;
     origineDatasetId:number;
@@ -50,11 +51,16 @@ interface Model {
   }
   
   interface Dataset {
-    id: number;
-    name: string;
-    description: string;
-    type: string;
-    ecgs: ECG[];
+    id_dataset? :number;
+    created_at : string;
+    name_dataset : string;
+    description_dataset: string;
+    type_dataset : string;
+    leads_name : string;
+    study_name?: string;
+    study_details?: string;
+    source_name? : string;
+    source_details? : string;
   }
   
 

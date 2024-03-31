@@ -15,7 +15,7 @@ export async function fetchAnalyses(): Promise<Analyse[]> {
     }
     return await response.json();
   }
-  export async function getAnalysesWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Projet[]> {
+  export async function getAnalysesWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Analyse[]> {
     const encodedStartDate = encodeURIComponent(startDate);
     const encodedEndDate = encodeURIComponent(endDate);
     const encodedSearchTerm = encodeURIComponent(searchTerm);

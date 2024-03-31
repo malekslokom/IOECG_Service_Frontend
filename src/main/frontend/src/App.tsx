@@ -49,13 +49,10 @@ function App() {
               path="/projets/catalogues"
               element={<CatalogueProjetPage />}
             />
-            <Route path="/projets/datasets" element={<DatasetProjetPage />} />
-            <Route path="/projets/analyses" element={<AnalyseProjetPage />} />
             <Route path="/projets/rapports" element={<RapportProjetPage />} />
             <Route path="/mes-catalogues" element={<MesCataloguePage />} />
-            <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/projets/:id" element={<ConsulterProjetPage />} />
-
+            <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/historique" element={<HistoriquePage />} />
             {/* Autres routes */}
             <Route path="projets/analyses/:id" element={<ConsulterAnalyse />} />
