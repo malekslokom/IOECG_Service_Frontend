@@ -1,0 +1,18 @@
+.table > :not(caption) > * > *{
+    color: var(--header-array-text-color);
+}
+.table thead th {
+    background: var(--header-array-color);
+}
+
+.table tbody td {
+    background: var(--background-color);
+    border-top: 1px solid var(--array-border-color);
+}
+.table tbody  {
+    background: var(--background-color);
+    border-top: 1px solid #e5e7eb;
+}
+.table thead {
+    border-top: 1px solid var(--array-border-color); 
+}

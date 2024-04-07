@@ -57,7 +57,7 @@ function App() {
             <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/historique" element={<HistoriquePage />} />
             {/* Autres routes */}
-            <Route path="projets/analyses/:id" element={<ConsulterAnalyse />} />
+            <Route path="projets/:id/analyses/:id" element={<ConsulterAnalyse />} />
             <Route path="projets/datasets/:id/ecg" element={<ListEcgPage />} />
             <Route path="projets/rapports/:id" element={<ConsulterRapport />} />
           </Routes>

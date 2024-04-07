@@ -52,7 +52,7 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
 
   /*Ouvrir une analyse */
   const handleShowAnalyse = (index: number) => {
-    navigate(`/projets/${index}/analyses/`);
+    navigate(`/projets/${idProjet}/analyses/${index}`);
     console.log("Analyse ouverte");
   };
 

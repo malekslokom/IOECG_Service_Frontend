@@ -35,6 +35,7 @@ interface Model {
     type_project:string;
     id_project?: number; 
   }
+
   interface ECG {
     id: number;
     origineDatasetId:number;
@@ -59,19 +60,73 @@ interface Model {
   // }
   
   interface Dataset {
-    id_dataset? :number;
+    idDataset :number;
     created_at : string;
-    name_dataset : string;
-    description_dataset: string;
-    type_dataset : 'search_results' | 'standard';
+    nameDataset : string;
+    descriptionDataset: string;
+    typeDataset : 'search_results' | 'standard';
     leads_name : string;
-    study_name?: string;
+    study_name: string;
     study_details?: string;
-    source_name? : string;
+    source_name : string;
     source_details? : string;
   }
-  
-
+  interface DatasetAnalyse{
+  idDataset :number;
+  created_at : string;
+  nameDataset : string;
+  descriptionDataset: string;
+  typeDataset : 'search_results' | 'standard';
+  leads_name : string;
+  study_name: string;
+  study_details?: string;
+  source_name : string;
+  source_details? : string;
+  numPatients:number;
+  numECGs:number;
+}
+interface PatientEcgData {
+  patient_id: number;
+  age: number;
+  height: number;
+  weight: number;
+  sex: string;
+  recording_started_at: string;
+  recording_ended_at: string;
+  recording_initial_sampling_rate: number;
+  recording_sampling_rate: number;
+  recording_duration: number;
+  protocol_details: string;
+  ecg_filepath: string;
+  lead_i: string;
+  lead_ii: string;
+  lead_iii: string;
+  lead_avr: string;
+  lead_avf: string;
+  lead_avl: string;
+  lead_v1: string;
+  lead_v2: string;
+  lead_v3: string;
+  lead_v4: string;
+  lead_v5: string;
+  lead_v6: string;
+  lead_x: string;
+  lead_y: string;
+  lead_z: string;
+  lead_es: string;
+  lead_as: string;
+  lead_ai: string;
+  idDataset: number;
+  created_at: string;
+  nameDataset: string;
+  descriptionDataset: string;
+  typeDataset: string;
+  leads_name: string;
+  study_name: string;
+  study_details: string;
+  source_name: string;
+  source_details: string;
+}
   interface DatasetECG {
     id: number;
     idDataset: string;
@@ -85,4 +140,14 @@ interface Rapport {
   nom: string ;
   modeles: string[];   //ou Model[]  ?
   datasets: string[] // ou Dataset[] ?
+}
+
+
+interface LeadData {
+  [leadName: string]: number[]; // Assuming each lead's data is an array of numbers
+}
+
+interface ECGPlotModalProps {
+  ecgData: LeadData[]; // Now ecgData is an array of LeadData objects
+  onClose: () => void;
 }

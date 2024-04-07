@@ -73,9 +73,9 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
       created_at: "string",
       leads_name: "string",
       study_name: "string",
-      study_details: null,
+      study_details: "null",
       source_name: "string",
-      source_details: null
+      source_details: "null"
     };
     return newDataset;
   };
@@ -246,31 +246,7 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
           Fermer
         </Button>
       </Modal.Footer>
-    </Modal><Modal show={showNewDatasetModal} onHide={() => setShowNewDatasetModal(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>Nouveau Dataset</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form>
-      <Form.Group controlId="formDatasetName">
-        <Form.Label>Nom du Dataset</Form.Label>
-        <Form.Control type="text" placeholder="Entrez le nom du Dataset" value={newDatasetName} onChange={(e) => setNewDatasetName(e.target.value)} />
-      </Form.Group>
-      <Form.Group controlId="formDatasetDescription">
-        <Form.Label>Description</Form.Label>
-        <Form.Control as="textarea" rows={3} placeholder="Entrez la description du Dataset" value={newDatasetDescription} onChange={(e) => setNewDatasetDescription(e.target.value)} />
-      </Form.Group>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button className='custom-button' onClick={handleNewDatasetSubmit}>
-    Enregistrer
-    </Button>
-    <Button variant="secondary"  onClick={() => setShowNewDatasetModal(false)}>
-      Annuler
-    </Button>
-  </Modal.Footer>
-</Modal>
+    </Modal>
 </>
   );
 };
