@@ -138,6 +138,7 @@ interface PatientEcgData {
 
     
 interface Rapport {
+  id_rapport: number;
   dateCreation: string;
   nom: string ;
   modeles: string[];   //ou Model[]  ?
