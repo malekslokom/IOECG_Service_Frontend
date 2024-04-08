@@ -26,4 +26,10 @@ export async function fetchDatasets(): Promise<Dataset[]> {
     }
     return await response.json();
   }
-  
+  export async function addDataset(newDataset: Dataset): Promise<Dataset> {
+    const response = await fetch(`${API_BASE_URL}/`,  {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newDataset)});
+    if (!response.ok) {
+        throw new Error('Failed to create dataset');
+    }
+    return await response.json();
+  }

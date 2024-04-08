@@ -8,12 +8,12 @@ export async function fetchModels(): Promise<Model[]> {
     return await response.json();
   }
   
-  export async function getModelsWithFilter(nomModel: string, typeModel: string, auteurModel: string): Promise<Model[]> {
+  export async function getModelsWithFilter(nomModel: string, typeModel: string, searchTerm: string): Promise<Model[]> {
     const encodedTypeModel = encodeURIComponent(typeModel);
     const encodedNomModel = encodeURIComponent(nomModel);
-    const encodedAuteurModel = encodeURIComponent(auteurModel);
-  
-    const response = await fetch(`${API_BASE_URL}/filter?name=${encodedNomModel}&author=${encodedAuteurModel}&task_nature=${encodedTypeModel}`);
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+
+    const response = await fetch(`${API_BASE_URL}/filter?name_model=${encodedNomModel}&search_term=${encodedSearchTerm}&task_nature=${encodedTypeModel}`);
     if (!response.ok) {
       const errorText = await response.text(); 
       throw new Error(`Failed to get models with filter: ${response.status} ${errorText}`);
