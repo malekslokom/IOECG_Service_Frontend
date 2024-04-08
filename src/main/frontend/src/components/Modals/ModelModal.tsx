@@ -1,6 +1,6 @@
 // import React from 'react';
 
-import './ModelModal.css';
+import "./ModelModal.css";
 
 // interface ModelModalProps {
 //   model: Model;
@@ -101,8 +101,8 @@ import './ModelModal.css';
 // }
 
 // export default ModelModal;
-import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React from "react";
+import { Modal, Button } from "react-bootstrap";
 
 interface ModelModalProps {
   model: Model;
@@ -111,7 +111,7 @@ interface ModelModalProps {
 
 const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
   return (
-    <Modal show={true} onHide={onClose}>
+    <Modal keyboard={false} centered size="lg" show={true} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>{model.name}</Modal.Title>
       </Modal.Header>
@@ -122,14 +122,29 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
             <div className="d-flex justify-content-between">
               <div className="input-group mb-3">
                 <span className="input-group-text">Auteur</span>
-                <input type="text" className="form-control" value={model.author} readOnly />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={model.author}
+                  readOnly
+                />
               </div>
               <div className="input-group mb-3">
                 <span className="input-group-text">Nom de projet</span>
-                <input type="text" className="form-control" value={model.project_name} readOnly />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={model.project_name}
+                  readOnly
+                />
               </div>
             </div>
-            <textarea className="form-control" rows={4} readOnly value={model.description}/> 
+            <textarea
+              className="form-control"
+              rows={4}
+              readOnly
+              value={model.description}
+            />
           </div>
         </div>
         <div className="modal-section">
@@ -138,14 +153,29 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
             <div className="d-flex justify-content-between">
               <div className="input-group mb-3">
                 <span className="input-group-text">Nom</span>
-                <input type="text" className="form-control" value={model.architecture_name} readOnly />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={model.architecture_name}
+                  readOnly
+                />
               </div>
               <div className="input-group mb-3">
                 <span className="input-group-text">Version</span>
-                <input type="text" className="form-control" value={model.architecture_version} readOnly />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={model.architecture_version}
+                  readOnly
+                />
               </div>
             </div>
-            <textarea className="form-control" rows={4} readOnly value={model.architecture_description}/>
+            <textarea
+              className="form-control"
+              rows={4}
+              readOnly
+              value={model.architecture_description}
+            />
           </div>
         </div>
         <div className="modal-section">
@@ -168,7 +198,9 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
             <div className="d-flex flex-wrap gap-2 justify-content-between">
               <div>
                 <h6 className="tag-title">Taux d'Apprentissage</h6>
-                <span className="badge bg-secondary">{model.learning_rate}</span>
+                <span className="badge bg-secondary">
+                  {model.learning_rate}
+                </span>
               </div>
               <div>
                 <h6 className="tag-title">Nature de la Tâche</h6>
@@ -179,13 +211,12 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button className='custom-button' onClick={onClose}>
+        <Button className="custom-button" onClick={onClose}>
           Fermer
         </Button>
       </Modal.Footer>
     </Modal>
   );
-}
+};
 
 export default ModelModal;
-
