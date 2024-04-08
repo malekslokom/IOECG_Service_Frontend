@@ -133,7 +133,7 @@ const handleNewDatasetSubmit = async () => {
       
       const newDataset = await datasetResponse.json();
       
-      const newDatasetId = newDataset.idDataset; 
+      const newDatasetId = newDataset.id_dataset; 
       
       // Associate selected ECGs with the new dataset
       const associationResponse = await fetch(`/api/datasets/${newDatasetId}/datasetEcg`, {
@@ -350,7 +350,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
               </thead>
           <tbody>
               {filteredData.data.map(dataset => (
-                <tr key={dataset.id_dataset}>
+                <tr key={dataset.id_ecg}>
                   <td>
                     <Form.Check
                       type="checkbox"
