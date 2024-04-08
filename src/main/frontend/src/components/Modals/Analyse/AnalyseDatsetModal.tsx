@@ -148,7 +148,7 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
                 <div className="modal-section">
 
                 <div className="modal-section-title" onClick={() => toggleSectionVisibility(dataset.id_dataset)} style={{ display: 'flex', alignItems: 'center' }}>
-                  <p style={{ marginRight: '10px', marginBottom: '0' , color:"#E30613"}}>
+                  <p style={{ marginRight: '10px', marginBottom: '0' , color:"#4A8BC5"}}>
                     {dataset.name_dataset}
                   </p>
                   <ExpandMoreIcon/>

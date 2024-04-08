@@ -133,7 +133,7 @@ const handleNewDatasetSubmit = async () => {
       
       const newDataset = await datasetResponse.json();
       
-      const newDatasetId = newDataset.idDataset; 
+      const newDatasetId = newDataset.id_dataset; 
       
       // Associate selected ECGs with the new dataset
       const associationResponse = await fetch(`/api/datasets/${newDatasetId}/datasetEcg`, {
@@ -220,12 +220,11 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                       <FontAwesomeIcon icon={faSync} style={{ fontSize: '1.5em', color: 'rgba(226,13,23)' }} />
                   </button>
               </div>
-              <div className="col-md-9">
-                  <div className="row">
-                      <div className="col-md-2">Patient</div>
-                      {/* Filtres pour les patients */}
+              <div className="col-10">
+                  <div className="row ">
+                      <div className="col-md-1 align-items-start">Patient</div>
                       <div className="col d-flex align-items-center">
-                          <label htmlFor="ageSelect">Age</label>
+                          <label className="m-1" htmlFor="ageSelect">Age</label>
                           <Form.Select  id="ageSelect" style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -241,7 +240,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                           </Form.Select>
                       </div>
                       <div className="col d-flex align-items-center">
-                          <label htmlFor="tailleSelect">Taille</label>
+                          <label className="m-1" htmlFor="tailleSelect">Taille</label>
                           <Form.Select id="tailleSelect"  style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -257,7 +256,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                           </Form.Select>
                       </div>
                       <div className="col d-flex align-items-center">
-                          <label htmlFor="poidSelect">Poids</label>
+                          <label className="m-1" htmlFor="poidSelect">Poids</label>
                           <Form.Select id="poidSelect" style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -273,7 +272,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                           </Form.Select>
                       </div>
                       <div className="col d-flex align-items-center">
-                          <label htmlFor="genreSelect">Genre</label>
+                          <label className="m-1" htmlFor="genreSelect">Genre</label>
                           <Form.Select style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -290,9 +289,9 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                       </div>
                   </div>
                   <div className="row">
-                      <div className="col">Dataset</div>
-                      <div className="col d-flex align-items-center">
-                          <label htmlFor="sourceSelect">Nom de la source</label>
+                      <div className="col-md-1">Dataset</div>
+                      <div className="col-6 d-flex align-items-center">
+                          <label className="m-1" htmlFor="sourceSelect">Source</label>
                           <Form.Select id="sourceSelect" style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -307,8 +306,8 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                               ))}
                           </Form.Select>
                       </div>
-                      <div className="col d-flex align-items-center">
-                          <label htmlFor="etudeSelect">Nom de l'étude</label>
+                      <div className="col-5 d-flex align-items-center">
+                          <label className="m-1" htmlFor="etudeSelect">Étude</label>
                           <Form.Select id="etudeSelect" style={{
                               width: "100%",
                               color: "var(--primary-text-color)",
@@ -325,7 +324,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
                       </div>
                   </div>
               </div>
-              <div className="col-auto">
+              <div className="col-1">
                   <button className="btn btn-light" onClick={handleFilterClick} style={{ color: 'rgba(226,13,23)' }}>
                       <FontAwesomeIcon icon={faFilter} />
                       Filtrer
@@ -351,7 +350,7 @@ const handleShowEcg = (ecgDataForCurrentRow: any) => {
               </thead>
           <tbody>
               {filteredData.data.map(dataset => (
-                <tr key={dataset.id_dataset}>
+                <tr key={dataset.id_ecg}>
                   <td>
                     <Form.Check
                       type="checkbox"

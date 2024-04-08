@@ -107,7 +107,7 @@ const MesAnalysePage = () => {
           style={{ top: "160px", left: 0, width: "100%" }}
         >
           <ElementsList
-            nameModule="Analyse"
+            nameModule="analyse"
             columns={columns}
             elementsList={listAnalyses}
             onShow={handleShowAnalyse}
