@@ -86,6 +86,7 @@ const AnalyseShow = () => {
        console.error('Error adding datasets:', error);
    }
  };
+
  const handleDeleteDatasetAnalyse= async (datasetId: number) => {
    try {
      const response = await fetch(`/api/analyses/${id}/datasets/${datasetId}`, {
@@ -96,13 +97,14 @@ const AnalyseShow = () => {
      }
       // Remove the deleted dataset from the state
      setDatasets((prevDatasets) =>
-       prevDatasets.filter((dataset) => dataset.idDataset !== datasetId)
+       prevDatasets.filter((dataset) => dataset.id_dataset !== datasetId)
      );
    } catch (error) {
      console.error('Error deleting dataset:', error);
    }
  };
  const handleAddSearchDatasetToAnalyse = async (newDatasets: Dataset[]) => {
+
  };
    return (   
       <div className="my-5">
@@ -138,37 +140,35 @@ const AnalyseShow = () => {
 
 
          <div className="col-md-6">
-         <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh" }}>
-         <div className="d-flex align-items-center justify-content-between">
-           <h5> Datasets</h5>
-           <div className="mt-1 me-2" onClick={handleOpenModalDataset}>
-             <FontAwesomeIcon icon={faPlusCircle}  style={{color:"#E30613", fontSize: '1.2em'}} />
-           </div>
-           </div>
-           <hr style={{color:"#555"}}/>
+          <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh", overflowY: "auto" }}>
+            <div className="d-flex align-items-center justify-content-between " >
+              <h5> Datasets</h5>
+              <div className="mt-1 me-2" onClick={handleOpenModalDataset}>
+                <FontAwesomeIcon icon={faPlusCircle}  style={{color:"#E30613", fontSize: '1.2em'}} />
+              </div>
+            </div>
+            <hr style={{color:"#555"}}/>
           
-           <Table>
-             <tbody>
-               {datasets.map(dataset => (
-                 <tr key={dataset.idDataset} className={selectedDatasets.includes(dataset) ? 'selected' : ''}>
-                   <td style={{ width: '10px' }}>
-                     <input
-                       type="checkbox"
-                        />
-                   </td>
-                   <td>
-                     <div style={{ whiteSpace: 'nowrap' }}>
-                     {dataset.nameDataset} ({dataset.numPatients} patients, {dataset.numECGs} ECGs)
-                       </div>
-                   </td>
-                   <td><FontAwesomeIcon icon={faTrash} className="icon-trash" onClick={() => handleDeleteDatasetAnalyse(dataset.idDataset)}/></td>
-                 </tr>
-               ))}
-               </tbody>
-           </Table>
-           
-         </div>
-         </div>
+            <Table >
+              <tbody>
+                {datasets.map(dataset => (
+                  <tr key={dataset.id_dataset} className={selectedDatasets.includes(dataset) ? 'selected' : ''}>
+                    <td style={{ width: '10px' }}>
+                      <input type="checkbox" />
+                    </td>
+                    <td>
+                      <div style={{ whiteSpace: 'nowrap' }}>
+                        {dataset.name_dataset} ({dataset.numPatients} patients, {dataset.numECGs} ECGs)
+                      </div>
+                    </td>
+                    <td><FontAwesomeIcon icon={faTrash} className="icon-trash" onClick={() => handleDeleteDatasetAnalyse(dataset.id_dataset)}/></td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </div>
+
 
 
        </div>
@@ -205,7 +205,7 @@ const AnalyseShow = () => {
 
      </div>
      {showModalDataset && <AnalyseDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModal} />}
-     {ShowModalSearchDataset && <AnalyseSearchDatsetModal onCreate={handleAddSearchDatasetToAnalyse} onClose={closeModalSearchDataset} />}
+     {ShowModalSearchDataset && <AnalyseSearchDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModalSearchDataset} />}
 
 
      </div>

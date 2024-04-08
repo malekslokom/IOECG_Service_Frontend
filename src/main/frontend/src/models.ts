@@ -60,23 +60,24 @@ interface Model {
   // }
   
   interface Dataset {
-    idDataset :number;
+    id_dataset :number;
     created_at : string;
-    nameDataset : string;
-    descriptionDataset: string;
-    typeDataset : 'search_results' | 'standard';
+    name_dataset : string;
+    description_dataset: string;
+    type_dataset : 'search_results' | 'standard';
     leads_name : string;
     study_name: string;
     study_details?: string;
     source_name : string;
     source_details? : string;
   }
+
   interface DatasetAnalyse{
-  idDataset :number;
+  id_dataset :number;
   created_at : string;
-  nameDataset : string;
-  descriptionDataset: string;
-  typeDataset : 'search_results' | 'standard';
+  name_dataset : string;
+  description_dataset: string;
+  type_dataset : 'search_results' | 'standard';
   leads_name : string;
   study_name: string;
   study_details?: string;
@@ -91,6 +92,7 @@ interface PatientEcgData {
   height: number;
   weight: number;
   sex: string;
+  id_ecg:number;
   recording_started_at: string;
   recording_ended_at: string;
   recording_initial_sampling_rate: number;
@@ -116,11 +118,11 @@ interface PatientEcgData {
   lead_es: string;
   lead_as: string;
   lead_ai: string;
-  idDataset: number;
+  id_dataset: number;
   created_at: string;
-  nameDataset: string;
-  descriptionDataset: string;
-  typeDataset: string;
+  name_dataset: string;
+  description_dataset: string;
+  type_dataset: string;
   leads_name: string;
   study_name: string;
   study_details: string;
@@ -129,8 +131,8 @@ interface PatientEcgData {
 }
   interface DatasetECG {
     id: number;
-    idDataset: string;
-    idEcg: string;
+    id_dataset: string;
+    id_ecg: string;
     type: string;
   }
 
