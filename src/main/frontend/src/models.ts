@@ -64,12 +64,12 @@ interface Model {
   // }
   
   interface Dataset {
-    id_dataset :number;
+    id_dataset? :number;
     created_at : string;
     name_dataset : string;
     description_dataset: string;
     type_dataset : 'search_results' | 'standard';
-    leads_name : string;
+    leads_name ?: string;
     study_name: string;
     study_details?: string;
     source_name : string;
@@ -142,6 +142,7 @@ interface PatientEcgData {
 
     
 interface Rapport {
+  id_rapport: number;
   dateCreation: string;
   nom: string ;
   modeles: string[];   //ou Model[]  ?

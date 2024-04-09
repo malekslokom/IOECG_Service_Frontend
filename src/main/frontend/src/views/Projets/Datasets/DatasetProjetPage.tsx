@@ -100,7 +100,7 @@ const DatasetProjetPage: React.FC<DatasetProjetProps> = ({ idProjet }) => {
         <ListPage
           title="Datasets du projet"
           bouton="Créer"
-          boutonVisible={true}
+          boutonVisible={false}
           onClick={buttonClick}
           onFilter={handleFilter}
         />

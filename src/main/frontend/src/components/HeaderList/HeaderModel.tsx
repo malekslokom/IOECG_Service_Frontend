@@ -1,31 +1,30 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faFilter } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import moment from "moment";
 interface HeaderModelProps {
   onFilter: (typeModel: string, auteurModel: string, nomModel: string) => void;
 }
 const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
   const [typeModel, setTypeModel] = useState("");
-  const [auteurModel, setAuteurModel] = useState("");
+  const [searchTerm, setsearchTerm] = useState("");
   const [nomModel, setNomeModel] = useState("");
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTypeModel(e.target.value);
   };
-  const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuteurModel(e.target.value);
+  const handleSearchTermSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setsearchTerm(e.target.value);
   };
   const handleModelNameSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNomeModel(e.target.value);
   };
   const handleFilterClick = () => {
-    onFilter(typeModel, auteurModel, nomModel);
+    onFilter(typeModel, searchTerm, nomModel);
   };
 
   const handleResetFilters = () => {
     // Réinitialiser les états des filtres
     setTypeModel("");
-    setAuteurModel("");
+    setsearchTerm("");
     setNomeModel("");
     // Appeler onFilter avec des valeurs vides pour réinitialiser les filtres côté parent
     onFilter("", "", "");
@@ -35,22 +34,16 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
     <div className="filters">
       <div className="row align-items-center">
         <div className="col-auto">
-          <button className="btn shadow-none">
+          <button className="btn shadow-none" onClick={handleResetFilters}>
             <FontAwesomeIcon
-              onClick={handleResetFilters}
               icon={faSync}
-              style={{ fontSize: "1.5em", color: "rgba(226,13,23)" }}
+              style={{
+                fontSize: "1.5em",
+                color: "rgba(59,153,255,255)",
+                background: "var(--background-color)",
+              }}
             />
           </button>
-        </div>
-        <div className="col">
-          <input
-            type="text"
-            placeholder="Auteur"
-            className="form-control"
-            style={{ width: "100%" }}
-            onChange={handleAuthorSearch}
-          />
         </div>
         <div className="col">
           <input
@@ -61,6 +54,16 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
             onChange={handleModelNameSearch}
           />
         </div>
+        <div className="col">
+          <input
+            type="text"
+            placeholder="chercher"
+            className="form-control"
+            style={{ width: "100%" }}
+            onChange={handleSearchTermSearch}
+          />
+        </div>
+
         <div className="col-auto">
           <select
             className="form-select"
