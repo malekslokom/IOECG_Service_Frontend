@@ -64,6 +64,16 @@ const ElementsList: React.FC<ListProps> = ({
                     <td></td>
                   </>
                 )}
+                {nameModule == "mesAnalyses" && (
+                  <>
+                    <td>{item.name_analysis}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td>{item.created_by}</td>
+                    <td>{item.description_analysis}</td>
+                    <td>{item.id_project}</td>
+                    <td></td>
+                  </>
+                )}
                 {nameModule == "projet" && (
                   <>
                     <td>{item.name_project}</td>
@@ -86,6 +96,7 @@ const ElementsList: React.FC<ListProps> = ({
 
                 {nameModule == "rapport" && (
                   <>
+
                     <td>{item.nom}</td>
                     <td>{item.dateCreation}</td>
                     <td>{item.auteur}</td>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/ListPage/ListPage";
+import CreateAnalyseModal from "../../components/Modals/CreateAnalyseModal";
 import ElementsList from "../../components/ElementsList/ElementsLits";
 import ConfirmationArchiverModal from "../../components/Modals/ConfirmationArchiverModal";
 import {
@@ -19,10 +20,10 @@ const MesAnalysePage = () => {
   }, []);
 
   const [columns, setColumns] = useState([
-    "Date création",
     "Nom",
+    "Date création",
+    "Auteur",
     "Description",
-    "Nom étude",
     "Nom source",
   ]);
 
@@ -98,7 +99,7 @@ const MesAnalysePage = () => {
         <ListPage
           title="Mes Analyses"
           bouton="Créer"
-          boutonVisible={true}
+          boutonVisible={false}
           onClick={buttonClick}
           onFilter={handleFilter}
         />
@@ -107,7 +108,7 @@ const MesAnalysePage = () => {
           style={{ top: "160px", left: 0, width: "100%" }}
         >
           <ElementsList
-            nameModule="Analyse"
+            nameModule="mesAnalyses"
             columns={columns}
             elementsList={listAnalyses}
             onShow={handleShowAnalyse}

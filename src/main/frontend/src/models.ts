@@ -20,11 +20,15 @@ interface Model {
 
 
   interface Analyse {
+    id_analysis:number;
+    id_project: number;
+    created_at: String;
+    last_updated_at:String;
+    name_analysis: String;
     dateCreation: string ;
-    nom: string;
-    auteur: string;
-    description: string;
-    id_analysis:number;    
+    description_analysis: String;
+    created_by: String;
+
   };
   
   interface Projet {
