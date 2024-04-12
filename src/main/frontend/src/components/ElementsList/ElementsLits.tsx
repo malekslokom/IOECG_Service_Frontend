@@ -4,6 +4,8 @@ import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
 import moment from "moment";
+import statutEnCours from "./../../assets/statut-en-cours.svg";
+import statutTermine from "./../../assets/statut-termine.svg";
 
 interface ListProps {
   nameModule: string;
@@ -52,6 +54,7 @@ const ElementsList: React.FC<ListProps> = ({
                   item.id_project ||
                   item.id_analysis ||
                   item.id_dataset ||
+                  item.id_experience ||
                   index
                 }
               >
@@ -106,6 +109,19 @@ const ElementsList: React.FC<ListProps> = ({
                   </>
                 )}
 
+                {nameModule == "experience" && (
+                  <>
+                    <td>{item.name_experience}</td>
+                    <td>{item.heure_lancement}</td>
+                    <td>{item.heure_fin_prevu}</td>
+                    <td> 
+                      {item.statut === "En cours" && <img src={statutEnCours} alt="Statut en cours" />}
+                      {item.statut === "Terminé" && <img src={statutTermine} alt="Statut terminé" />}
+                    </td>
+                    <td></td>
+                  </>
+                )}
+
                 <td>
                   <FontAwesomeIcon
                     icon={faEye}
@@ -114,6 +130,7 @@ const ElementsList: React.FC<ListProps> = ({
                         item.id_project ||
                           item.id_analysis ||
                           item.id_dataset ||
+                          item.id_experience ||
                           index
                       )
                     }
@@ -128,6 +145,7 @@ const ElementsList: React.FC<ListProps> = ({
                         item.id_project ||
                           item.id_analysis ||
                           item.id_dataset ||
+                          item.id_experience ||
                           index
                       )
                     }

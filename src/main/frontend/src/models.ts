@@ -1,6 +1,7 @@
 interface Model {
     // inputShape: number[];
     // outputShape: number[];
+    id_model?: number;
     name: string;
     description: string;
     author: string;
@@ -20,12 +21,11 @@ interface Model {
 
 
   interface Analyse {
-    id_analysis:number;
+    id_analysis?:number;
     id_project: number;
     created_at: String;
     last_updated_at:String;
     name_analysis: String;
-    dateCreation: string ;
     description_analysis: String;
     created_by: String;
 
@@ -157,4 +157,18 @@ interface LeadData {
 interface ECGPlotModalProps {
   ecgData: LeadData[]; // Now ecgData is an array of LeadData objects
   onClose: () => void;
+}
+
+interface Experience {
+  id_experience?: number;
+  name_experience: string;
+  models: (number |undefined)[]; // Tableau des id des modeles de l'experience
+  datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
+  nom_machine: string;
+  nb_gpu: number;
+  nb_processeurs: number;
+  heure_lancement: string; 
+  heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
+  statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
+  resultat_prediction: number[];
 }

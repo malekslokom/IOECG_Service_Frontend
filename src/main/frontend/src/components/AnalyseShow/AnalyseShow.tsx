@@ -6,7 +6,11 @@ import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import AnalyseDatsetModal from '../Modals/Analyse/AnalyseDatsetModal';
 import AnalyseSearchDatsetModal from '../Modals/Analyse/AnalyseSearchDatsetModal';
+import CreateExperienceModal from '../Modals/Analyse/CreateExperienceModal';
+import InfoExperienceModal from '../Modals/Analyse/InfoExperienceModal';
+import ElementsList from '../ElementsList/ElementsLits';
 import { useParams } from 'react-router-dom';
+import { NetworkWifi } from '@mui/icons-material';
 
 
 
@@ -16,12 +20,37 @@ import { useParams } from 'react-router-dom';
 const AnalyseShow = () => {
  const [showModalDataset, setShowModalDataset] = useState(false);
  const [ShowModalSearchDataset, setShowModalSearchDataset] = useState(false);
+ const [showModalExperience, setShowModalExperience] = useState(false);
+ const [showModalInfoExperience, setShowModalInfoExperience] = useState(false);
 
 
  const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
  const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
  //const [datasets, setDatasets] = useState<Dataset[]>(selectedDatasets);
 
+ const [selectedModels, setSelectedModels] = useState<Model[]>([]);
+
+ const [selectedExperience, setSelectedExperience] = useState<Experience>({ 
+  id_experience: 1,
+  name_experience: "Test",
+  models: [],
+  datasets: [],
+  nom_machine: "", 
+  nb_gpu: 0, 
+  nb_processeurs: 0, 
+  heure_lancement: "", 
+  heure_fin_prevu: "", 
+  statut: "En cours", 
+  resultat_prediction: [], 
+});    //Experience selectionnée pour visualiser les informations);
+  
+
+ const [columnsExperience, setColumnsExperience] = useState([
+  "Nom",
+  "Heure lancement",
+  "Heure de fin",
+  "Statut"
+]);
 
  const { id } = useParams();
  const [datasets, setDatasets] = useState<DatasetAnalyse[]>([]);
@@ -45,6 +74,71 @@ const AnalyseShow = () => {
  }, [id]);
 
 
+ /////////EXPERIENCE FUNCTIONS
+ const handleOpenModalExperience = () => {
+  setShowModalExperience(true);
+ }
+
+ const handleAddExperience = (newExperience: Experience) => {
+  setExperienceList([...experiencesList,newExperience]);  //Mise à jour de la liste des experiences de l'analyse
+}
+
+const closeModalExperience =() => {
+  setShowModalExperience(false);
+}
+
+const handleOpenInfoExperience = (idExperience: number) => {
+  setShowModalInfoExperience(true);
+
+  console.log("Ouverture des infos de l'experience");
+  const experience = experiencesList.find(exp => exp.id_experience === idExperience);
+  if (experience) {
+    setSelectedExperience(experience);
+  }
+}
+
+const handleCloseInfoExperience = () => {
+  setShowModalInfoExperience(false);
+}
+
+const handleDeleteExperience = () => {
+}
+
+//Changement de statut
+const [experiencesList,setExperienceList] = useState<Experience[]>([]);
+
+//Permet de changer le string HH:MM:SS en type Date pour la comparaison
+const parseTimeStringToTime = (timeString: string) => {
+  const [hour, minute, second] = timeString.split(':').map(Number);
+  return new Date(0, 0, 0, hour, minute, second);
+};
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log('This will run every second!');
+
+    setExperienceList(prevExperiences => prevExperiences.map((experience) => {
+      if (experience.statut === "En cours" && experience.heure_fin_prevu) {
+
+        const currentTime = new Date();
+        const endTime = parseTimeStringToTime(experience.heure_fin_prevu);
+
+        console.log(currentTime, endTime ,experience.statut)
+
+        if (currentTime > endTime) {
+          console.log("Temps dépassé");
+          return { ...experience, statut: "Terminé" } as Experience;
+        }
+      }
+      return experience;
+    }));
+  }, 1000);
+
+  return () => clearInterval(timer);
+
+},  []);
+
+ /////////DATASET FUNCTIONS
  const handleOpenModalDataset = () => {
    setShowModalDataset(true);
  }
@@ -53,10 +147,10 @@ const AnalyseShow = () => {
  const handleOpenModalSearchDataset = () => {
    setShowModalSearchDataset(true);
  }
+
   const closeModal = () => {
    setShowModalDataset(false);
  };
-
 
  const closeModalSearchDataset = () => {
    setShowModalSearchDataset(false);
@@ -106,6 +200,10 @@ const AnalyseShow = () => {
  const handleAddSearchDatasetToAnalyse = async (newDatasets: Dataset[]) => {
 
  };
+
+
+
+
    return (   
       <div className="my-5">
      <div className="container-fluid rounded border " style={{backgroundColor:'white'}}>
@@ -127,19 +225,33 @@ const AnalyseShow = () => {
 
 
          <div className="col-md-6">
+          {/*EXPERIENCE */}
          <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh" }}>
          <div className="d-flex align-items-center justify-content-between">
            <h5 > Expériences</h5>
            <div className="mb-0">
-             <button className="btn mb-10" style={{backgroundColor:"#E30613", color:"white"}}>Exécuter</button>
+             <button className="btn mb-10" style={{backgroundColor:"#E30613", color:"white"}} onClick={handleOpenModalExperience}>Exécuter</button>
            </div>
            </div>
            <hr style={{color:"#555"}}/>
+           
+           <div className="overflow-x-auto">
+            <ElementsList
+              nameModule="experience"
+              columns={columnsExperience}
+              elementsList={experiencesList}
+              onShow={handleOpenInfoExperience}
+              onDelete={handleDeleteExperience}
+            />
+           </div>
+           
+
          </div>
          </div>
 
 
          <div className="col-md-6">
+          {/*LISTE DES DATASETS*/}
           <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh", overflowY: "auto" }}>
             <div className="d-flex align-items-center justify-content-between " >
               <h5> Datasets</h5>
@@ -176,6 +288,7 @@ const AnalyseShow = () => {
 
        <div className="row mt-3" >
          <div className="col-md-6 ">
+          {/*LISTE DES RAPPORTS */}
          <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh" }}>
            <div className="d-flex align-items-center justify-content-between">
            <h5> Rapports</h5>
@@ -187,6 +300,8 @@ const AnalyseShow = () => {
          </div>
          </div>
          <div className="col-md-6">
+
+          {/*LISTE DES MODELES */}
          <div className="rounded border p-3 position-relative shadow-sm" style={{ height: "50vh" }}>
            <div className="d-flex align-items-center justify-content-between">
            <h5> Modèles</h5>
@@ -195,7 +310,7 @@ const AnalyseShow = () => {
            </div>
            </div>
            <hr style={{color:"#555"}}/>
-           </div>
+          </div>
          
          </div>
        </div>
@@ -206,8 +321,8 @@ const AnalyseShow = () => {
      </div>
      {showModalDataset && <AnalyseDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModal} />}
      {ShowModalSearchDataset && <AnalyseSearchDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModalSearchDataset} />}
-
-
+     {showModalExperience && <CreateExperienceModal onCreate={handleAddExperience} onClose={closeModalExperience} modelsList={selectedModels} datasetsList={selectedDatasets}/>}
+     {showModalInfoExperience && <InfoExperienceModal experience={selectedExperience} onClose={handleCloseInfoExperience}/>}
      </div>
 
 
