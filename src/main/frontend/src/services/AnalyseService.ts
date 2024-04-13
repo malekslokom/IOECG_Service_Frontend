@@ -18,6 +18,15 @@ export async function fetchAnalyses(): Promise<Analyse[]> {
     return await response.json();
   }
   
+  export async function deleteAnalyseById(id: number): Promise<Analyse> {
+
+    const response = await fetch(`${API_BASE_URL}/delete/${id}`, {method:'DELETE'});
+    if (!response.ok) {
+        throw new Error('Failed to delete Analyse');
+    }
+    return await response.json();
+  }
+
   export async function getAnalysesWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Analyse[]> {
     const encodedStartDate = encodeURIComponent(startDate);
     const encodedEndDate = encodeURIComponent(endDate);

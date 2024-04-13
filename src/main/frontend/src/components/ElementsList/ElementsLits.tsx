@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
-import moment from "moment";
 import statutEnCours from "./../../assets/statut-en-cours.svg";
 import statutTermine from "./../../assets/statut-termine.svg";
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ListProps {
   nameModule: string;
@@ -138,7 +138,7 @@ const ElementsList: React.FC<ListProps> = ({
                   />
                 </td>
                 <td>
-                  <FontAwesomeIcon
+                { /* <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() =>
                       onDelete(
@@ -150,7 +150,34 @@ const ElementsList: React.FC<ListProps> = ({
                       )
                     }
                     style={{ cursor: "pointer" }}
+                  />*/}
+
+                   <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => {
+                      let idToDelete;
+                      switch (nameModule) {
+                        case 'analyse':
+                          idToDelete = item.id_analysis;
+                          break;
+                        case 'mesAnalyses':
+                          idToDelete = item.id_analysis;
+                          break;
+                        case 'projet':
+                          idToDelete = item.id_project;
+                          break;
+                        case 'dataset':
+                          idToDelete = item.id_dataset;
+                          break;
+                        default:
+                          console.error('Module type not recognized for deletion');
+                          return;
+                      }
+                      onDelete(idToDelete);
+                    }}
+                    style={{ cursor: "pointer" }}
                   />
+
                 </td>
               </tr>
             ))}
