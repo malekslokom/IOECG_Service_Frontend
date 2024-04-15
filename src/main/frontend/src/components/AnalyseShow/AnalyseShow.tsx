@@ -1,7 +1,7 @@
 import { faPlusCircle,faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
+import { fetchExperienceForAnalysis, createExperience } from '../../services/ExperienceService';
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import AnalyseDatsetModal from '../Modals/Analyse/AnalyseDatsetModal';
@@ -32,6 +32,7 @@ const AnalyseShow = () => {
 
  const [selectedExperience, setSelectedExperience] = useState<Experience>({ 
   id_experience: 1,
+  id_analysis: 1,
   name_experience: "Test",
   models: [],
   datasets: [],
@@ -42,7 +43,7 @@ const AnalyseShow = () => {
   heure_fin_prevu: "", 
   statut: "En cours", 
   resultat_prediction: [], 
-});    //Experience selectionnée pour visualiser les informations);
+});    //Experience selectionnée pour visualiser les informations
   
 
  const [columnsExperience, setColumnsExperience] = useState([
@@ -52,7 +53,7 @@ const AnalyseShow = () => {
   "Statut"
 ]);
 
- const { id } = useParams();
+ const { id } = useParams();  //id de l'analyse
  const [datasets, setDatasets] = useState<DatasetAnalyse[]>([]);
  console.log(id)
  useEffect(() => {
@@ -79,9 +80,15 @@ const AnalyseShow = () => {
   setShowModalExperience(true);
  }
 
- const handleAddExperience = (newExperience: Experience) => {
-  setExperienceList([...experiencesList,newExperience]);  //Mise à jour de la liste des experiences de l'analyse
-}
+ const handleAddExperience = async (newExperience: Experience) => {
+  try {
+    await createExperience(Number(id), newExperience);
+    setExperienceList([...experiencesList,newExperience]);  //Mise à jour de la liste des experiences de l'analyse
+    }
+    catch (error) {
+      console.error("Error adding experience:", error);
+    }
+  }
 
 const closeModalExperience =() => {
   setShowModalExperience(false);
@@ -104,8 +111,13 @@ const handleCloseInfoExperience = () => {
 const handleDeleteExperience = () => {
 }
 
-//Changement de statut
+//Liste experience
 const [experiencesList,setExperienceList] = useState<Experience[]>([]);
+useEffect(() => {
+  fetchExperienceForAnalysis(Number(id))
+    .then((data)=> setExperienceList(data))
+    .catch((error) => console.error("Error fetching experiences:", error));
+}, []);
 
 //Permet de changer le string HH:MM:SS en type Date pour la comparaison
 const parseTimeStringToTime = (timeString: string) => {
@@ -113,9 +125,10 @@ const parseTimeStringToTime = (timeString: string) => {
   return new Date(0, 0, 0, hour, minute, second);
 };
 
+/////////Verificatioon pour le changement de statut
 useEffect(() => {
   const timer = setInterval(() => {
-    console.log('This will run every second!');
+    //console.log('This will run every second!');
 
     setExperienceList(prevExperiences => prevExperiences.map((experience) => {
       if (experience.statut === "En cours" && experience.heure_fin_prevu) {
@@ -321,7 +334,7 @@ useEffect(() => {
      </div>
      {showModalDataset && <AnalyseDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModal} />}
      {ShowModalSearchDataset && <AnalyseSearchDatsetModal onCreate={handleAddDatasetToAnalyse} onClose={closeModalSearchDataset} />}
-     {showModalExperience && <CreateExperienceModal onCreate={handleAddExperience} onClose={closeModalExperience} modelsList={selectedModels} datasetsList={selectedDatasets}/>}
+     {showModalExperience && <CreateExperienceModal id_analyse={Number(id)} onCreate={handleAddExperience} onClose={closeModalExperience} modelsList={selectedModels} datasetsList={selectedDatasets}/>}
      {showModalInfoExperience && <InfoExperienceModal experience={selectedExperience} onClose={handleCloseInfoExperience}/>}
      </div>
 

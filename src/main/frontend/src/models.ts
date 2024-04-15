@@ -161,6 +161,7 @@ interface ECGPlotModalProps {
 
 interface Experience {
   id_experience?: number;
+  id_analysis: number;
   name_experience: string;
   models: (number |undefined)[]; // Tableau des id des modeles de l'experience
   datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience

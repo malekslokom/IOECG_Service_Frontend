@@ -3,12 +3,14 @@ import { Modal, Button, Form } from 'react-bootstrap';
 
 
 interface CreateExperienceModalProps {
+    id_analyse: number; 
     onClose: () => void;
     onCreate: (newExperience: Experience) => void;
     modelsList: Model[];
     datasetsList: Dataset[];
 }
 const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
+    id_analyse, 
     onClose,
     onCreate,
     modelsList,
@@ -19,38 +21,19 @@ const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
     const [selectedModels, setSelectedModels] = useState<Model[]>([]);
     const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
 
-    
-    /*const getCurrentTime = () => {
-        const currentDate = new Date();
-        return currentDate.toLocaleTimeString("fr-FR", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-        });
-    };
-
-    const calculateEndTime = () => {
-        const currentDate = new Date();
-        currentDate.setSeconds(currentDate.getSeconds() + 5);
-        return currentDate.toLocaleTimeString("fr-FR", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-        });
-    };   */
-
     const handleCreateExperience = () => {
 
       const currentTime = new Date().toLocaleTimeString("fr-FR", { hour12: false });
-      const endTime = new Date(Date.now() + 6000).toLocaleTimeString("fr-FR", { hour12: false });
+      const endTime = new Date(Date.now() + 10000).toLocaleTimeString("fr-FR", { hour12: false });
 
         const newExperience: Experience = {
+            id_analysis: id_analyse,
             name_experience: nameExperience,
             models: selectedModels.map(model => model.id_model), 
             datasets: selectedDatasets.map(dataset => dataset.id_dataset), 
-            nom_machine: "",
-            nb_gpu: 0,
-            nb_processeurs: 0,
+            nom_machine: "Machine Andy",     //Données statiques
+            nb_gpu: 6,           //Données statiques
+            nb_processeurs: 4,   //Données statiques
             heure_lancement: currentTime,
             heure_fin_prevu: endTime,
             statut: "En cours",

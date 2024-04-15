@@ -19,7 +19,7 @@ const ListProjetsPage = () => {
   useEffect(() => {
     fetchProjets()
       .then((data) => setListProjets(data))
-      .catch((error) => console.error("Error fetching analyses:", error));
+      .catch((error) => console.error("Error fetching projets:", error));
   }, []);
 
   const [columns, setColumns] = useState([
