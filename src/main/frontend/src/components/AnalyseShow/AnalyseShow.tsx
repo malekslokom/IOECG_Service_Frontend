@@ -1,7 +1,7 @@
 import { faPlusCircle,faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { fetchExperienceForAnalysis, createExperience } from '../../services/ExperienceService';
+import { fetchExperienceForAnalysis, createExperience, updateExperienceStatus } from '../../services/ExperienceService';
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import AnalyseDatsetModal from '../Modals/Analyse/AnalyseDatsetModal';
@@ -32,7 +32,7 @@ const AnalyseShow = () => {
 
  const [selectedExperience, setSelectedExperience] = useState<Experience>({ 
   id_experience: 1,
-  id_analysis: 1,
+  id_analysis_experience: 1,
   name_experience: "Test",
   models: [],
   datasets: [],
@@ -94,11 +94,11 @@ const closeModalExperience =() => {
   setShowModalExperience(false);
 }
 
-const handleOpenInfoExperience = (idExperience: number) => {
+const handleOpenInfoExperience = (index: number) => {
   setShowModalInfoExperience(true);
 
-  console.log("Ouverture des infos de l'experience");
-  const experience = experiencesList.find(exp => exp.id_experience === idExperience);
+  console.log("Ouverture des infos de l'experience: ", index);
+  const experience = experiencesList.find(exp => exp.id_experience === index);
   if (experience) {
     setSelectedExperience(experience);
   }
@@ -119,17 +119,40 @@ useEffect(() => {
     .catch((error) => console.error("Error fetching experiences:", error));
 }, []);
 
-//Permet de changer le string HH:MM:SS en type Date pour la comparaison
-const parseTimeStringToTime = (timeString: string) => {
-  const [hour, minute, second] = timeString.split(':').map(Number);
-  return new Date(0, 0, 0, hour, minute, second);
-};
+
 
 /////////Verificatioon pour le changement de statut
 useEffect(() => {
-  const timer = setInterval(() => {
-    //console.log('This will run every second!');
 
+  //Permet de changer le string HH:MM:SS en type Date pour la comparaison
+  const parseTimeStringToTime = (timeString: string) => {
+    const [hour, minute, second] = timeString.split(':').map(Number);
+    return new Date(0, 0, 0, hour, minute, second);
+  };
+
+  const timer = setInterval(async () => {
+    console.log('This will run every second!');
+
+    for (const experience of experiencesList) {
+      const currentTime = new Date();
+      const endTime = parseTimeStringToTime(experience.heure_fin_prevu);
+
+      if (currentTime > endTime && experience.statut !== "Terminé" && experience.id_experience) {
+        try {
+          await updateExperienceStatus(experience.id_experience, "Terminé");
+          // Mettre à jour la liste des expériences dans le state
+          setExperienceList(prevList => prevList.map(exp => {
+            if (exp.id_experience === experience.id_experience) {
+              return {...exp, statut: "Terminé"};
+            }
+            return exp;
+          }));
+        } catch (error) {
+          console.error("Temps dépassé but error updating experience status:", error);
+        }
+      }
+    }
+     /*
     setExperienceList(prevExperiences => prevExperiences.map((experience) => {
       if (experience.statut === "En cours" && experience.heure_fin_prevu) {
 
@@ -144,12 +167,13 @@ useEffect(() => {
         }
       }
       return experience;
-    }));
-  }, 1000);
+    }));*/
+
+  }, 3000);
 
   return () => clearInterval(timer);
 
-},  []);
+},  [id, experiencesList]);
 
  /////////DATASET FUNCTIONS
  const handleOpenModalDataset = () => {

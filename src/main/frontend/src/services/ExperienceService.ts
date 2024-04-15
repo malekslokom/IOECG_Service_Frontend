@@ -45,3 +45,22 @@ export async function getExperienceById(id_experience: number): Promise<Experien
     }
   }
   ;
+
+  export async function updateExperienceStatus(id_experience: number, newStatus: string): Promise<void> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/experiences/${id_experience}/update-status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ statut: newStatus })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update experience status');
+      }
+    } catch (error) {
+      console.error("Error updating experience status:", error);
+      throw error;
+    }
+}

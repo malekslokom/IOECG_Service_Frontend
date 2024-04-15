@@ -161,7 +161,7 @@ interface ECGPlotModalProps {
 
 interface Experience {
   id_experience?: number;
-  id_analysis: number;
+  id_analysis_experience: number;
   name_experience: string;
   models: (number |undefined)[]; // Tableau des id des modeles de l'experience
   datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
@@ -169,7 +169,8 @@ interface Experience {
   nb_gpu: number;
   nb_processeurs: number;
   heure_lancement: string; 
-  heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
+  heure_fin_prevu: string;
+  //heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
   statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
   resultat_prediction: number[];
 }

@@ -18,8 +18,6 @@ const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
 }) => {
     
     const [nameExperience, setNameExperience] = useState('');
-    const [selectedModels, setSelectedModels] = useState<Model[]>([]);
-    const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
 
     const handleCreateExperience = () => {
 
@@ -27,10 +25,10 @@ const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
       const endTime = new Date(Date.now() + 10000).toLocaleTimeString("fr-FR", { hour12: false });
 
         const newExperience: Experience = {
-            id_analysis: id_analyse,
+            id_analysis_experience: id_analyse,
             name_experience: nameExperience,
-            models: selectedModels.map(model => model.id_model), 
-            datasets: selectedDatasets.map(dataset => dataset.id_dataset), 
+            models: modelsList.map(model => model.id_model), 
+            datasets: datasetsList.map(dataset => dataset.id_dataset), 
             nom_machine: "Machine Andy",     //Données statiques
             nb_gpu: 6,           //Données statiques
             nb_processeurs: 4,   //Données statiques
@@ -44,8 +42,6 @@ const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
 
         onCreate(newExperience);
         setNameExperience('');
-        setSelectedDatasets([]);
-        setSelectedModels([]);
         onClose();
     };
 

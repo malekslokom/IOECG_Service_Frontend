@@ -109,7 +109,7 @@ const ListProjetsPage = () => {
   /*Ouvrir une analyse */
   const handleShowProjet = (id: number) => {
     navigate(`/projets/${id}`);
-    console.log("Projet ouverte");
+    console.log("Projet ouvert");
   };
   return (
     <div>

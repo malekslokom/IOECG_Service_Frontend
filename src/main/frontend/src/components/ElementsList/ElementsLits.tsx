@@ -169,6 +169,9 @@ const ElementsList: React.FC<ListProps> = ({
                         case 'dataset':
                           idToDelete = item.id_dataset;
                           break;
+                        case 'experience':
+                           idToDelete = item.id_experience;
+                          break;
                         default:
                           console.error('Module type not recognized for deletion');
                           return;
