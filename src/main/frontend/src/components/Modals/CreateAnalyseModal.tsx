@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 interface CreateAnalyseModalProps {
+  idProjet: number;
   onClose: () => void;
   onCreate: (newAnalyse: Analyse) => void;
 }
 
 const CreateAnalyseModal: React.FC<CreateAnalyseModalProps> = ({
+  idProjet,
   onClose,
   onCreate,
 }) => {
@@ -27,10 +29,12 @@ const CreateAnalyseModal: React.FC<CreateAnalyseModalProps> = ({
     event.preventDefault();
 
     const newAnalyse: Analyse = {
-      nom: name,
-      dateCreation: new Date().toLocaleDateString("fr-FR"),
-      auteur: "Andy", // Vous pouvez remplacer par le nom de l'utilisateur actuel
-      description: description,
+      id_project: idProjet,
+      created_at: new Date().toLocaleDateString("fr-FR"),
+      last_updated_at: new Date().toLocaleDateString("fr-FR"),
+      name_analysis: name,
+      description_analysis: description,
+      created_by: "Andy", // Vous pouvez remplacer par le nom de l'utilisateur actuel
     };
 
     onCreate(newAnalyse);

@@ -19,7 +19,7 @@ const ListProjetsPage = () => {
   useEffect(() => {
     fetchProjets()
       .then((data) => setListProjets(data))
-      .catch((error) => console.error("Error fetching analyses:", error));
+      .catch((error) => console.error("Error fetching projets:", error));
   }, []);
 
   const [columns, setColumns] = useState([
@@ -75,7 +75,7 @@ const ListProjetsPage = () => {
     console.log("Nouveau projet créé:", newProjet);
     const createdProjet = await createProject(newProjet);
     console.log("Projet créé avec succès:", createdProjet);
-    setListProjets([...listProjets, createdProjet]);
+    setListProjets([...listProjets, newProjet]);
   };
 
   const handleCloseModal = () => {
@@ -111,7 +111,7 @@ const ListProjetsPage = () => {
   /*Ouvrir une analyse */
   const handleShowProjet = (id: number) => {
     navigate(`/projets/${id}`);
-    console.log("Projet ouverte");
+    console.log("Projet ouvert");
   };
   return (
     <div>

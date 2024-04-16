@@ -1,6 +1,7 @@
 interface Model {
     // inputShape: number[];
     // outputShape: number[];
+    id_model?: number;
     name: string;
     description: string;
     author: string;
@@ -21,11 +22,14 @@ interface Model {
 
 
   interface Analyse {
-    dateCreation: string ;
-    nom: string;
-    auteur: string;
-    description: string;
-    id_analysis?:number;    
+    id_analysis?:number;
+    id_project: number;
+    created_at: String;
+    last_updated_at:String;
+    name_analysis: String;
+    description_analysis: String;
+    created_by: String;
+
   };
   
   interface Projet {
@@ -139,11 +143,11 @@ interface PatientEcgData {
 
     
 interface Rapport {
-  id_rapport: number;
-  dateCreation: string;
-  nom: string ;
-  modeles: string[];   //ou Model[]  ?
-  datasets: string[] // ou Dataset[] ?
+  id_rapport?: number;
+  id_experience_rapport: number;
+  created_at: string;
+  name_rapport: string ;
+
 }
 
 
@@ -154,4 +158,20 @@ interface LeadData {
 interface ECGPlotModalProps {
   ecgData: LeadData[]; // Now ecgData is an array of LeadData objects
   onClose: () => void;
+}
+
+interface Experience {
+  id_experience?: number;
+  id_analysis_experience: number;
+  name_experience: string;
+  models: (number |undefined)[]; // Tableau des id des modeles de l'experience
+  datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
+  nom_machine: string;
+  nb_gpu: number;
+  nb_processeurs: number;
+  heure_lancement: string; 
+  heure_fin_prevu: string;
+  //heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
+  statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
+  resultat_prediction: number[];
 }

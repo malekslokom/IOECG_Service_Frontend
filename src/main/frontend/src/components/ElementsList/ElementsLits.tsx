@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
+import statutEnCours from "./../../assets/statut-en-cours.svg";
+import statutTermine from "./../../assets/statut-termine.svg";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ListProps {
   nameModule: string;
@@ -52,6 +54,8 @@ const ElementsList: React.FC<ListProps> = ({
                   item.id_project ||
                   item.id_analysis ||
                   item.id_dataset ||
+                  item.id_experience ||
+                  item.id_rapport ||
                   index
                 }
               >
@@ -61,6 +65,16 @@ const ElementsList: React.FC<ListProps> = ({
                     <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
                     <td>{item.created_by}</td>
                     <td>{item.description_analysis}</td>
+                    <td></td>
+                  </>
+                )}
+                {nameModule == "mesAnalyses" && (
+                  <>
+                    <td>{item.name_analysis}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td>{item.created_by}</td>
+                    <td>{item.description_analysis}</td>
+                    <td>{item.id_project}</td>
                     <td></td>
                   </>
                 )}
@@ -86,11 +100,31 @@ const ElementsList: React.FC<ListProps> = ({
 
                 {nameModule == "rapport" && (
                   <>
-                    <td>{item.nom}</td>
-                    <td>{item.dateCreation}</td>
-                    <td>{item.auteur}</td>
-                    <td>{item.models.join(", ")}</td>
-                    <td>{item.datasets.join(", ")}</td>
+
+                    <td>{item.name_rapport}</td>
+                    <td>{item.created_at}</td>
+                    <td>{item.id_experience_rapport}</td>
+                    <td></td>
+                  </>
+                )}
+
+                  {nameModule == "rapportAnalyse" && (
+                    <>
+                      <td>{item.name_rapport}</td>
+                      <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                      <td></td>
+                    </>
+                  )}
+
+                {nameModule == "experience" && (
+                  <>
+                    <td>{item.name_experience}</td>
+                    <td>{item.heure_lancement}</td>
+                    <td>{item.heure_fin_prevu}</td>
+                    <td> 
+                      {item.statut === "En cours" && <img src={statutEnCours} alt="Statut en cours" />}
+                      {item.statut === "Terminé" && <img src={statutTermine} alt="Statut terminé" />}
+                    </td>
                     <td></td>
                   </>
                 )}
@@ -103,6 +137,8 @@ const ElementsList: React.FC<ListProps> = ({
                         item.id_project ||
                           item.id_analysis ||
                           item.id_dataset ||
+                          item.id_experience ||
+                          item.id_rapport ||
                           index
                       )
                     }
@@ -110,18 +146,52 @@ const ElementsList: React.FC<ListProps> = ({
                   />
                 </td>
                 <td>
-                  <FontAwesomeIcon
+                { /* <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() =>
                       onDelete(
                         item.id_project ||
                           item.id_analysis ||
                           item.id_dataset ||
+                          item.id_experience ||
                           index
                       )
                     }
                     style={{ cursor: "pointer" }}
+                  />*/}
+
+                   <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => {
+                      let idToDelete;
+                      switch (nameModule) {
+                        case 'analyse':
+                          idToDelete = item.id_analysis;
+                          break;
+                        case 'mesAnalyses':
+                          idToDelete = item.id_analysis;
+                          break;
+                        case 'projet':
+                          idToDelete = item.id_project;
+                          break;
+                        case 'dataset':
+                          idToDelete = item.id_dataset;
+                          break;
+                        case 'experience':
+                           idToDelete = item.id_experience;
+                          break;
+                        case 'rapport':
+                          idToDelete = item.id_rapport;
+                          break;
+                        default:
+                          console.error('Module type not recognized for deletion');
+                          return;
+                      }
+                      onDelete(idToDelete);
+                    }}
+                    style={{ cursor: "pointer" }}
                   />
+
                 </td>
               </tr>
             ))}

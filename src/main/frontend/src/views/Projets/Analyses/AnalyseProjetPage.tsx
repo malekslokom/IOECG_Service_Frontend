@@ -132,6 +132,7 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
       </div>
       {newAnalyseModal && (
         <CreateAnalyseModal
+          idProjet={idProjet}
           onClose={handleCloseModal}
           onCreate={handleCreateAnalyse}
         />

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/ListPage/ListPage";
+import CreateAnalyseModal from "../../components/Modals/CreateAnalyseModal";
 import ElementsList from "../../components/ElementsList/ElementsLits";
 import ConfirmationArchiverModal from "../../components/Modals/ConfirmationArchiverModal";
 import {
+  deleteAnalyseById,
   fetchAnalyses,
   getAnalysesWithFilter,
 } from "../../services/AnalyseService";
@@ -19,11 +21,11 @@ const MesAnalysePage = () => {
   }, []);
 
   const [columns, setColumns] = useState([
-    "Date création",
     "Nom",
+    "Date création",
+    "Auteur",
     "Description",
-    "Nom étude",
-    "Nom source",
+    "Id projet",
   ]);
 
   const [filters, setFilters] = useState({
@@ -44,8 +46,9 @@ const MesAnalysePage = () => {
   };
 
   const handleShowAnalyse = (index: number) => {
-    navigate(`/projets/analyses/${index}`);
-    console.log("Analyse ouvert !");
+   //navigate(`/projets/analyses/${index}`);
+    navigate(`/projets/1/analyses/${index}`);
+    console.log("Analyse ouverte !");
   };
   const handleFilter = (
     startDate: string,
@@ -61,10 +64,12 @@ const MesAnalysePage = () => {
     console.log("Analyse  cliqué et supprimé");
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedAnalyse !== null) {
-      const updatedList = [...listAnalyses];
-      updatedList.splice(selectedAnalyse, 1);
+      /*const updatedList = [...listAnalyses];
+      updatedList.splice(selectedAnalyse, 1);*/
+      await deleteAnalyseById(selectedAnalyse);
+      const updatedList = listAnalyses.filter(analyse => analyse.id_analysis !== selectedAnalyse);
       setListAnalyses(updatedList);
 
       setSelectedAnalyse(null);
@@ -98,7 +103,7 @@ const MesAnalysePage = () => {
         <ListPage
           title="Mes Analyses"
           bouton="Créer"
-          boutonVisible={true}
+          boutonVisible={false}
           onClick={buttonClick}
           onFilter={handleFilter}
         />
@@ -107,7 +112,7 @@ const MesAnalysePage = () => {
           style={{ top: "160px", left: 0, width: "100%" }}
         >
           <ElementsList
-            nameModule="analyse"
+            nameModule="mesAnalyses"
             columns={columns}
             elementsList={listAnalyses}
             onShow={handleShowAnalyse}

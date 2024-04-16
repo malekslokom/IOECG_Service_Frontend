@@ -46,6 +46,10 @@ spring:
           uri: lb://models
           predicates:
             - Path=/api/models/**
+        - id: rapports
+          uri: lb://rapports
+          predicates:
+            - Path=/api/rapports/**
 server:
   port: 8080
 

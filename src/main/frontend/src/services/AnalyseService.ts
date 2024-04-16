@@ -1,17 +1,18 @@
 
 const API_BASE_URL = "http://localhost:8080/api/analyses";
 export async function fetchAnalyses(): Promise<Analyse[]> {
-  const response = await fetch(`${API_BASE_URL}/`);
+  const response = await fetch(`${API_BASE_URL}/allAnalyse`);
   if (!response.ok) {
       throw new Error('Failed to fetch analyses');
     }
     return await response.json();
   }
-export async function getAnalyseById(id: number): Promise<Projet> {
 
+  
+  export async function getAnalyseById(id: number): Promise<Analyse> {
   const response = await fetch(`${API_BASE_URL}/${id}`);
   if (!response.ok) {
-      throw new Error('Failed to get project');
+      throw new Error('Failed to get analyse');
   }
   return await response.json();
 }
@@ -48,6 +49,16 @@ export async function fetchAnalyseModels(id_analyse:number): Promise<Model[]> {
   const response = await fetch(`${API_BASE_URL}/${id_analyse}/models`);
   if (!response.ok) {
       throw new Error('Failed to fetch models');
+  }
+      return await response.json();
+
+}
+  export async function deleteAnalyseById(id: number): Promise<Analyse> {
+
+    const response = await fetch(`${API_BASE_URL}/delete/${id}`, {method:'DELETE'});
+    if (!response.ok) {
+        throw new Error('Failed to delete Analyse');
     }
     return await response.json();
   }
+
