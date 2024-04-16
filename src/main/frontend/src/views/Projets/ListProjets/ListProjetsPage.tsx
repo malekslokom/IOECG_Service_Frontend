@@ -7,7 +7,7 @@ import {
   fetchProjets,
   getProjectWithFilter,
   createProject,
-  deleteProjectById
+  deleteProjectById,
 } from "../../../services/ProjetService";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +91,9 @@ const ListProjetsPage = () => {
   const handleConfirmDeleteProjet = async () => {
     if (selectedProjet !== null) {
       await deleteProjectById(selectedProjet);
-      const updatedList = listProjets.filter(projet => projet.id_project !== selectedProjet);
+      const updatedList = listProjets.filter(
+        (projet) => projet.id_project !== selectedProjet
+      );
       /*const updatedList = [...listProjets];
       updatedList.splice(selectedProjet, 1);*/
       setListProjets(updatedList);
@@ -122,6 +124,7 @@ const ListProjetsPage = () => {
             onClick={buttonClick}
             onFilter={handleFilter}
           />
+          <hr style={{ color: "#555" }} />
           <div
             className="position-absolute"
             style={{ top: "160px", left: 0, width: "100%" }}

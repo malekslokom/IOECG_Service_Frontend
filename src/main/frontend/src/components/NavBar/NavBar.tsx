@@ -23,7 +23,7 @@ const NavBar = ({ theme, onThemeChange }: Props) => {
       }}
     >
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/home">
           <img src={logo} style={{ height: "70px", width: "auto" }} />
         </a>
         <div className="d-flex align-items-center">

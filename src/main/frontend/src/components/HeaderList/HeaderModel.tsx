@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faFilter } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 interface HeaderModelProps {
-  onFilter: (typeModel: string, auteurModel: string, nomModel: string) => void;
+  onFilter: (typeModel: string, searchTerm: string, nomModel: string) => void;
 }
 const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
   const [typeModel, setTypeModel] = useState("");
   const [searchTerm, setsearchTerm] = useState("");
-  const [nomModel, setNomeModel] = useState("");
+  const [nomModel, setNomModel] = useState("");
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTypeModel(e.target.value);
   };
@@ -15,7 +15,7 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
     setsearchTerm(e.target.value);
   };
   const handleModelNameSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNomeModel(e.target.value);
+    setNomModel(e.target.value);
   };
   const handleFilterClick = () => {
     onFilter(typeModel, searchTerm, nomModel);
@@ -25,7 +25,7 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
     // Réinitialiser les états des filtres
     setTypeModel("");
     setsearchTerm("");
-    setNomeModel("");
+    setNomModel("");
     // Appeler onFilter avec des valeurs vides pour réinitialiser les filtres côté parent
     onFilter("", "", "");
   };
@@ -49,8 +49,11 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
           <input
             type="text"
             placeholder="Nom de modéle"
-            className="form-control"
-            style={{ width: "100%" }}
+            className="form-control input-placeholder"
+            style={{
+              width: "100%",
+              background: "var(--background-color)",
+            }}
             onChange={handleModelNameSearch}
           />
         </div>
@@ -58,8 +61,11 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
           <input
             type="text"
             placeholder="chercher"
-            className="form-control"
-            style={{ width: "100%" }}
+            className="form-control input-placeholder"
+            style={{
+              width: "100%",
+              background: "var(--background-color)",
+            }}
             onChange={handleSearchTermSearch}
           />
         </div>
@@ -69,20 +75,29 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
             className="form-select"
             value={typeModel}
             onChange={handleTypeChange}
+            style={{
+              background: "var(--background-color)",
+              color: "var(--primary-text-color)",
+            }}
           >
-            <option value="">Nature de modéle</option>
-            <option value="Regression">Regression</option>
-            <option value="Binary Classification">Binary Classification</option>
-            <option value="Multi-class Classification">
+            <option value="régression">Regression</option>
+            <option value="classification multi-class">
+              Binary Classification
+            </option>
+            <option value="classification multi-class">
               Multi-class Classification
             </option>
           </select>
         </div>
         <div className="col-auto">
           <button
-            className="btn btn-light"
+            className="btn"
             onClick={handleFilterClick}
-            style={{ color: "rgba(226,13,23)" }}
+            style={{
+              background: "var(--background-color)",
+              color: "var(--primary-text-color)",
+              border: "1px solid var(--primary-text-color)",
+            }}
           >
             <FontAwesomeIcon icon={faFilter} />
             Filter

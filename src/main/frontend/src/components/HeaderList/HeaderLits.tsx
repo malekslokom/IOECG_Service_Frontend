@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faFilter } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import moment from "moment";
+
 interface HeaderListProps {
   onFilter: (startDate: string, endDate: string, searchTerm: string) => void;
 }
@@ -91,10 +92,10 @@ const HeaderList: React.FC<HeaderListProps> = ({ onFilter }) => {
             placeholder="chercher ...."
             value={searchTerm}
             onChange={handleSearch}
-            className="form-control"
+            className="form-control "
             style={{
               width: "100%",
-              color: "var(--primary-text-color)",
+              color: "var(--placeholder-color-dark)",
               background: "var(--background-color)",
             }}
           />

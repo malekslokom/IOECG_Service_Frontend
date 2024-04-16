@@ -33,3 +33,10 @@ export async function fetchDatasets(): Promise<Dataset[]> {
     }
     return await response.json();
   }
+  export async function fetchDatasetsIRD(): Promise<Dataset[]> {
+    const response = await fetch(`${API_BASE_URL}/ird/`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch datasets');
+    }
+    return await response.json();
+  }

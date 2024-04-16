@@ -12,6 +12,7 @@ interface Model {
     model_size: string;
     batch_size: string;
     learning_rate:Float32Array;
+    id:number;
   //  hyperparameters: { [key: string]: string };
 
    // architectureImage: string;
@@ -24,7 +25,7 @@ interface Model {
     nom: string;
     auteur: string;
     description: string;
-    id_analysis:number;    
+    id_analysis?:number;    
   };
   
   interface Projet {
@@ -60,7 +61,7 @@ interface Model {
   // }
   
   interface Dataset {
-    id_dataset? :number;
+    id_dataset :number;
     created_at : string;
     name_dataset : string;
     description_dataset: string;

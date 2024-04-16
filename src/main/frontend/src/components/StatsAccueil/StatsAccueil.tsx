@@ -1,14 +1,20 @@
+// StatsAccueil.tsx
+
+import React from "react";
+import ProgressBar from "../ProgressBar/ProgressBar";
 import "./StatsAccueil.css";
 
 interface StatsAccueilProps {
-    icon: string; // URL de l'icône
-    title: string; // Le texte à afficher, comme "Projets"
-    count: number; // Le nombre total à afficher
-  }
+  icon: string;
+  title: string;
+  count: number;
+  maxValue: number;
+}
 
-const StatsAccueil = ({ icon, title, count }:StatsAccueilProps) => {
+const StatsAccueil = ({ icon, title, count, maxValue }: StatsAccueilProps) => {
+  const percentage = (count / maxValue) * 100 || 0;
+
   return (
-  
     <div className="StatsAccueil">
       <div className="StatsAccueil-icon">
         <img src={icon} alt={title} />
@@ -16,9 +22,10 @@ const StatsAccueil = ({ icon, title, count }:StatsAccueilProps) => {
       <div className="StatsAccueil-content">
         <h3 className="StatsAccueil-title">{title}</h3>
         <div className="StatsAccueil-count">{count} total créé</div>
+        <ProgressBar percentage={percentage} />
       </div>
     </div>
   );
-}
+};
 
-export default StatsAccueil
+export default StatsAccueil;
