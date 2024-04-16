@@ -7,7 +7,7 @@ import {
   fetchProjets,
   getProjectWithFilter,
   createProject,
-  deleteProjectById
+  deleteProjectById,
 } from "../../../services/ProjetService";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ const ListProjetsPage = () => {
   useEffect(() => {
     fetchProjets()
       .then((data) => setListProjets(data))
-      .catch((error) => console.error("Error fetching analyses:", error));
+      .catch((error) => console.error("Error fetching projets:", error));
   }, []);
 
   const [columns, setColumns] = useState([
@@ -75,7 +75,7 @@ const ListProjetsPage = () => {
     console.log("Nouveau projet créé:", newProjet);
     const createdProjet = await createProject(newProjet);
     console.log("Projet créé avec succès:", createdProjet);
-    setListProjets([...listProjets, createdProjet]);
+    setListProjets([...listProjets, newProjet]);
   };
 
   const handleCloseModal = () => {
@@ -91,7 +91,9 @@ const ListProjetsPage = () => {
   const handleConfirmDeleteProjet = async () => {
     if (selectedProjet !== null) {
       await deleteProjectById(selectedProjet);
-      const updatedList = listProjets.filter(projet => projet.id_project !== selectedProjet);
+      const updatedList = listProjets.filter(
+        (projet) => projet.id_project !== selectedProjet
+      );
       /*const updatedList = [...listProjets];
       updatedList.splice(selectedProjet, 1);*/
       setListProjets(updatedList);
@@ -109,7 +111,7 @@ const ListProjetsPage = () => {
   /*Ouvrir une analyse */
   const handleShowProjet = (id: number) => {
     navigate(`/projets/${id}`);
-    console.log("Projet ouverte");
+    console.log("Projet ouvert");
   };
   return (
     <div>
@@ -122,6 +124,7 @@ const ListProjetsPage = () => {
             onClick={buttonClick}
             onFilter={handleFilter}
           />
+          <hr style={{ color: "#555" }} />
           <div
             className="position-absolute"
             style={{ top: "160px", left: 0, width: "100%" }}

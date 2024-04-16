@@ -111,17 +111,32 @@ interface ModelModalProps {
 
 const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
   return (
-    <Modal keyboard={false} centered size="lg" show={true} onHide={onClose}>
+    <Modal
+      keyboard={false}
+      centered
+      size="lg"
+      show={true}
+      onHide={onClose}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{model.name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="modal-section">
-          <p className="modal-section-title">Informations sur le modèle</p>
+          <p
+            
+            className="modal-section-title"
+          >
+            Informations sur le modèle
+          </p>
           <div className="section-box">
             <div className="d-flex justify-content-between">
               <div className="input-group mb-3">
-                <span className="input-group-text">Auteur</span>
+                <span
+                  className="input-group-text"
+                >
+                  Auteur
+                </span>
                 <input
                   type="text"
                   className="form-control"
@@ -130,7 +145,11 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
                 />
               </div>
               <div className="input-group mb-3">
-                <span className="input-group-text">Nom de projet</span>
+                <span
+                  className="input-group-text"
+                >
+                  Nom de projet
+                </span>
                 <input
                   type="text"
                   className="form-control"
@@ -148,11 +167,19 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
           </div>
         </div>
         <div className="modal-section">
-          <p className="modal-section-title">Architecture</p>
+          <p
+            className="modal-section-title"
+          >
+            Architecture
+          </p>
           <div className="section-box">
             <div className="d-flex justify-content-between">
               <div className="input-group mb-3">
-                <span className="input-group-text">Nom</span>
+                <span
+                  className="input-group-text"
+                >
+                  Nom
+                </span>
                 <input
                   type="text"
                   className="form-control"
@@ -179,19 +206,35 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
           </div>
         </div>
         <div className="modal-section">
-          <p className="modal-section-title">Informations Additionnelles</p>
+          <p
+            className="modal-section-title"
+          >
+            Informations Additionnelles
+          </p>
           <div className="section-box">
             <div className="d-flex flex-wrap gap-2 justify-content-between mb-4">
               <div>
-                <h6 className="tag-title">Total des Paramètres</h6>
+                <h6
+                  className="tag-title"
+                >
+                  Total des Paramètres
+                </h6>
                 <span className="badge bg-secondary">{model.total_params}</span>
               </div>
               <div>
-                <h6 className="tag-title">Taille du Modèle</h6>
+                <h6
+                  className="tag-title"
+                >
+                  Taille du Modèle
+                </h6>
                 <span className="badge bg-secondary">{model.model_size}</span>
               </div>
               <div>
-                <h6 className="tag-title">Taille du Batch</h6>
+                <h6
+                  className="tag-title"
+                >
+                  Taille du Batch
+                </h6>
                 <span className="badge bg-secondary">{model.batch_size}</span>
               </div>
             </div>
@@ -203,7 +246,11 @@ const ModelModal: React.FC<ModelModalProps> = ({ model, onClose }) => {
                 </span>
               </div>
               <div>
-                <h6 className="tag-title">Nature de la Tâche</h6>
+                <h6
+                  className="tag-title"
+                >
+                  Nature de la Tâche
+                </h6>
                 <span className="badge bg-secondary">{model.task_nature}</span>
               </div>
             </div>

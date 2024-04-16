@@ -100,3 +100,7 @@
 .tag-title {
   margin: 0;
 }
+.modal-content {
+ background: var(--primary-bg);
+
+}

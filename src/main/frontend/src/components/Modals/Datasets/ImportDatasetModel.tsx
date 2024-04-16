@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { fetchDatasets } from "../../../services/DatasetService";
+import React, { useState, useEffect, useRef } from "react";
+import { fetchDatasetsIRD } from "../../../services/DatasetService";
 import { Modal, Button, Table } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import * as Papa from "papaparse";
+import "./ImportDataset.css";
 
 interface ImportDatasetModelProps {
   onClose: () => void;
@@ -15,13 +17,13 @@ const ImportDatasetModel: React.FC<ImportDatasetModelProps> = ({
   const [listDatasets, setListDatasets] = useState<Dataset[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const datasetsPerPage = 5;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchDatasets()
+    fetchDatasetsIRD()
       .then((data) => setListDatasets(data))
       .catch((error) => console.error("Error fetching datasets:", error));
   }, []);
-
   const addDataset = (dataset: Dataset) => {
     onCreate(dataset);
     console.log("Ajouter dataset", dataset);
@@ -31,6 +33,31 @@ const ImportDatasetModel: React.FC<ImportDatasetModelProps> = ({
     currentPage * datasetsPerPage,
     (currentPage + 1) * datasetsPerPage
   );
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files[0]) {
+      Papa.parse<Dataset>(files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const newDatasets = results.data.map((item, index) => ({
+            id_dataset: Math.random(), // Generate a unique ID for each dataset
+            created_at: new Date().toISOString(),
+            name_dataset: item.name_dataset,
+            description_dataset: item.description_dataset,
+            type_dataset: item.type_dataset || "standard", // Default to 'standard' if not specified
+            study_name: item.study_name,
+            source_name: item.source_name,
+            leads_name: item.leads_name,
+            study_details: item.study_details,
+          }));
+
+          // Append new datasets to the existing list
+          setListDatasets((prevDatasets) => [...prevDatasets, ...newDatasets]);
+        },
+      });
+    }
+  };
 
   return (
     <Modal
@@ -68,14 +95,23 @@ const ImportDatasetModel: React.FC<ImportDatasetModelProps> = ({
                 Faites glisser et déposez un fichier ici
               </p>
               <div className="text-center">
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  style={{ display: "none" }}
+                  ref={fileInputRef}
+                />
                 <Button
                   variant="outline-danger"
                   className="customButton"
                   style={{
                     padding: "10px",
-                    color: "#E30613",
                     fontWeight: "bold",
                   }}
+                  onClick={() =>
+                    fileInputRef.current && fileInputRef.current.click()
+                  }
                 >
                   Choisir fichier
                 </Button>

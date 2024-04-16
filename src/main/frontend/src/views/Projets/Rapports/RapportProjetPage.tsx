@@ -30,10 +30,8 @@ const RapportProjetPage = () => {
 
   const [listRapports, setListRapports] = useState<Rapport[]>([]);
   const [columns, setColumns] = useState([
+    "Nom Rapport",
     "DateCreation",
-    "Nom",
-    "Modeles",
-    "Datasets",
   ]);
 
   const [showConfirmationModal, setShowConfirmationModal] =

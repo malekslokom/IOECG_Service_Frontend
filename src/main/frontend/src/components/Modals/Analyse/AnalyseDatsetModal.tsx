@@ -1,75 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 //import datasets from './datasetFakeData';
-import Table from 'react-bootstrap/Table';
-import HeaderDataset from '../../HeaderList/HeaderDataset';
-import PlotComponent from '../../Plots/PlotComponent';
+import Table from "react-bootstrap/Table";
+import HeaderDataset from "../../HeaderList/HeaderDataset";
+import PlotComponent from "../../Plots/PlotComponent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import ECGPlotModal from '../ECG/ECGPlotModal';
+import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import ECGPlotModal from "../ECG/ECGPlotModal";
 
 interface AnalyseDatsetModalProps {
-  onClose: () =>void;
+  onClose: () => void;
   onCreate: (newDatasets: Dataset[]) => void;
 }
 
-const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCreate }) => {
+const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({
+  onClose,
+  onCreate,
+}) => {
   const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
   const [selectedECGs, setSelectedECGs] = useState<ECG[]>([]);
-  const [showNewDatasetModal, setShowNewDatasetModal] = useState<boolean>(false);
-  const [newDatasetName, setNewDatasetName] = useState<string>('');
-  const [newDatasetDescription, setNewDatasetDescription] = useState<string>('');
-  const [sectionVisibility, setSectionVisibility] = useState<{ [key: string]: boolean }>({});
-
+  const [showNewDatasetModal, setShowNewDatasetModal] =
+    useState<boolean>(false);
+  const [newDatasetName, setNewDatasetName] = useState<string>("");
+  const [newDatasetDescription, setNewDatasetDescription] =
+    useState<string>("");
+  const [sectionVisibility, setSectionVisibility] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const { id } = useParams(); // Extracting analysisId from URL params
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [ecgDataForModal, setEcgDataForModal] = useState<any>(null);
-  const [showECGModal, setShowECGModal] = useState(false); 
+  const [showECGModal, setShowECGModal] = useState(false);
 
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
         const response = await fetch(`/api/datasets/`);
         if (!response.ok) {
-          throw new Error('Failed to fetch datasets');
+          throw new Error("Failed to fetch datasets");
         }
         const data = await response.json();
         setDatasets(data);
       } catch (error) {
-        console.error('Error fetching datasets:', error);
+        console.error("Error fetching datasets:", error);
       }
     };
 
     fetchDatasets();
   }, [id]);
-  console.log(datasets)
+  console.log(datasets);
 
   const toggleSectionVisibility = (datasetId: number) => {
-    setSectionVisibility(prevVisibility => ({
+    setSectionVisibility((prevVisibility) => ({
       ...prevVisibility,
-      [datasetId]: !prevVisibility[datasetId]
+      [datasetId]: !prevVisibility[datasetId],
     }));
   };
 
-  
-  
   const handleECGSelection = (ecg: ECG) => {
-    setSelectedECGs(prevSelectedECGs => {
-
-      const index = prevSelectedECGs.findIndex(selectedECG => selectedECG.id === ecg.id);
+    setSelectedECGs((prevSelectedECGs) => {
+      const index = prevSelectedECGs.findIndex(
+        (selectedECG) => selectedECG.id === ecg.id
+      );
       if (index !== -1) {
-        return prevSelectedECGs.filter(selectedECG => selectedECG.id !== ecg.id);
+        return prevSelectedECGs.filter(
+          (selectedECG) => selectedECG.id !== ecg.id
+        );
       } else {
         return [...prevSelectedECGs, ecg];
       }
     });
   };
-
- 
-
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +81,6 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
     console.log(selectedECGs);
     console.log(selectedDatasets);
     onClose();
-    
   };
 
   const handleShowEcg = (ecgDataForCurrentRow: any) => {
@@ -85,119 +88,186 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
     setEcgDataForModal(ecgDataForCurrentRow);
   };
 
-
   const handleCheckboxChange = (dataset: Dataset) => {
     const newSelectedDatasets = selectedDatasets.includes(dataset)
-      ? selectedDatasets.filter(item => item !== dataset)
+      ? selectedDatasets.filter((item) => item !== dataset)
       : [...selectedDatasets, dataset];
-  
+
     setSelectedDatasets(newSelectedDatasets);
-  
-    setSectionVisibility(prevVisibility => ({
+
+    setSectionVisibility((prevVisibility) => ({
       ...prevVisibility,
-      [dataset.id_dataset]: newSelectedDatasets.includes(dataset)
+      [dataset.id_dataset]: newSelectedDatasets.includes(dataset),
     }));
   };
-  
-  
+
   const handleClose = () => {
     setSelectedDatasets([]); // Clear selected ECGs
-    setSelectedECGs([]);// Clear selected ECGs
+    setSelectedECGs([]); // Clear selected ECGs
     onClose(); // Close the modal
   };
 
   const closeModal = () => {
     setShowECGModal(false);
-    setEcgDataForModal([])
+    setEcgDataForModal([]);
   };
   return (
-    <><Modal show onHide={onClose} size="xl">
-      <Modal.Header closeButton>
-        <Modal.Title>Ajouter datasets à l'analyse</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        
-        <div className="row">
-          <div className="col-md-4 ">
-            <Table>
-              <tbody>
-                {datasets.map(dataset => (
-                  <tr key={dataset.id_dataset} className={ selectedDatasets.includes(dataset) ? 'selected rounded border position-relative shadow-sm' : 'rounded border position-relative shadow-sm'}>
-                    <td style={{ width: '10px' }}>
-                      <input
-                        type="checkbox"
-                        onChange={() => handleCheckboxChange(dataset)}
-                        checked={selectedDatasets.includes(dataset)} />
-                    </td>
-                    <td>
-                      <div className="text-wrap" style={{ whiteSpace: 'nowrap'}}>{dataset.name_dataset}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-
-          </div>
-          <div className="col-md-8">
-          {/* <div className="alert alert-danger" role="alert">
+    <>
+      <Modal show onHide={onClose} size="xl">
+        <Modal.Header closeButton>
+          <Modal.Title>Ajouter datasets à l'analyse</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col-md-4 ">
+              <Table>
+                <tbody>
+                  {datasets.map((dataset) => (
+                    <tr
+                      key={dataset.id_dataset}
+                      className={
+                        selectedDatasets.includes(dataset)
+                          ? "selected rounded border position-relative shadow-sm"
+                          : "rounded border position-relative shadow-sm"
+                      }
+                    >
+                      <td style={{ width: "10px" }}>
+                        <input
+                          type="checkbox"
+                          onChange={() => handleCheckboxChange(dataset)}
+                          checked={selectedDatasets.includes(dataset)}
+                        />
+                      </td>
+                      <td>
+                        <div
+                          className="text-wrap"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {dataset.name_dataset}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+            <div className="col-md-8">
+              {/* <div className="alert alert-danger" role="alert">
             Veuillez sélectionner un ou plusieurs datasets à ajouter à l'analyse 
           </div> */}
-            {/* <HeaderDataset></HeaderDataset> */}
-            {selectedDatasets.map(dataset => (
-              <div key={dataset.id_dataset}>
-                <div className="modal-section">
+              {/* <HeaderDataset></HeaderDataset> */}
+              {selectedDatasets.map((dataset) => (
+                <div key={dataset.id_dataset}>
+                  <div className="modal-section">
+                    <div
+                      className="modal-section-title"
+                      onClick={() =>
+                        toggleSectionVisibility(dataset.id_dataset)
+                      }
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <p
+                        style={{
+                          marginRight: "10px",
+                          marginBottom: "0",
+                          color: "#4A8BC5",
+                        }}
+                      >
+                        {dataset.name_dataset}
+                      </p>
+                      <ExpandMoreIcon />
+                    </div>
 
-                <div className="modal-section-title" onClick={() => toggleSectionVisibility(dataset.id_dataset)} style={{ display: 'flex', alignItems: 'center' }}>
-                  <p style={{ marginRight: '10px', marginBottom: '0' , color:"#4A8BC5"}}>
-                    {dataset.name_dataset}
-                  </p>
-                  <ExpandMoreIcon/>
-                </div>
+                    {sectionVisibility[dataset.id_dataset] && (
+                      <div className="section-box">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">Description</span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={
+                              dataset.description_dataset ??
+                              "Aucune description disponible"
+                            }
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">Type</span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={dataset.type_dataset}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            Noms des fils
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={dataset.leads_name}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            Nom de l'étude
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={dataset.study_name}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            Détails de l'étude
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={
+                              dataset.study_details ??
+                              "Aucun détail de l'étude disponible"
+                            }
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            Nom de la source
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={dataset.source_name}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            Détails de la source
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={
+                              dataset.source_details ??
+                              "Aucun détail de la source disponible"
+                            }
+                            readOnly
+                          />
+                        </div>
 
-                {sectionVisibility[dataset.id_dataset] && (
-                  <div className="section-box">
-               
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Description</span>
-                        <input type="text" className="form-control" value={dataset.description_dataset ?? 'Aucune description disponible'} readOnly />
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Type</span>
-                        <input type="text" className="form-control" value={dataset.type_dataset } readOnly />
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Noms des fils</span>
-                        <input type="text" className="form-control" value={dataset.leads_name } readOnly />
-
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Nom de l'étude</span>
-                        <input type="text" className="form-control" value={dataset.study_name } readOnly />
-
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Détails de l'étude</span>
-                        <input type="text" className="form-control" value={dataset.study_details ?? 'Aucun détail de l\'étude disponible'} readOnly />          
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Nom de la source</span>
-                        <input type="text" className="form-control" value={dataset.source_name } readOnly />
-
-                      </div>
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">Détails de la source</span>
-                        <input type="text" className="form-control" value={dataset.source_details ?? 'Aucun détail de la source disponible'} readOnly />
-
-                      </div>
-
-
-
-                    {/* <div className="input-group mb-3">
+                        {/* <div className="input-group mb-3">
                       <span className="input-group-text col col-12">Les ECGs</span>
                     </div> */}
-                    <div className="input-group mb-3">
-
-                      {/* <Table>
+                        <div className="input-group mb-3">
+                          {/* <Table>
                         <tbody>
                           {dataset.ecgs.map(ecg => (
                             <tr key={ecg.id} className={selectedECGs.includes(ecg) ? 'selected' : ''}>
@@ -216,7 +286,7 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
                           ))}
                         </tbody>
                       </Table> */}
-                      {/* <Form onSubmit={handleSubmit}>
+                          {/* <Form onSubmit={handleSubmit}>
                         <div className="table-container">
                         <table className="table">
                           <thead>
@@ -263,27 +333,27 @@ const AnalyseDatsetModal: React.FC<AnalyseDatsetModalProps> = ({ onClose, onCrea
                       </div>
                           
                         </Form> */}
-                    </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Form onSubmit={handleSubmit}>
-          <Button type="submit" className='custom-button'>
-            Ajouter
+        </Modal.Body>
+        <Modal.Footer>
+          <Form onSubmit={handleSubmit}>
+            <Button type="submit" className="custom-button">
+              Ajouter
+            </Button>
+          </Form>
+          <Button onClick={handleClose} variant="secondary">
+            Fermer
           </Button>
-        </Form>
-        <Button onClick={handleClose} variant="secondary">
-          Fermer
-        </Button>
-      </Modal.Footer>
-    </Modal>
-</>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 

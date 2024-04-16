@@ -13,6 +13,7 @@ interface Model {
     model_size: string;
     batch_size: string;
     learning_rate:Float32Array;
+    id:number;
   //  hyperparameters: { [key: string]: string };
 
    // architectureImage: string;
@@ -64,7 +65,7 @@ interface Model {
   // }
   
   interface Dataset {
-    id_dataset? :number;
+    id_dataset :number;
     created_at : string;
     name_dataset : string;
     description_dataset: string;
@@ -142,11 +143,11 @@ interface PatientEcgData {
 
     
 interface Rapport {
-  id_rapport: number;
-  dateCreation: string;
-  nom: string ;
-  modeles: string[];   //ou Model[]  ?
-  datasets: string[] // ou Dataset[] ?
+  id_rapport?: number;
+  id_experience_rapport: number;
+  created_at: string;
+  name_rapport: string ;
+
 }
 
 
@@ -161,6 +162,7 @@ interface ECGPlotModalProps {
 
 interface Experience {
   id_experience?: number;
+  id_analysis_experience: number;
   name_experience: string;
   models: (number |undefined)[]; // Tableau des id des modeles de l'experience
   datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
@@ -168,7 +170,8 @@ interface Experience {
   nb_gpu: number;
   nb_processeurs: number;
   heure_lancement: string; 
-  heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
+  heure_fin_prevu: string;
+  //heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
   statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
   resultat_prediction: number[];
 }

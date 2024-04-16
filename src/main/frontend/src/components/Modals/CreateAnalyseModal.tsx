@@ -84,8 +84,6 @@ const CreateAnalyseModal: React.FC<CreateAnalyseModalProps> = ({
         </Form>
       </Modal.Body>
     </Modal>
-
-    
   );
 };
 

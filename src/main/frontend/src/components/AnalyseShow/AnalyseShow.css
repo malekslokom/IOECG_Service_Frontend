@@ -1,0 +1,15 @@
+.navigation-link {
+    cursor: pointer;
+    color: var(--navigation-header-text);
+    margin:10px
+  }
+  
+  .navigation-text {
+    color: var(--navigation-header-text);
+    font-weight: bolder;
+  }
+  .navigation-separator {
+    margin: 0 5px;
+    color: var(--navigation-header-arrow);
+    font-weight: bolder;
+  }

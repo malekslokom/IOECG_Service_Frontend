@@ -62,16 +62,19 @@ const MesCataloguePage: React.FC = () => {
   }, [filters]); // Écoute les changements de filtres
 
   const handleFilter = (
-    nomModel: string,
     typeModel: string,
-    searchTerm: string
+    searchTerm: string,
+    nomModel: string
   ) => {
-    setFilters({ nomModel, typeModel, searchTerm });
+    setFilters({ typeModel, searchTerm, nomModel });
   };
 
   return (
     <div className="catalog-page">
-      <div className="content-head">
+      <div
+        style={{ color: "var(--primary-text-color)" }}
+        className="content-head"
+      >
         <h2>Catalogue des modéles</h2>
       </div>
       <hr />

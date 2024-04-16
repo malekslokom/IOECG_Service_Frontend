@@ -48,7 +48,7 @@ const MesAnalysePage = () => {
   const handleShowAnalyse = (index: number) => {
    //navigate(`/projets/analyses/${index}`);
     navigate(`/projets/1/analyses/${index}`);
-    console.log("Analyse ouvert !");
+    console.log("Analyse ouverte !");
   };
   const handleFilter = (
     startDate: string,
