@@ -142,11 +142,11 @@ interface PatientEcgData {
 
     
 interface Rapport {
-  id_rapport: number;
-  dateCreation: string;
-  nom: string ;
-  modeles: string[];   //ou Model[]  ?
-  datasets: string[] // ou Dataset[] ?
+  id_rapport?: number;
+  id_experience_rapport: number;
+  created_at: string;
+  name_rapport: string ;
+
 }
 
 

@@ -2,6 +2,7 @@ import { faPlusCircle,faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { fetchExperienceForAnalysis, createExperience, updateExperienceStatus } from '../../services/ExperienceService';
+import { fetchRapportForAnalysis, createRapport } from '../../services/RapportService';
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import AnalyseDatsetModal from '../Modals/Analyse/AnalyseDatsetModal';
@@ -22,7 +23,7 @@ const AnalyseShow = () => {
  const [ShowModalSearchDataset, setShowModalSearchDataset] = useState(false);
  const [showModalExperience, setShowModalExperience] = useState(false);
  const [showModalInfoExperience, setShowModalInfoExperience] = useState(false);
-
+ const [showModalRapport,setShowModalRapport] = useState(false);
 
  const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
  const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
@@ -53,6 +54,12 @@ const AnalyseShow = () => {
   "Statut"
 ]);
 
+const [columnsRapport, setColumnsRapport] = useState([
+  "Nom",
+  "Date Creation",
+]);
+
+
  const { id } = useParams();  //id de l'analyse
  const [datasets, setDatasets] = useState<DatasetAnalyse[]>([]);
  console.log(id)
@@ -75,7 +82,8 @@ const AnalyseShow = () => {
  }, [id]);
 
 
- /////////EXPERIENCE FUNCTIONS
+ 
+ //////////////////////////////////////////////////EXPERIENCE FUNCTIONS////////////////////////////////////////////////////////////
  const handleOpenModalExperience = () => {
   setShowModalExperience(true);
  }
@@ -140,6 +148,7 @@ useEffect(() => {
       if (currentTime > endTime && experience.statut !== "Terminé" && experience.id_experience) {
         try {
           await updateExperienceStatus(experience.id_experience, "Terminé");
+
           // Mettre à jour la liste des expériences dans le state
           setExperienceList(prevList => prevList.map(exp => {
             if (exp.id_experience === experience.id_experience) {
@@ -147,6 +156,12 @@ useEffect(() => {
             }
             return exp;
           }));
+          
+          //Créer un rapport                                      
+          const newRapport: Rapport = { id_experience_rapport: experience.id_experience, 
+                                        name_rapport: experience.name_experience,    //L'experience et le rapport ont le même nom lors de la creation
+                                        created_at: new Date().toISOString()};
+          await handleAddRapport(newRapport);
         } catch (error) {
           console.error("Temps dépassé but error updating experience status:", error);
         }
@@ -175,7 +190,7 @@ useEffect(() => {
 
 },  [id, experiencesList]);
 
- /////////DATASET FUNCTIONS
+ //////////////////////////////////////////////////DATASET FUNCTIONS////////////////////////////////////////////////////////////
  const handleOpenModalDataset = () => {
    setShowModalDataset(true);
  }
@@ -239,6 +254,39 @@ useEffect(() => {
  };
 
 
+ //////////////////////////////////////////////////RAPPORT FUNCTIONS////////////////////////////////////////////////////////////
+ const closeModalRapport =() => {
+  setShowModalRapport(false);
+}
+
+const handleOpenRapport = () => {
+  setShowModalRapport(true);
+
+}
+
+const handleDeleteRapport = () => {
+  }
+  
+//Liste rapport
+const [rapportsList,setRapportList] = useState<Rapport[]>([]);
+useEffect(() => {
+  fetchRapportForAnalysis(Number(id))
+    .then((data)=> setRapportList(data))
+    .catch((error) => console.error("Error fetching rapport:", error));
+}, []);
+
+const handleAddRapport = async (newRapport: Rapport) => {
+  try {
+    await createRapport(Number(id), newRapport);
+    const updatedRapportsList = await fetchRapportForAnalysis(Number(id));   //Mise à jour de la liste des rapports de l'analyse
+    setRapportList(updatedRapportsList);
+  }
+    catch (error) {
+      console.error("Error adding rapport:", error);
+    }
+  }
+
+
 
 
    return (   
@@ -272,7 +320,7 @@ useEffect(() => {
            </div>
            <hr style={{color:"#555"}}/>
            
-           <div className="overflow-x-auto">
+           <div className="overflow-auto">
             <ElementsList
               nameModule="experience"
               columns={columnsExperience}
@@ -334,6 +382,16 @@ useEffect(() => {
            </div>
            </div>
            <hr style={{color:"#555"}}/>
+           <div className="overflow-auto">
+            <ElementsList
+              nameModule="rapportAnalyse"
+              columns={columnsRapport}
+              elementsList={rapportsList}
+              onShow={handleOpenRapport}
+              onDelete={handleDeleteRapport}
+            />
+           </div>
+
          </div>
          </div>
          <div className="col-md-6">

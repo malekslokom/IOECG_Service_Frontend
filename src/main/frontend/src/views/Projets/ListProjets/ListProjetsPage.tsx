@@ -75,7 +75,7 @@ const ListProjetsPage = () => {
     console.log("Nouveau projet créé:", newProjet);
     const createdProjet = await createProject(newProjet);
     console.log("Projet créé avec succès:", createdProjet);
-    setListProjets([...listProjets, createdProjet]);
+    setListProjets([...listProjets, newProjet]);
   };
 
   const handleCloseModal = () => {

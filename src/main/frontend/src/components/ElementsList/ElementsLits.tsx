@@ -55,6 +55,7 @@ const ElementsList: React.FC<ListProps> = ({
                   item.id_analysis ||
                   item.id_dataset ||
                   item.id_experience ||
+                  item.id_rapport ||
                   index
                 }
               >
@@ -100,14 +101,20 @@ const ElementsList: React.FC<ListProps> = ({
                 {nameModule == "rapport" && (
                   <>
 
-                    <td>{item.nom}</td>
-                    <td>{item.dateCreation}</td>
-                    <td>{item.auteur}</td>
-                    <td>{item.models.join(", ")}</td>
-                    <td>{item.datasets.join(", ")}</td>
+                    <td>{item.name_rapport}</td>
+                    <td>{item.created_at}</td>
+                    <td>{item.id_experience_rapport}</td>
                     <td></td>
                   </>
                 )}
+
+                  {nameModule == "rapportAnalyse" && (
+                    <>
+                      <td>{item.name_rapport}</td>
+                      <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                      <td></td>
+                    </>
+                  )}
 
                 {nameModule == "experience" && (
                   <>
@@ -131,6 +138,7 @@ const ElementsList: React.FC<ListProps> = ({
                           item.id_analysis ||
                           item.id_dataset ||
                           item.id_experience ||
+                          item.id_rapport ||
                           index
                       )
                     }
@@ -171,6 +179,9 @@ const ElementsList: React.FC<ListProps> = ({
                           break;
                         case 'experience':
                            idToDelete = item.id_experience;
+                          break;
+                        case 'rapport':
+                          idToDelete = item.id_rapport;
                           break;
                         default:
                           console.error('Module type not recognized for deletion');
