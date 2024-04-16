@@ -62,3 +62,21 @@ export async function fetchAnalyseModels(id_analyse:number): Promise<Model[]> {
     return await response.json();
   }
 
+  export async function createAnalyse(newAnalyse: Analyse): Promise<Analyse> {
+    console.log('here service ', newAnalyse);
+    const response = await fetch(`${API_BASE_URL}/new`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(newAnalyse)
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to create analyse');
+    }
+
+    return await response.json();
+}
+
+
+  
+  
