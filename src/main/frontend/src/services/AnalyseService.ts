@@ -27,6 +27,22 @@ export async function fetchAnalyses(): Promise<Analyse[]> {
     return await response.json();
   }
 
+  export async function createAnalyse(newAnalyse: Analyse): Promise<Analyse> {
+    console.log('here service ', newAnalyse);
+    const response = await fetch(`${API_BASE_URL}/new`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(newAnalyse)
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to create analyse');
+    }
+
+    return await response.json();
+}
+
+
   export async function getAnalysesWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Analyse[]> {
     const encodedStartDate = encodeURIComponent(startDate);
     const encodedEndDate = encodeURIComponent(endDate);
