@@ -9,6 +9,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ElementsList from "../ElementsList/ElementsLits";
 import CreateExperienceModal from "../Modals/Analyse/CreateExperienceModal";
 import InfoExperienceModal from "../Modals/Analyse/InfoExperienceModal";
+import ConfirmationArchiverModal from "../Modals/ConfirmationArchiverModal";
 import {
   fetchExperienceForAnalysis,
   createExperience,
@@ -45,6 +46,13 @@ const AnalyseShow = () => {
   const [selectedDatasets, setSelectedDatasets] = useState<Dataset[]>([]);
   const [selectedModels, setSelectedModels] = useState<Model[]>([]);
   const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
+  const [showConfirmationModal, setShowConfirmationModal] =
+    useState<boolean>(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [itemTypeToDelete, setItemTypeToDelete] = useState<
+    "dataset" | "model" | null
+  >(null);
+
   //const [datasets, setDatasets] = useState<Dataset[]>(selectedDatasets);
   const [selectedExperience, setSelectedExperience] = useState<Experience>({
     id_experience: 1,
@@ -165,16 +173,28 @@ const AnalyseShow = () => {
       .then((data) => setModels(data))
       .catch((error) => console.error("Error fetching models", error));
   };
+
   const handleDeleteModelToAnalyse = async (modelId: number) => {
     const analyseId = id ? parseInt(id, 10) : -1;
-
     await deleteModelAnalyse(analyseId, modelId);
     // Remove the deleted dataset from the state
     setModels((prevModels) =>
       prevModels.filter((model) => model.id !== modelId)
     );
+    setShowConfirmationModal(false);
+    console.log("Modal supprimé");
+  };
+  const handleDeleteDatasetClick = (datasetId: number) => {
+    setSelectedItemId(datasetId);
+    setItemTypeToDelete("dataset");
+    setShowConfirmationModal(true);
   };
 
+  const handleDeleteModelClick = (modelId: number) => {
+    setSelectedItemId(modelId);
+    setItemTypeToDelete("model");
+    setShowConfirmationModal(true);
+  };
   const handleDeleteDatasetAnalyse = async (datasetId: number) => {
     try {
       const response = await fetch(
@@ -336,7 +356,18 @@ const AnalyseShow = () => {
   };
   //////////////////////////////////////////////////DATASET FUNCTIONS////////////////////////////////////////////////////////////
   const handleAddSearchDatasetToAnalyse = async (newDatasets: Dataset[]) => {};
-
+  const confirmDeleteItem = async () => {
+    if (selectedItemId !== null) {
+      if (itemTypeToDelete === "dataset") {
+        await handleDeleteDatasetAnalyse(selectedItemId);
+      } else if (itemTypeToDelete === "model") {
+        await handleDeleteModelToAnalyse(selectedItemId);
+      }
+      setShowConfirmationModal(false);
+      setSelectedItemId(null);
+      setItemTypeToDelete(null);
+    }
+  };
   return (
     <div className="my-5">
       <div className="navigation-link" onClick={handleGoBack}>
@@ -435,7 +466,7 @@ const AnalyseShow = () => {
                           icon={faTrash}
                           className="icon-trash"
                           onClick={() =>
-                            handleDeleteDatasetAnalyse(dataset.id_dataset)
+                            handleDeleteDatasetClick(dataset.id_dataset)
                           }
                         />
                       </td>
@@ -515,7 +546,7 @@ const AnalyseShow = () => {
                         <FontAwesomeIcon
                           icon={faTrash}
                           className="icon-trash"
-                          onClick={() => handleDeleteModelToAnalyse(model.id)}
+                          onClick={() => handleDeleteModelClick(model.id)}
                         />
                       </td>
                     </tr>
@@ -560,6 +591,11 @@ const AnalyseShow = () => {
           onClose={handleCloseInfoExperience}
         />
       )}
+      <ConfirmationArchiverModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        onConfirm={confirmDeleteItem}
+      />
     </div>
   );
 };
