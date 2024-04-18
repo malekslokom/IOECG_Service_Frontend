@@ -27,7 +27,7 @@
   --card-sub-title-color:#595C5F;
   --card-bg-color:#F3F6F9;
   --placeholder-color: #ccc;
-
+  --recent-experience-box:#F3F5F7;
 }
 
 [data-theme="dark"] {
@@ -55,4 +55,5 @@
   --tag-model-color:#fff;
   --card-bg-color:#283452;
   --placeholder-color: #aaa; 
+  --recent-experience-box:#f6f6f6;
 }
