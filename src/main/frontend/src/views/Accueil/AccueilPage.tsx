@@ -1,9 +1,4 @@
 import "./AccueilPage.css";
-import analyseIcon from "../../../../resources/static/assets/Acceuil/analysing.png";
-import projetsIcon from "../../../../resources/static/assets/Acceuil/project-plan.png";
-import datasetsIcon from "../../../../resources/static/assets/Acceuil/data-transfer.png";
-import rapportsIcon from "../../../../resources/static/assets/Acceuil/repports.png";
-import noProjectIcon from "../../../../resources/static/assets/Acceuil/no-project.png";
 import StatsAccueil from "../../components/StatsAccueil/StatsAccueil";
 import { useEffect, useState } from "react";
 import { fetchModels } from "../../services/ModelService";
@@ -60,32 +55,32 @@ const AccueilPage = () => {
 
       <div className="stats-section">
         <StatsAccueil
-          icon={projetsIcon}
+          icon="/assets/Acceuil/project-plan.png"
           title="Projets"
           count={projects.length}
           maxValue={100}
         />
         <StatsAccueil
-          icon={analyseIcon}
+          icon="/assets/Acceuil/analysing.png"
           title="Analyses"
           count={analyses.length}
           maxValue={100}
         />
         <StatsAccueil
-          icon={datasetsIcon}
+          icon="/assets/Acceuil/data-transfer.png"
           title="Datasets"
           count={datasets.length}
           maxValue={100}
         />
         <StatsAccueil
-          icon={rapportsIcon}
+          icon="/assets/Acceuil/repports.png"
           title="Rapports"
           count={models.length}
           maxValue={100}
         />
       </div>
       <div className="no-project-section">
-        <img src={noProjectIcon} alt="No Project Found" />
+        <img src="/assets/Acceuil/no-project.png" alt="No Project Found" />
         <h4>
           Nous supposons que c'est votre première fois ! <br />
           Créez un projet maintenant pour commencer !

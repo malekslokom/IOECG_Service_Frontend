@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
-import statutEnCours from "./../../assets/statut-en-cours.svg";
-import statutTermine from "./../../assets/statut-termine.svg";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -100,7 +98,6 @@ const ElementsList: React.FC<ListProps> = ({
 
                 {nameModule == "rapport" && (
                   <>
-
                     <td>{item.name_rapport}</td>
                     <td>{item.created_at}</td>
                     <td>{item.id_experience_rapport}</td>
@@ -108,22 +105,32 @@ const ElementsList: React.FC<ListProps> = ({
                   </>
                 )}
 
-                  {nameModule == "rapportAnalyse" && (
-                    <>
-                      <td>{item.name_rapport}</td>
-                      <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
-                      <td></td>
-                    </>
-                  )}
+                {nameModule == "rapportAnalyse" && (
+                  <>
+                    <td>{item.name_rapport}</td>
+                    <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
+                    <td></td>
+                  </>
+                )}
 
                 {nameModule == "experience" && (
                   <>
                     <td>{item.name_experience}</td>
                     <td>{item.heure_lancement}</td>
                     <td>{item.heure_fin_prevu}</td>
-                    <td> 
-                      {item.statut === "En cours" && <img src={statutEnCours} alt="Statut en cours" />}
-                      {item.statut === "Terminé" && <img src={statutTermine} alt="Statut terminé" />}
+                    <td>
+                      {item.statut === "En cours" && (
+                        <img
+                          src="/assets/statut-en-cours.svg"
+                          alt="Statut en cours"
+                        />
+                      )}
+                      {item.statut === "Terminé" && (
+                        <img
+                          src="/assets/statut-termine.svg"
+                          alt="Statut terminé"
+                        />
+                      )}
                     </td>
                     <td></td>
                   </>
@@ -146,7 +153,7 @@ const ElementsList: React.FC<ListProps> = ({
                   />
                 </td>
                 <td>
-                { /* <FontAwesomeIcon
+                  {/* <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() =>
                       onDelete(
@@ -160,38 +167,39 @@ const ElementsList: React.FC<ListProps> = ({
                     style={{ cursor: "pointer" }}
                   />*/}
 
-                   <FontAwesomeIcon
+                  <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() => {
                       let idToDelete;
                       switch (nameModule) {
-                        case 'analyse':
+                        case "analyse":
                           idToDelete = item.id_analysis;
                           break;
-                        case 'mesAnalyses':
+                        case "mesAnalyses":
                           idToDelete = item.id_analysis;
                           break;
-                        case 'projet':
+                        case "projet":
                           idToDelete = item.id_project;
                           break;
-                        case 'dataset':
+                        case "dataset":
                           idToDelete = item.id_dataset;
                           break;
-                        case 'experience':
-                           idToDelete = item.id_experience;
+                        case "experience":
+                          idToDelete = item.id_experience;
                           break;
-                        case 'rapport':
+                        case "rapport":
                           idToDelete = item.id_rapport;
                           break;
                         default:
-                          console.error('Module type not recognized for deletion');
+                          console.error(
+                            "Module type not recognized for deletion"
+                          );
                           return;
                       }
                       onDelete(idToDelete);
                     }}
                     style={{ cursor: "pointer" }}
                   />
-
                 </td>
               </tr>
             ))}
