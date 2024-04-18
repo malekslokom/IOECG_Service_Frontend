@@ -81,7 +81,7 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
             }}
           >
             <option value="régression">Regression</option>
-            <option value="classification multi-class">
+            <option value="classification binaire">
               Binary Classification
             </option>
             <option value="classification multi-class">
