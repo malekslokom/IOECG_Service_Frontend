@@ -41,7 +41,7 @@ const MesDatasetPage = () => {
 
   const handleShowDataset = (index: number) => {
     navigate(`/projets/datasets/${index}/ecg`);
-    console.log("Dataset ouvert !");
+    console.log("Ecg ouvert !");
   };
   const handleFilter = (
     startDate: string,
@@ -88,23 +88,26 @@ const MesDatasetPage = () => {
         .catch((error) => console.error("Error fetching datasets:", error));
     }
   }, [filters]);
+
   const handleCloseImportModal = () => {
     setImportDataset(false);
   };
+
   const handleImportDatasetModal = async (dataset: Dataset) => {
     const newDataset = await addDataset(dataset);
     setListDatasets([...listDatasets, newDataset]);
   };
+
   const handleImportDataset = () => {
     setImportDataset(true);
-    console.log("Bouton Ajouter cliqué !");
+    console.log("Bouton Importer cliqué !");
   };
   return (
     <div>
       <div className="position-relative">
         <ListPage
           title="Mes Datasets"
-          bouton="Créer"
+          bouton="Importer"
           boutonVisible={true}
           onClick={handleImportDataset}
           onFilter={handleFilter}
