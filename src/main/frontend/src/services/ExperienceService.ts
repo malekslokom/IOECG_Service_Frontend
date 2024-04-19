@@ -1,12 +1,6 @@
 const API_BASE_URL = "http://localhost:8080/api/analyses";
 
-export async function fetchExperiences(): Promise<Experience[]> {
-  const response = await fetch(`${API_BASE_URL}/experiences/all/`);
-  if (!response.ok) {
-      throw new Error('Failed to fetch experiences');
-    }
-    return await response.json();
-  }
+
 
 export async function fetchExperienceForAnalysis(id_analysis: number): Promise<Experience[]> {
     const response = await fetch(`${API_BASE_URL}/${id_analysis}/experiences`);
@@ -37,6 +31,13 @@ export async function getExperienceById(id_experience: number): Promise<Experien
       if (!response.ok) {
         throw new Error('Failed to create experience');
       }
+
+      const responseData = await response.json();
+      const id_experience = responseData.id_experience; // Récupérer l'id de l'expérience créée
+    
+      // Mettre à jour l'expérience avec l'id reçu pour l'affichage directe des infos 
+      newExperience.id_experience = id_experience;
+
       
       // Si la création est réussie, pas besoin de récupérer de données
     } catch (error) {
@@ -63,4 +64,32 @@ export async function getExperienceById(id_experience: number): Promise<Experien
       console.error("Error updating experience status:", error);
       throw error;
     }
+}
+
+export async function updateExperienceResultat(id_experience: number, newResultat: string): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/experiences/${id_experience}/update-resultat`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ resultat_prediction: newResultat })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to update experience status');
+    }
+  } catch (error) {
+    console.error("Error updating experience status:", error);
+    throw error;
+  }
+}
+
+export async function deleteExperienceById(id: number): Promise<Experience> {
+
+  const response = await fetch(`${API_BASE_URL}/experiences/delete/${id}`, {method:'DELETE'});
+  if (!response.ok) {
+      throw new Error('Failed to delete Experience');
+  }
+  return await response.json();
 }

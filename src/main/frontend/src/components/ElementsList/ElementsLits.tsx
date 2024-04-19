@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import "./ElementLists.css";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { fetchAnalyses } from "../../services/AnalyseService";
+import { fetchProjets } from "../../services/ProjetService";
+import { fetchExperiences } from "../../services/HistoriqueService";
 interface ListProps {
   nameModule: string;
   columns: string[];
   elementsList: any[];
   onDelete: (index: number) => void;
   onShow: (index: number) => void;
+  listRaport?: number[]
 }
 
 const ElementsList: React.FC<ListProps> = ({
@@ -20,6 +23,7 @@ const ElementsList: React.FC<ListProps> = ({
   onShow,
   onDelete,
 }) => {
+  const [selectedReports, setSelectedReports] = useState<number[]>([]);
   const elementsPerPage = 15; // Nombre d'éléments par page
   const [currentPage, setCurrentPage] = useState(0); // React Paginate utilise un index basé sur 0
   const onPageChange = (selectedItem: { selected: number }) => {
@@ -30,6 +34,59 @@ const ElementsList: React.FC<ListProps> = ({
     currentPage * elementsPerPage,
     (currentPage + 1) * elementsPerPage
   );
+
+
+  const [analysesList, setAnalysesList] = useState<Analyse[]>([]);
+  useEffect(() => {
+    fetchAnalyses()
+      .then((data) => setAnalysesList(data))
+      .catch((error) => console.error("Error fetching analyses:", error));
+  }, []);
+
+  const [projetsList, setProjetsList] = useState<Projet[]>([]);
+  useEffect(() => {
+    fetchProjets()
+      .then((data) => setProjetsList(data))
+      .catch((error) => console.error("Error fetching projets:", error));
+  }, []);
+
+
+  const [experiencesList, setExperiencesList] = useState<Experience[]>([]);
+  useEffect(() => {
+    fetchExperiences()
+      .then((data) => setExperiencesList(data))
+      .catch((error) => console.error("Error fetching experiences:", error));
+  }, []);
+
+
+  const getAnalyseName = (id: number) => {
+    // Rechercher l'analyse correspondante dans la liste des analyses
+    const analyse = analysesList.find(analyse => analyse.id_analysis === id);
+    // Si une analyse correspondante est trouvée, renvoyer son nom, sinon renvoyer une chaîne vide
+    return analyse ? analyse.name_analysis : "";
+  };
+
+  const getProjectName = (id: number) => {
+    // Rechercher le projet correspondant dans la liste des projets
+    const project = projetsList.find(project => project.id_project === id);
+    // Si un projet correspondant est trouvé, renvoyer son nom, sinon renvoyer une chaîne vide
+    return project ? project.name_project : "" ; 
+  };
+  
+  /*const toggleReportSelection = (id: number) => {
+    console.log(selectedReports)
+    if (selectedReports.includes(id)) {
+      setSelectedReports(selectedReports.filter(reportId => reportId !== id));
+      
+    } else {
+      if (selectedReports.length < 2) {
+        setSelectedReports([...selectedReports, id]);
+      } else {
+        console.log("Vous ne pouvez sélectionner que jusqu'à deux rapports.");
+      }
+    }
+   
+  };  */
 
   return (
     <div>
@@ -54,6 +111,7 @@ const ElementsList: React.FC<ListProps> = ({
                   item.id_dataset ||
                   item.id_experience ||
                   item.id_rapport ||
+                  item.id||
                   index
                 }
               >
@@ -72,7 +130,7 @@ const ElementsList: React.FC<ListProps> = ({
                     <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
                     <td>{item.created_by}</td>
                     <td>{item.description_analysis}</td>
-                    <td>{item.id_project}</td>
+                    <td>{getProjectName(item.id_project)}</td>
                     <td></td>
                   </>
                 )}
@@ -96,45 +154,69 @@ const ElementsList: React.FC<ListProps> = ({
                   </>
                 )}
 
+                {nameModule === "ecg" && (
+                  <>
+                    <td>{item.patient_weight}</td>
+                    <td>{item.patient_sex}</td>
+                    <td>{item.patient_age}</td>
+                    <td>{item.patient_race}</td>
+                    <td>{item.recording_started_at}</td>
+                    <td>{item.recording_ended_at}</td>
+                    <td>{item.recording_ended_at}</td>
+                    <td>{item.recording_initial_sampling_rate}</td>
+                    <td>{item.recording_sampling_rate}</td>
+                  
+                  </>
+                 )}
+
                 {nameModule == "rapport" && (
                   <>
                     <td>{item.name_rapport}</td>
-                    <td>{item.created_at}</td>
-                    <td>{item.id_experience_rapport}</td>
-                    <td></td>
-                  </>
-                )}
-
-                {nameModule == "rapportAnalyse" && (
-                  <>
-                    <td>{item.name_rapport}</td>
                     <td>{moment(item.created_at).format("DD-MM-YYYY")}</td>
-                    <td></td>
+                    <td> {/* On récupère l'experience correspondante dans la liste des experience */}
+                          {item.id_experience_rapport && experiencesList.find(exp => exp.id_experience === item.id_experience_rapport)?
+                           // Si experience trouvée, obtenir id de l'analyse en utilisant la lste des experiences et ainsi récupérer le nom de l'analyse
+                          getAnalyseName(experiencesList.find(exp => exp.id_experience === item.id_experience_rapport)?.id_analysis_experience || 0)
+                          : "" /* Si aucune analyse correspondante n'est trouvée, afficher une chaîne vide */}
+                    </td>
                   </>
                 )}
 
-                {nameModule == "experience" && (
+                {nameModule == "experienceAnalyse" && (
                   <>
                     <td>{item.name_experience}</td>
-                    <td>{item.heure_lancement}</td>
-                    <td>{item.heure_fin_prevu}</td>
-                    <td>
-                      {item.statut === "En cours" && (
-                        <img
-                          src="/assets/statut-en-cours.svg"
-                          alt="Statut en cours"
-                        />
-                      )}
-                      {item.statut === "Terminé" && (
-                        <img
-                          src="/assets/statut-termine.svg"
-                          alt="Statut terminé"
-                        />
-                      )}
+                    <td>{moment(item.heure_lancement,"HH:mm:ss").format("HH:mm:ss")}</td>
+                    <td>{moment(item.heure_fin_prevu,"HH:mm:ss").format("HH:mm:ss")}</td>
+                    <td> 
+                          {item.statut === "En cours" && (
+                              <img
+                                src="/assets/statut-en-cours.svg"
+                                alt="En cours"
+                              />
+                            )}
+                            {item.statut === "Terminé" && (
+                              <img
+                                src="/assets/statut-termine.svg"
+                                alt="Terminé"
+                              />
+                            )}
                     </td>
                     <td></td>
                   </>
                 )}
+
+                {nameModule == "historique" && (
+                  <>
+                    <td>{item.name_experience}</td>
+                    <td>{moment(item.heure_lancement).format("DD-MM-YYYY")}</td>
+                    <td>{getAnalyseName(item.id_analysis_experience)}</td>
+                    <td>   {/* On récupère l'analyse correspondante dans la liste des analyses */}
+                          {item.id_analysis_experience && analysesList.find(analysis => analysis.id_analysis === item.id_analysis_experience)?
+                           // Si analyse trouvée, obtenir id du projet pour récupérer le nom du projet
+                          getProjectName(analysesList.find(analysis => analysis.id_analysis === item.id_analysis_experience)?.id_project || 0)
+                          : "" /* Si aucune analyse correspondante n'est trouvée, afficher une chaîne vide */}</td>
+                  </>
+                )}  
 
                 <td>
                   <FontAwesomeIcon
@@ -146,14 +228,15 @@ const ElementsList: React.FC<ListProps> = ({
                           item.id_dataset ||
                           item.id_experience ||
                           item.id_rapport ||
+                          item.id||
                           index
                       )
                     }
                     style={{ cursor: "pointer" }}
                   />
                 </td>
-                <td>
-                  {/* <FontAwesomeIcon
+                
+                { /* <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() =>
                       onDelete(
@@ -166,8 +249,9 @@ const ElementsList: React.FC<ListProps> = ({
                     }
                     style={{ cursor: "pointer" }}
                   />*/}
-
-                  <FontAwesomeIcon
+          {nameModule != "ecg" && nameModule != "rapportAnalyse" && nameModule != "experienceAnalyse" && (
+                  <td>
+                   <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() => {
                       let idToDelete;
@@ -201,6 +285,7 @@ const ElementsList: React.FC<ListProps> = ({
                     style={{ cursor: "pointer" }}
                   />
                 </td>
+              )}
               </tr>
             ))}
           </tbody>

@@ -10,7 +10,7 @@ import {
   fetchAnalyseProjets,
   getAnalyseProjetWithFilter,
 } from "../../../services/AnalyseProjetService";
-import { createAnalyse } from "../../../services/AnalyseService";
+import { createAnalyse, deleteAnalyseById } from "../../../services/AnalyseService";
 
 
 
@@ -51,7 +51,7 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
     if (newAnalyse !== null) {
     //setListAnalyses([...listAnalyses, newAnalyse]);
     await createAnalyse(newAnalyse);
-      const updatedList = listAnalyses.filter(analyse => analyse.id_analysis !== selectedAnalyse);
+      const updatedList = [...listAnalyses, newAnalyse];
       setListAnalyses(updatedList);
       console.log("Nouvelle analyse créée:", newAnalyse);
     }
@@ -71,13 +71,15 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
   const handleDeleteAnalyse = (index: number) => {
     setSelectedAnalyse(index);
     setShowConfirmationModal(true);
-    console.log("Analyse cliquée et supprimée");
+    console.log("Analyse cliquée, pas encore supprimée");
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedAnalyse !== null) {
-      const updatedList = [...listAnalyses];
-      updatedList.splice(selectedAnalyse, 1);
+      /*const updatedList = [...listAnalyses];
+      updatedList.splice(selectedAnalyse, 1);*/
+      await deleteAnalyseById(selectedAnalyse);
+      const updatedList = listAnalyses.filter(analyse => analyse.id_analysis !== selectedAnalyse);
       setListAnalyses(updatedList);
 
       setSelectedAnalyse(null);
@@ -85,6 +87,8 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
       console.log("Analyse supprimée");
     }
   };
+
+
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",

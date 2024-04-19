@@ -3,10 +3,17 @@ import { Modal, Button } from 'react-bootstrap';
 
 interface infoExperienceProps {
     onClose: () => void;
-    experience: Experience;
+    experience: Experience | null;
 }
 
 const InfoExperienceModal: React.FC<infoExperienceProps> = ({ experience, onClose }) => {
+    
+    if (experience === null) {
+        console.log("Experience inexistante");
+        return null; // Ou un composant de remplacement si nécessaire
+    }
+    
+    
     return (
         <Modal show onHide={onClose} centered>
             <Modal.Header closeButton>

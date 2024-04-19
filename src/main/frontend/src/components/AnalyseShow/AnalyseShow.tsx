@@ -1,4 +1,4 @@
-import { faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
@@ -10,10 +10,13 @@ import ElementsList from "../ElementsList/ElementsLits";
 import CreateExperienceModal from "../Modals/Analyse/CreateExperienceModal";
 import InfoExperienceModal from "../Modals/Analyse/InfoExperienceModal";
 import ConfirmationArchiverModal from "../Modals/ConfirmationArchiverModal";
+import AnalyseModelModal from "../Modals/Analyse/AnalyseModelModal";
+import ReportComparisonModal from "../Rapport/ReportComparisonModals";
 import {
   fetchExperienceForAnalysis,
   createExperience,
   updateExperienceStatus,
+  updateExperienceResultat,
 } from "../../services/ExperienceService";
 import {
   fetchRapportForAnalysis,
@@ -24,16 +27,19 @@ import {
   deleteModelAnalyse,
   getAnalyseById,
 } from "../../services/AnalyseService";
-import AnalyseModelModal from "../Modals/Analyse/AnalyseModelModal";
 import { Numbers } from "@mui/icons-material";
 import "./AnalyseShow.css";
+import moment from "moment";
+
+
 const AnalyseShow = () => {
   const [showModalDataset, setShowModalDataset] = useState(false);
   const [ShowModalSearchDataset, setShowModalSearchDataset] = useState(false);
   const [showModalModel, setShowModalModel] = useState(false);
   const [showModalExperience, setShowModalExperience] = useState(false);
   const [showModalInfoExperience, setShowModalInfoExperience] = useState(false);
-  const [showModalRapport, setShowModalRapport] = useState(false);
+  const [showReportComparisonModal, setShowReportComparisonModal] = useState(false);
+
   const [analyse, setAnalyse] = useState<Analyse>({
     created_at: "",
     name_analysis: "",
@@ -54,20 +60,9 @@ const AnalyseShow = () => {
   >(null);
 
   //const [datasets, setDatasets] = useState<Dataset[]>(selectedDatasets);
-  const [selectedExperience, setSelectedExperience] = useState<Experience>({
-    id_experience: 1,
-    id_analysis_experience: 1,
-    name_experience: "Test",
-    models: [],
-    datasets: [],
-    nom_machine: "",
-    nb_gpu: 0,
-    nb_processeurs: 0,
-    heure_lancement: "",
-    heure_fin_prevu: "",
-    statut: "En cours",
-    resultat_prediction: [],
-  }); //Experience selectionnée pour visualiser les informations
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null); //Experience selectionnée pour visualiser les informations
+  const [selectedReports, setSelectedReports] = useState<number[]>([]); 
+
   const navigate = useNavigate();
 
   const [columnsExperience, setColumnsExperience] = useState([
@@ -125,6 +120,7 @@ const AnalyseShow = () => {
     fetchAnalyseModels();
   }, [id]);
 
+  ////////////////////////////////////////////////DATASET  & MODELS FUNCTIONS////////////////////////////////////////////////////////////
   const handleOpenModalDataset = () => {
     setShowModalDataset(true);
   };
@@ -214,6 +210,26 @@ const AnalyseShow = () => {
       console.error("Error deleting dataset:", error);
     }
   };
+
+  const handleDatasetCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, dataset: Dataset) => {
+    const isChecked = e.target.checked;
+  
+    if (isChecked) {
+      setSelectedDatasets((prevSelectedDatasets) => [...prevSelectedDatasets, dataset]);
+    } else {
+      setSelectedDatasets((prevSelectedDatasets) => prevSelectedDatasets.filter((dataset) => dataset.id_dataset !== dataset.id_dataset));
+    }
+  };
+
+  const handleModelCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, model: Model) => {
+    const isChecked = e.target.checked;
+  
+    if (isChecked) {
+      setSelectedModels((prevSelectedModels) => [...prevSelectedModels, model]);
+    } else {
+      setSelectedModels((prevSelectedModels) => prevSelectedModels.filter((selectedModel) => selectedModel.id_model!== model.id));
+    }
+  };
   //////////////////////////////////////////////////EXPERIENCE FUNCTIONS////////////////////////////////////////////////////////////
   const handleOpenModalExperience = () => {
     setShowModalExperience(true);
@@ -222,7 +238,7 @@ const AnalyseShow = () => {
   const handleAddExperience = async (newExperience: Experience) => {
     try {
       await createExperience(Number(id), newExperience);
-      setExperienceList([...experiencesList, newExperience]); //Mise à jour de la liste des experiences de l'analyse
+      setExperiencesList([...experiencesList, newExperience]); //Mise à jour de la liste des experiences de l'analyse
     } catch (error) {
       console.error("Error adding experience:", error);
     }
@@ -232,12 +248,12 @@ const AnalyseShow = () => {
     setShowModalExperience(false);
   };
 
-  const handleOpenInfoExperience = (index: number) => {
+  const handleOpenInfoExperience = (id_experience: number) => {
     setShowModalInfoExperience(true);
 
-    console.log("Ouverture des infos de l'experience: ", index);
+    console.log("Ouverture des infos de l'experience: ", id_experience);
     const experience = experiencesList.find(
-      (exp) => exp.id_experience === index
+      (exp) => exp.id_experience === id_experience
     );
     if (experience) {
       setSelectedExperience(experience);
@@ -248,30 +264,28 @@ const AnalyseShow = () => {
     setShowModalInfoExperience(false);
   };
 
-  const handleDeleteExperience = () => {};
+  const handleDeleteExperience = () => {
+     };
+
+
 
   //Liste experience
-  const [experiencesList, setExperienceList] = useState<Experience[]>([]);
+  const [experiencesList, setExperiencesList] = useState<Experience[]>([]);
   useEffect(() => {
     fetchExperienceForAnalysis(Number(id))
-      .then((data) => setExperienceList(data))
+      .then((data) => setExperiencesList(data))
       .catch((error) => console.error("Error fetching experiences:", error));
   }, []);
 
   /////////Verificatioon pour le changement de statut
   useEffect(() => {
-    //Permet de changer le string HH:MM:SS en type Date pour la comparaison
-    const parseTimeStringToTime = (timeString: string) => {
-      const [hour, minute, second] = timeString.split(":").map(Number);
-      return new Date(0, 0, 0, hour, minute, second);
-    };
 
     const timer = setInterval(async () => {
       console.log("This will run every second!");
 
       for (const experience of experiencesList) {
         const currentTime = new Date();
-        const endTime = parseTimeStringToTime(experience.heure_fin_prevu);
+        const endTime = new Date(experience.heure_fin_prevu);
 
         if (
           currentTime > endTime &&
@@ -282,7 +296,7 @@ const AnalyseShow = () => {
             await updateExperienceStatus(experience.id_experience, "Terminé");
 
             // Mettre à jour la liste des expériences dans le state
-            setExperienceList((prevList) =>
+            setExperiencesList((prevList) =>
               prevList.map((exp) => {
                 if (exp.id_experience === experience.id_experience) {
                   return { ...exp, statut: "Terminé" };
@@ -306,51 +320,67 @@ const AnalyseShow = () => {
           }
         }
       }
-      /*
-    setExperienceList(prevExperiences => prevExperiences.map((experience) => {
-      if (experience.statut === "En cours" && experience.heure_fin_prevu) {
-
-        const currentTime = new Date();
-        const endTime = parseTimeStringToTime(experience.heure_fin_prevu);
-
-        console.log(currentTime, endTime ,experience.statut)
-
-        if (currentTime > endTime) {
-          console.log("Temps dépassé");
-          return { ...experience, statut: "Terminé" } as Experience;
-        }
-      }
-      return experience;
-    }));*/
     }, 3000);
 
     return () => clearInterval(timer);
   }, [id, experiencesList]);
-  const closeModalRapport = () => {
-    setShowModalRapport(false);
-  };
 
-  const handleOpenRapport = () => {
-    setShowModalRapport(true);
-  };
+  //////////////////////////////////////////////////REPORT FUNCTIONS////////////////////////////////////////////////////////////
+ //Liste rapport
+ const [rapportsList, setRapportsList] = useState<Rapport[]>([]);
+ useEffect(() => {
+   fetchRapportForAnalysis(Number(id))
+     .then((data) => setRapportsList(data))
+     .catch((error) => console.error("Error fetching rapport:", error));
+ }, []);
 
-  const handleDeleteRapport = () => {};
-  //Liste rapport
-  const [rapportsList, setRapportList] = useState<Rapport[]>([]);
-  useEffect(() => {
-    fetchRapportForAnalysis(Number(id))
-      .then((data) => setRapportList(data))
-      .catch((error) => console.error("Error fetching rapport:", error));
-  }, []);
-  const handleAddRapport = async (newRapport: Rapport) => {
-    try {
-      await createRapport(Number(id), newRapport);
-      const updatedRapportsList = await fetchRapportForAnalysis(Number(id)); //Mise à jour de la liste des rapports de l'analyse
-      setRapportList(updatedRapportsList);
-    } catch (error) {
-      console.error("Error adding rapport:", error);
+ const handleAddRapport = async (newRapport: Rapport) => {
+   try {
+     await createRapport(Number(id), newRapport);
+     const updatedRapportsList = await fetchRapportForAnalysis(Number(id)); //Mise à jour de la liste des rapports de l'analyse
+     setRapportsList(updatedRapportsList);
+   } catch (error) {
+     console.error("Error adding rapport:", error);
+   }
+ };
+
+  const handleOpenRapport = (index:number) => {
+    navigate(`/projets/analyse/${index}/rapport`);
+    console.log("Rapport ouvert !");
+  
+  }
+
+  /*Supprimer un rapporRapport */
+   const handleDeleteRapport = (index: number) => {
+        console.log("Rapport supprimé ");
+  }; 
+ 
+  const toggleReportSelection = (id: number) => {
+    console.log(selectedReports)
+    if (selectedReports.includes(id)) {
+      setSelectedReports(selectedReports.filter(reportId => reportId !== id));
+      
+    } else {
+      if (selectedReports.length < 2) {
+        setSelectedReports([...selectedReports, id]);
+      } else {
+        alert("Vous avez déjà sélectionné deux rapports pour la comparaison.");
+        console.log("Vous ne pouvez sélectionner que jusqu'à deux rapports.");
+      }
+    }
+   
+  };
+  
+  const handleComparer = () => {
+    {console.log(selectedReports)}
+    if (selectedReports.length > 1) {
+      setShowReportComparisonModal(true);
+    } else {
+      alert("Vous devez sélectionner deux rapports pour faire la comparaison.");
+      console.log("Vous devez d'abord sélectionner les rapports à comparer.");
     }
   };
+
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -400,15 +430,23 @@ const AnalyseShow = () => {
           <div className="col-md-6">
             <div
               className="rounded border p-3 position-relative shadow-sm"
-              style={{ height: "50vh" }}
+              style={{ height: "50vh", overflowY: "auto" }}
             >
               <div className="d-flex align-items-center justify-content-between">
                 <h5> Expériences</h5>
                 <div className="mb-0">
                   <button
                     className="btn mb-10"
-                    style={{ backgroundColor: "#E30613", color: "white" }}
-                    onClick={handleOpenModalExperience}
+                    style={{ backgroundColor: "#E30613", color: "var(--background-color)"}}
+                    onClick= {() => {
+                        // Vérifier si selectedModels et selectedDatasets ne sont pas vides
+                        if (selectedModels.length > 0 && selectedDatasets.length > 0) {
+                          handleOpenModalExperience();
+                        } else {
+                              alert("Veuillez sélectionner au moins un modèle et un dataset.");
+                        }
+                      }
+                    }
                   >
                     Exécuter
                   </button>
@@ -417,9 +455,9 @@ const AnalyseShow = () => {
               <hr style={{ color: "#555" }} />
               <div className="overflow-auto">
                 <ElementsList
-                  nameModule="experience"
+                  nameModule="experienceAnalyse"
                   columns={columnsExperience}
-                  elementsList={experiencesList}
+                  elementsList={Array.isArray(experiencesList)?experiencesList:[]}
                   onShow={handleOpenInfoExperience}
                   onDelete={handleDeleteExperience}
                 />
@@ -437,7 +475,7 @@ const AnalyseShow = () => {
                 <div className="mt-1 me-2" onClick={handleOpenModalDataset}>
                   <FontAwesomeIcon
                     icon={faPlusCircle}
-                    style={{ color: "#E30613", fontSize: "1.2em" }}
+                    style={{ color: "#E30613", fontSize: "1.2em", cursor: "pointer" }}
                   />
                 </div>
               </div>
@@ -453,7 +491,10 @@ const AnalyseShow = () => {
                       }
                     >
                       <td style={{ width: "10px" }}>
-                        <input type="checkbox" />
+                        <input 
+                              type="checkbox" 
+                              checked={selectedDatasets.includes(dataset)}
+                              onChange={(e) =>handleDatasetCheckboxChange(e,dataset)}/>
                       </td>
                       <td>
                         <div style={{ whiteSpace: "nowrap" }}>
@@ -468,6 +509,7 @@ const AnalyseShow = () => {
                           onClick={() =>
                             handleDeleteDatasetClick(dataset.id_dataset)
                           }
+                          style={{ cursor: "pointer" }}
                         />
                       </td>
                     </tr>
@@ -482,42 +524,86 @@ const AnalyseShow = () => {
           <div className="col-md-6 ">
             <div
               className="rounded border p-3 position-relative shadow-sm"
-              style={{ height: "50vh" }}
+              style={{ height: "50vh", overflowY: "auto" }}
             >
               <div className="d-flex align-items-center justify-content-between">
                 <h5> Rapports</h5>
                 <div className="mb-0">
                   <button
                     className="btn px-2"
-                    style={{ backgroundColor: "#E30613", color: "white" }}
+                    onClick={handleComparer}
+                    style={{ backgroundColor: "#E30613", color: "var(--background-color)"}}
                   >
                     Comparer
                   </button>
+                  <ReportComparisonModal
+                    show={showReportComparisonModal}
+                    onHide={() => setShowReportComparisonModal(false)}
+                    selectedReports={selectedReports}
+                  />
                 </div>
-              </div>
-              <hr style={{ color: "#555" }} />
-              <div className="overflow-auto">
-                <ElementsList
-                  nameModule="rapportAnalyse"
-                  columns={columnsRapport}
-                  elementsList={rapportsList}
-                  onShow={handleOpenRapport}
-                  onDelete={handleDeleteRapport}
-                />
+                </div>
+                <hr style={{ color: "#555" }} />
+                <div className="overflow-auto">
+                
+                <Table>
+                    <thead>
+                      <tr>
+                        <th> </th>
+                        <th>Nom</th>
+                        <th>Date de création</th>
+                        <th> </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rapportsList.length > 0 && rapportsList.map(rapport => (
+                        <tr key={rapport.id_rapport} className={rapport.id_rapport && selectedReports.includes(rapport.id_rapport) ? 'selected' : ''}>
+                        {rapport.id_rapport &&
+                          <td style={{ width: '10px' }}>
+                            <input
+                              type="checkbox" 
+                              className="form-check-input"
+                              checked={ selectedReports.includes(rapport.id_rapport)}
+                              onChange={() => rapport.id_rapport && toggleReportSelection(rapport.id_rapport)}
+                              style={{ backgroundColor: selectedReports.includes(rapport.id_rapport) ? 'red' : ''}}
+                            />
+                          </td>
+                  }
+                          <td>
+                            <div style={{ whiteSpace: 'nowrap' }}>
+                               {rapport.name_rapport}
+                            </div>
+                          </td>
+                          <td> 
+                              {moment(rapport.created_at).format("DD-MM-YYYY")}
+                          </td>
+                          <td>
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              className="icon-trash"
+                              onClick={() => rapport.id_rapport && handleOpenRapport(rapport.id_rapport)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
               </div>
             </div>
           </div>
+
           <div className="col-md-6">
             <div
               className="rounded border p-3 position-relative shadow-sm"
-              style={{ height: "50vh" }}
+              style={{ height: "50vh", overflowY: "auto" }}
             >
               <div className="d-flex align-items-center justify-content-between">
                 <h5> Modèles</h5>
                 <div className="mt-1 me-2" onClick={handleOpenModalModel}>
                   <FontAwesomeIcon
                     icon={faPlusCircle}
-                    style={{ color: "#E30613", fontSize: "1.2em" }}
+                    style={{ color: "#E30613", fontSize: "1.2em", cursor: "pointer"}}
                   />
                 </div>
               </div>
@@ -532,7 +618,11 @@ const AnalyseShow = () => {
                       }
                     >
                       <td style={{ width: "10px" }}>
-                        <input type="checkbox" />
+                        <input 
+                              type="checkbox" 
+                              checked={selectedModels.includes(model)}
+                              onChange={(e) =>handleModelCheckboxChange(e,model)}
+                          />
                       </td>
                       <td>
                         <div style={{ whiteSpace: "nowrap" }}>
@@ -546,7 +636,8 @@ const AnalyseShow = () => {
                         <FontAwesomeIcon
                           icon={faTrash}
                           className="icon-trash"
-                          onClick={() => handleDeleteModelClick(model.id)}
+                          onClick={() => handleDeleteModelToAnalyse(model.id)}
+                          style={{ cursor: "pointer" }}
                         />
                       </td>
                     </tr>
@@ -591,11 +682,7 @@ const AnalyseShow = () => {
           onClose={handleCloseInfoExperience}
         />
       )}
-      <ConfirmationArchiverModal
-        isOpen={showConfirmationModal}
-        onClose={() => setShowConfirmationModal(false)}
-        onConfirm={confirmDeleteItem}
-      />
+
     </div>
   );
 };

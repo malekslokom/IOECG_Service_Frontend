@@ -21,13 +21,19 @@ const CreateExperienceModal: React.FC<CreateExperienceModalProps> = ({
 
     const handleCreateExperience = () => {
 
-      const currentTime = new Date().toLocaleTimeString("fr-FR", { hour12: false });
-      const endTime = new Date(Date.now() + 10000).toLocaleTimeString("fr-FR", { hour12: false });
+      //const currentTime = new Date().toLocaleTimeString("fr-FR", { hour12: false });
+      //const endTime = new Date(Date.now() + 10000).toLocaleTimeString("fr-FR", { hour12: false });
 
+      const currentTime = new Date().toISOString();
+      const endTime = new Date(Date.now() + 10000).toISOString();
+
+
+        console.log(modelsList);
+        console.log(datasetsList);
         const newExperience: Experience = {
             id_analysis_experience: id_analyse,
             name_experience: nameExperience,
-            models: modelsList.map(model => model.id_model), 
+            models: modelsList.map(model => model.id), 
             datasets: datasetsList.map(dataset => dataset.id_dataset), 
             nom_machine: "Machine Andy",     //Données statiques
             nb_gpu: 6,           //Données statiques
