@@ -60,7 +60,7 @@ const ConsulterProjetPage = () => {
             <DatasetProjetPage idProjet={projectId} />
           </TabPanel>
           <TabPanel>
-            <RapportProjetPage />
+            <RapportProjetPage idProjet={projectId}/>
           </TabPanel>
         </Tabs>
       </div>

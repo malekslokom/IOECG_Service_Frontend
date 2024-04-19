@@ -27,7 +27,6 @@ const ListProjetsPage = () => {
     "Date Création",
     "Description",
     "Auteur",
-    "Version",
     "Type",
   ]);
 

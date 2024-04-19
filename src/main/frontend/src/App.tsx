@@ -6,9 +6,6 @@ import "./App.css";
 
 import ListProjetsPage from "./views/Projets/ListProjets/ListProjetsPage";
 import CatalogueProjetPage from "./views/Projets/Catalogues/CatalogueProjetPage";
-import DatasetProjetPage from "./views/Projets/Datasets/DatasetProjetPage";
-import AnalyseProjetPage from "./views/Projets/Analyses/AnalyseProjetPage";
-import RapportProjetPage from "./views/Projets/Rapports/RapportProjetPage";
 import MesCataloguePage from "./views/Catalogues/MesCataloguePage";
 import HistoriquePage from "./views/Historique/HistoriquePage";
 import NavBar from "./components/NavBar/NavBar";
@@ -19,7 +16,7 @@ import AccueilPage from "./views/Accueil/AccueilPage";
 import ConsulterProjetPage from "./views/Projets/ListProjets/ConsulterProjetPage";
 import ListEcgPage from "./views/Projets/Ecg/ListEcgPage";
 import ConsulterRapport from "./views/Projets/Rapports/ConsulterRapport";
-import MesAnalysePage from "./views/Analyses/MesAnalysePage";
+import MesAnalysesPage from "./views/Analyses/MesAnalysesPage";
 
 function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -50,16 +47,16 @@ function App() {
               path="/projets/catalogues"
               element={<CatalogueProjetPage />}
             />
-            <Route path="/projets/rapports" element={<RapportProjetPage />} />
             <Route path="/mes-catalogues" element={<MesCataloguePage />} />
-            <Route path="/mes-analyses" element={<MesAnalysePage />} />
+            <Route path="/mes-analyses" element={<MesAnalysesPage />} />
             <Route path="/projets/:id" element={<ConsulterProjetPage />} />
             <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/historique" element={<HistoriquePage />} />
             {/* Autres routes */}
             <Route path="projets/:id/analyses/:id" element={<ConsulterAnalyse />} />
             <Route path="projets/datasets/:id/ecg" element={<ListEcgPage />} />
-            <Route path="projets/rapports/:id" element={<ConsulterRapport />} />
+            <Route path="projets/analyse/:id/rapport" element={<ConsulterRapport />} />
+            <Route path="projets/:id/rapports/:id" element={<ConsulterRapport />} />
           </Routes>
         </div>
       </BrowserRouter>

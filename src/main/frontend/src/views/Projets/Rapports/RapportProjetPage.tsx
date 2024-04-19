@@ -1,12 +1,23 @@
 import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteRapportById, fetchRapportForProject } from "../../../services/RapportService";
+import { deleteExperienceById } from "../../../services/ExperienceService";
+interface RapportProjetProps {
+  idProjet: number;
+}
 
-const RapportProjetPage = () => {
+const RapportProjetPage: React.FC<RapportProjetProps> = ({ idProjet }) => {
   const navigate = useNavigate();
 
+  const [listRapports, setListRapports] = useState<Rapport[]>([]);
+  useEffect(() => {
+  fetchRapportForProject(idProjet)
+    .then((data)=> setListRapports(data))
+    .catch((error) => console.error("Error fetching rapports:", error));
+}, []);
   /*
     {
       dateCreation: "09/03/2024",
@@ -28,11 +39,20 @@ const RapportProjetPage = () => {
     },
   */
 
-  const [listRapports, setListRapports] = useState<Rapport[]>([]);
+  
+
+
   const [columns, setColumns] = useState([
-    "Nom Rapport",
-    "DateCreation",
+    "Nom ",
+    "Date Creation",
+    "Nom Analyse" //"Analyse"
   ]);
+
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    searchTerm: "",
+  });
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -42,8 +62,8 @@ const RapportProjetPage = () => {
     console.log("Bouton cliqué !");
   };
 
-  function onShow(index: number): void {
-    navigate("projets/rapports/${index}");
+  function handleOpenRapport(index: number): void {
+    navigate(`/projets/${idProjet}/rapports/${index}`);
     console.log("Rapport ouvert");
   }
 
@@ -51,24 +71,45 @@ const RapportProjetPage = () => {
   const handleDeleteRapport = (index: number) => {
     setSelectedRapport(index);
     setShowConfirmationModal(true);
-    console.log("Rapport cliqué et supprimé");
+    console.log("Rapport cliqué , pas encore supprimé");
   };
 
-  const handleConfirmDeleteRapport = () => {
+  const handleConfirmDeleteRapport = async () => {
     if (selectedRapport !== null) {
-      const updatedList = [...listRapports];
-      updatedList.splice(selectedRapport, 1);
-      setListRapports(updatedList);
+      const rapportToDelete = listRapports.find(rapport => rapport.id_rapport === selectedRapport);
+      const idExperience = rapportToDelete?.id_experience_rapport  //Le "?" est dans le cas où rapportTodelte est undefined
 
+      await deleteRapportById(selectedRapport);
+      const updatedList = listRapports.filter(rapport => rapport.id_rapport !== selectedRapport)
+      setListRapports(updatedList);
+      console.log("Rapport supprimé");
+
+       /*Si on supprime un rapport , il faut supprimer son expérience */
+      if (idExperience!==undefined){
+          await deleteExperienceById(idExperience);
+          console.log("L'experience associé au rapport supprimée")
+      }
+      else {
+        console.log("id_experience_rapport est indéfini");
+      }
+      
       setSelectedRapport(null);
       setShowConfirmationModal(false);
-      console.log("Rapport supprimé");
     }
   };
+
 
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setSelectedRapport(null);
+  };
+
+  const handleFilter = (
+    startDate: string,
+    endDate: string,
+    searchTerm: string
+  ) => {
+    setFilters({ startDate, endDate, searchTerm });
   };
 
   return (
@@ -80,6 +121,7 @@ const RapportProjetPage = () => {
           bouton="Créer"
           boutonVisible={false}
           onClick={buttonClick}
+          onFilter={handleFilter}
         />
         <div
           className="position-absolute"
@@ -90,7 +132,7 @@ const RapportProjetPage = () => {
             columns={columns}
             elementsList={listRapports}
             onDelete={handleDeleteRapport}
-            onShow={onShow}
+            onShow={handleOpenRapport}
           />
         </div>
       </div>

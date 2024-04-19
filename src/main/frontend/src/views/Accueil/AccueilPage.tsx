@@ -5,7 +5,7 @@ import { fetchModels } from "../../services/ModelService";
 import { fetchAnalyses } from "../../services/AnalyseService";
 import { fetchDatasets } from "../../services/DatasetService";
 import { fetchProjets, createProject } from "../../services/ProjetService";
-import { fetchExperiences } from "../../services/ExperienceService";
+import { fetchExperiences } from "../../services/HistoriqueService";
 import CreateProjetModal from "./../../components/Modals/CreateProjetModal";
 
 const AccueilPage = () => {
@@ -48,6 +48,7 @@ const AccueilPage = () => {
         setRecentExperiences(data.slice(0, 4));
       })
       .catch((error) => console.error("Error fetching projetcs:", error));
+
     fetchDatasets()
       .then((data) => {
         setDatasets(data);

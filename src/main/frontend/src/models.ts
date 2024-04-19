@@ -42,27 +42,24 @@ interface Model {
   }
 
   interface ECG {
-    id: number;
-    origineDatasetId:number;
-    patientId: number;
-    filepath: string;
-    recordingStartedAt: string;
-    recordingEndedAt: string;
-    recordingInitialSamplingRate: number;
-    recordingSamplingRate: number;
-    recordingDuration: number;
-    protocolDetails: any;
-    data: number[];
-
+    id: number | null;
+    origin_dataset: number | null;
+    id_patient: number | null;
+    patient_weight: string | null;
+    patient_sex: string | null;
+    patient_age: number | null;
+    patient_race: string | null;
+    filepath: string|null;
+    recording_started_at: string;
+    recording_ended_at: string | null ;
+    recording_initial_sampling_rate: number | null;
+    recording_sampling_rate: number | null;
+    recording_duration: number | null;
+    protocol_details: any | null;
+    data?: number[];
   }
   
-  // interface Dataset {
-  //   id: number;
-  //   name: string;
-  //   description: string;
-  //   type: string;
-  //   ecgs: ECG[];
-  // }
+
   
   interface Dataset {
     id_dataset :number;
@@ -91,7 +88,7 @@ interface Model {
   numPatients:number;
   numECGs:number;
 }
-interface PatientEcgData {
+/*interface PatientEcgData {
   patient_id: number;
   age: number;
   height: number;
@@ -133,7 +130,51 @@ interface PatientEcgData {
   study_details: string;
   source_name: string;
   source_details: string;
-}
+}*/
+interface PatientEcgData {
+  patient_id: number|null;
+  age: number|null;
+  height: number|null;
+  weight: number|null;
+  sex: string|null;
+  id_ecg:number;
+  recording_started_at: string|null;
+  recording_ended_at: string|null;
+  recording_initial_sampling_rate: number|null;
+  recording_sampling_rate: number|null;
+  recording_duration: number|null;
+  protocol_details: string|null;
+  ecg_filepath: string|null;
+  lead_i:  number[]; // Modification ici
+  lead_ii: number[]; // Modification ici
+  lead_iii: number[]; // Modification ici
+  lead_avr:  number[]; // Modification ici
+  lead_avf: number[]; // Modification ici
+  lead_avl:  number[]; // Modification ici
+  lead_v1:  number[]; // Modification ici
+  lead_v2: number[]; // Modification ici
+  lead_v3:  number[]; // Modification ici
+  lead_v4:number[]; // Modification ici
+  lead_v5:  number[]; // Modification ici
+  lead_v6:  number[]; // Modification ici
+  lead_x: number[]; // Modification ici
+  lead_y:number[]; // Modification ici
+  lead_z:  number[]; // Modification ici
+  lead_es: number[]; // Modification ici
+  lead_as:  number[]; // Modification ici
+  lead_ai: number[]; // Modification ici
+  id_dataset: number;
+  created_at: string|null;
+  name_dataset: string|null;
+  description_dataset: string|null;
+  type_dataset: string|null;
+  leads_name: string;
+  study_name: string|null;
+  study_details: string|null;
+  source_name: string|null;
+  source_details: string|null;
+  }
+  
   interface DatasetECG {
     id: number;
     id_dataset: string;
@@ -171,7 +212,38 @@ interface Experience {
   nb_processeurs: number;
   heure_lancement: string; 
   heure_fin_prevu: string;
-  //heure_fin_prevu?: string | null; // Heure de fin prévue, optionnelle
   statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
   resultat_prediction: number[];
 }
+
+interface PredictionData {
+  nom_experience: string;
+  evluation  : string;
+  analyse_onrigine : string;
+  
+  predictions: { [key: string]: number };
+  f1_score: {
+    precision: number;
+    recall: number;
+    f1_score: number;
+  };
+  matriceConfusion: {
+    vrais_positifs: number;
+    faux_positifs: number;
+    faux_negatifs: number;
+    vrais_negatifs: number;
+  };
+  datasets: {
+    title: string;
+    description: string;
+    ecgCount: number;
+    creationDate: string;
+    type: string;
+  }[];
+  models: {
+    name: string;
+    accuracy: string;
+    trainingTime: string;
+    parameters: string;
+  }[];
+  }

@@ -3,26 +3,28 @@ import ElementsList from "../../components/ElementsList/ElementsLits";
 import { useState, useEffect } from "react";
 import ConfirmationArchiverModal from "../../components/Modals/ConfirmationArchiverModal";
 import {  useNavigate } from "react-router-dom";
+import { fetchExperiences } from "../../services/HistoriqueService";
+import InfoExperienceModal from "../../components/Modals/Analyse/InfoExperienceModal";
 
 const HistoriquePage = () => {
 
-  const navigate = useNavigate();
-
-  const [listRapports, setListRapports] = useState<Rapport[]>([]);
- /* useEffect(() => {
-    fetchRapports()
-      .then((data) => setListRapport(data))
-      .catch((error) => console.error("Error fetching Rapports:", error));
-  }, []);  */
+  const [listExperiences, setListExperiences] = useState<Experience[]>([]);
+ useEffect(() => {
+    fetchExperiences()
+      .then((data) => setListExperiences(data))
+      .catch((error) => console.error("Error fetching Experiences:", error));
+  }, []);  
   
-  const [showConfirmationModal, setShowConfirmationModal] =
-    useState<boolean>(false);
-  const [selectedRapport, setSelectedRapport] = useState<number | null>(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+  const [showModalInfoExperience, setShowModalInfoExperience] = useState(false);
+
+  const [selectedExperience, setSelectedExperience] = useState<number | null>(null);
   const [columns, setColumns] = useState([
-    "Nom Rapport",
+    "Nom Experience",
     "Date Création",
-    "Auteur",
-    ""
+    "Nom Analyse",
+    "Nom Projet"
+    //"Projet" Analyse, Experience
   ]);
 
   const [filters, setFilters] = useState({
@@ -63,35 +65,53 @@ const HistoriquePage = () => {
 
 
   /*Supprimer un rapport + confirmation*/
-  const handleDeleteRapport = (id: number) => {
-    setSelectedRapport(id);
+  const handleDeleteExperience = (id: number) => {
+    setSelectedExperience(id);
     setShowConfirmationModal(true);
-    console.log("Rapport à supprimer cliqué");
+    console.log("Experience à supprimer cliqué");
   };
 
-  const handleConfirmDeleteRapport = async () => {
-    if (selectedRapport !== null) {
-      //await deleteRapportById(selectedRapport);
-      const updatedList = listRapports.filter(rapport => rapport.id_rapport !== selectedRapport);
+  const handleConfirmDeleteExperience = async () => {
+    if (selectedExperience !== null) {
+      //await deleteRapportById(selectedExperience);
+      const updatedList = listExperiences.filter(exp => exp.id_experience !== selectedExperience);
       /*const updatedList = [...listProjets];
       updatedList.splice(selectedProjet, 1);*/
-      setListRapports(updatedList);
+      setListExperiences(updatedList);
 
-      setSelectedRapport(null);
+      setSelectedExperience(null);
       setShowConfirmationModal(false);
-      console.log("Rapport supprimé");
+      console.log("Experience supprimée");
     }
   };
 
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
-    setSelectedRapport(null);
+    setSelectedExperience(null);
   };
-  /*Ouvrir une expérience */
-  const handleShowRapport = (id: number) => {
-    navigate(`/historique/${id}`);
-    console.log("Rapport ouvert");
+
+
+  /*Ouvrir les infos d'une expérience */
+  const handleShowExperience = (id_experience: number) => {
+    setShowModalInfoExperience(true);
+
+    console.log("Ouverture des infos de l'experience: ", id_experience);
+    const experience = listExperiences.find(
+      (exp) => exp.id_experience === id_experience
+    );
+    if (experience && experience.id_experience !== undefined) { 
+      setSelectedExperience(experience.id_experience);
+    } else {
+      setSelectedExperience(null); // Si l'expérience n'est pas trouvée ou si id_experience est undefined, définissez selectedExperience sur null
+    }
+
+  console.log("Experience ouverte");
   };
+
+  const handleCloseInfoExperience = () => {
+    setShowModalInfoExperience(false);
+  };
+
 
 
 
@@ -100,7 +120,7 @@ const HistoriquePage = () => {
       <div className="position-relative">
         <div>
           <ListPage
-            title="Historiques"
+            title="Historique"
             bouton="Créer"
             boutonVisible={false}
             onClick={buttonClick}
@@ -112,18 +132,25 @@ const HistoriquePage = () => {
           >
             <ElementsList
               columns={columns}
-              nameModule="rapport"
-              elementsList={listRapports}
-              onDelete={handleDeleteRapport}
-              onShow={handleShowRapport}
+              nameModule="historique"
+              elementsList={listExperiences}
+              onDelete={handleDeleteExperience}
+              onShow={handleShowExperience}
             />
           </div>
 
           <ConfirmationArchiverModal
             isOpen={showConfirmationModal}
             onClose={handleCloseConfirmationModal}
-            onConfirm={handleConfirmDeleteRapport}
+            onConfirm={handleConfirmDeleteExperience}
           />
+
+        {showModalInfoExperience && (
+           <InfoExperienceModal
+          experience={listExperiences.find((exp) => exp.id_experience === selectedExperience) || null}
+          onClose={handleCloseInfoExperience}
+        />
+      )}    
         </div>
       </div>
     </div>

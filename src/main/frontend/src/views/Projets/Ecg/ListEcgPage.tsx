@@ -6,42 +6,54 @@ function ListEcgPage() {
   const [listEcg, setListEcg] = useState<ECG[]>([
     {
       id:1,
-      patientId: 1,
-      origineDatasetId: 1,
+      id_patient: 1,
+      origin_dataset: 1,
       filepath: "/chemin/vers/fichier1",
-      recordingStartedAt: "15/03/22",
-      recordingEndedAt: "20/04/22",
-      recordingInitialSamplingRate: 100,
-      recordingSamplingRate: 100,
-      recordingDuration: 1,
-      protocolDetails: "Détails du protocole 1",
+      patient_weight: "68",
+      patient_sex: 'F',
+      patient_age: 32,
+      patient_race: "French",
+      recording_started_at: "15/03/22",
+      recording_ended_at: "20/04/22",
+      recording_initial_sampling_rate: 100,
+      recording_sampling_rate: 100,
+      recording_duration: 1,
+      protocol_details: "Détails du protocole 1",
       data: []
     },
     {
       id:2,
-      patientId: 2,
-      origineDatasetId: 1,
+      id_patient: 2,
+      origin_dataset: 1,
+      patient_weight: "70",
+      patient_sex: 'M',
+      patient_age: 46,
+      patient_race: "American",
       filepath: "/chemin/vers/fichier2",
-      recordingStartedAt: "15/03/22",
-      recordingEndedAt: "01/04/22",
-      recordingInitialSamplingRate: 100,
-      recordingSamplingRate: 100,
-      recordingDuration: 2,
-      protocolDetails: "Détails du protocole 2",
+      recording_started_at: "15/03/22",
+      recording_ended_at: "01/04/22",
+      recording_initial_sampling_rate: 100,
+      recording_sampling_rate: 100,
+      recording_duration: 2,
+      protocol_details: "Détails du protocole 2",
       data: []
     },
     {
-      id:3,
-      patientId: 3,
-      origineDatasetId: 2,
+      id: 3,
+      id_patient: 3,
+      origin_dataset: 2,
       filepath: "/chemin/vers/fichier3",
-      recordingStartedAt: "15/06/22",
-      recordingEndedAt: "15/07/22",
-      recordingInitialSamplingRate: 200,
-      recordingSamplingRate: 200,
-      recordingDuration: 3,
-      protocolDetails: "Détails du protocole 3",
-      data: []
+      recording_started_at: "15/06/22",
+      recording_ended_at: "15/07/22",
+      recording_initial_sampling_rate: 200,
+      recording_sampling_rate: 200,
+      recording_duration: 3,
+      protocol_details: "Détails du protocole 3",
+      data: [],
+      patient_weight: "60",
+      patient_sex: "F",
+      patient_age: 24,
+      patient_race: "Indian"
     },
   ]);
 
@@ -61,6 +73,12 @@ function ListEcgPage() {
     useState<boolean>(false);
   const [selectedEcg, setSelectedEcg] = useState<number | null>(null);
 
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    searchTerm: "",
+  }); 
+  
   const buttonClick = () => {
     console.log("Bouton cliqué !");
   };
@@ -93,6 +111,14 @@ function ListEcgPage() {
     setSelectedEcg(null);
   };
 
+  const handleFilter = (
+    startDate: string,
+    endDate: string,
+    searchTerm: string
+  ) => {
+    setFilters({ startDate, endDate, searchTerm });
+  };
+
   return (
     <div>
       <div className="position-relative">
@@ -101,6 +127,7 @@ function ListEcgPage() {
           bouton="Créer"
           boutonVisible={false}
           onClick={buttonClick}
+          onFilter={handleFilter}
         />
         <div
           className="position-absolute"
