@@ -20,7 +20,14 @@
   --header-array-text-color:#03003A;
   --array-border-color:#F2F5F7;
   --navigation-header-text:#a4a6ab;
-  --navigation-header-arrow:#f4a4a9
+  --navigation-header-arrow:#f4a4a9;
+  --tag-model-bg-color:#6C757D;
+  --tag-model-color:#fff;
+  --card-tite-color:#212529;
+  --card-sub-title-color:#595C5F;
+  --card-bg-color:#F3F6F9;
+  --placeholder-color: #ccc;
+  --recent-experience-box:#F3F5F7;
 }
 
 [data-theme="dark"] {
@@ -41,5 +48,12 @@
   --header-array-text-color:#BFC2CA;
   --array-border-color: #F2F5F7;
   --navigation-header-text:#f6f6f6;
-  --navigation-header-arrow:rgb(137, 167, 249)
+  --navigation-header-arrow:rgb(137, 167, 249);
+  --card-tite-color:#E9ECEF;
+  --card-sub-title-color:#BEC2C4;
+  --tag-model-bg-color:#A6ADB5;
+  --tag-model-color:#fff;
+  --card-bg-color:#283452;
+  --placeholder-color: #aaa; 
+  --recent-experience-box:#f6f6f6;
 }

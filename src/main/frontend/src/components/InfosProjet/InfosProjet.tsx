@@ -1,6 +1,5 @@
 import React from "react";
 import "./InfosProjet.css";
-import ecg from "./../../assets/ecg.jpg";
 
 interface Projet {
   project: {
@@ -15,7 +14,11 @@ interface Projet {
 const InfosProjet = ({ project }: Projet) => {
   return (
     <div className="card-content card">
-      <img className="card-img-top" src={ecg} alt="Card image cap"></img>
+      <img
+        className="card-img-top"
+        src="/assets/ecg.jpg"
+        alt="Card image cap"
+      ></img>
       <div className="card-header">
         <h2>{project.name_project}</h2>
       </div>

@@ -1,6 +1,7 @@
 interface Model {
     // inputShape: number[];
     // outputShape: number[];
+    id_model?: number;
     name: string;
     description: string;
     author: string;
@@ -12,6 +13,7 @@ interface Model {
     model_size: string;
     batch_size: string;
     learning_rate:Float32Array;
+    id:number;
   //  hyperparameters: { [key: string]: string };
 
    // architectureImage: string;
@@ -20,11 +22,14 @@ interface Model {
 
 
   interface Analyse {
-    dateCreation: string ;
-    nom: string;
-    auteur: string;
-    description: string;
-    id_analysis:number;    
+    id_analysis?:number;
+    id_project: number;
+    created_at: String;
+    last_updated_at:String;
+    name_analysis: String;
+    description_analysis: String;
+    created_by: String;
+
   };
   
   interface Projet {
@@ -37,27 +42,24 @@ interface Model {
   }
 
   interface ECG {
-    id: number;
-    origineDatasetId:number;
-    patientId: number;
-    filepath: string;
-    recordingStartedAt: string;
-    recordingEndedAt: string;
-    recordingInitialSamplingRate: number;
-    recordingSamplingRate: number;
-    recordingDuration: number;
-    protocolDetails: any;
-    data: number[];
-
+    id: number | null;
+    origin_dataset: number | null;
+    id_patient: number | null;
+    patient_weight: string | null;
+    patient_sex: string | null;
+    patient_age: number | null;
+    patient_race: string | null;
+    filepath: string|null;
+    recording_started_at: string;
+    recording_ended_at: string | null ;
+    recording_initial_sampling_rate: number | null;
+    recording_sampling_rate: number | null;
+    recording_duration: number | null;
+    protocol_details: any | null;
+    data?: number[];
   }
   
-  // interface Dataset {
-  //   id: number;
-  //   name: string;
-  //   description: string;
-  //   type: string;
-  //   ecgs: ECG[];
-  // }
+
   
   interface Dataset {
     id_dataset :number;
@@ -65,7 +67,7 @@ interface Model {
     name_dataset : string;
     description_dataset: string;
     type_dataset : 'search_results' | 'standard';
-    leads_name : string;
+    leads_name ?: string;
     study_name: string;
     study_details?: string;
     source_name : string;
@@ -86,7 +88,7 @@ interface Model {
   numPatients:number;
   numECGs:number;
 }
-interface PatientEcgData {
+/*interface PatientEcgData {
   patient_id: number;
   age: number;
   height: number;
@@ -128,7 +130,51 @@ interface PatientEcgData {
   study_details: string;
   source_name: string;
   source_details: string;
-}
+}*/
+interface PatientEcgData {
+  patient_id: number|null;
+  age: number|null;
+  height: number|null;
+  weight: number|null;
+  sex: string|null;
+  id_ecg:number;
+  recording_started_at: string|null;
+  recording_ended_at: string|null;
+  recording_initial_sampling_rate: number|null;
+  recording_sampling_rate: number|null;
+  recording_duration: number|null;
+  protocol_details: string|null;
+  ecg_filepath: string|null;
+  lead_i:  number[]; // Modification ici
+  lead_ii: number[]; // Modification ici
+  lead_iii: number[]; // Modification ici
+  lead_avr:  number[]; // Modification ici
+  lead_avf: number[]; // Modification ici
+  lead_avl:  number[]; // Modification ici
+  lead_v1:  number[]; // Modification ici
+  lead_v2: number[]; // Modification ici
+  lead_v3:  number[]; // Modification ici
+  lead_v4:number[]; // Modification ici
+  lead_v5:  number[]; // Modification ici
+  lead_v6:  number[]; // Modification ici
+  lead_x: number[]; // Modification ici
+  lead_y:number[]; // Modification ici
+  lead_z:  number[]; // Modification ici
+  lead_es: number[]; // Modification ici
+  lead_as:  number[]; // Modification ici
+  lead_ai: number[]; // Modification ici
+  id_dataset: number;
+  created_at: string|null;
+  name_dataset: string|null;
+  description_dataset: string|null;
+  type_dataset: string|null;
+  leads_name: string;
+  study_name: string|null;
+  study_details: string|null;
+  source_name: string|null;
+  source_details: string|null;
+  }
+  
   interface DatasetECG {
     id: number;
     id_dataset: string;
@@ -138,10 +184,11 @@ interface PatientEcgData {
 
     
 interface Rapport {
-  dateCreation: string;
-  nom: string ;
-  modeles: string[];   //ou Model[]  ?
-  datasets: string[] // ou Dataset[] ?
+  id_rapport?: number;
+  id_experience_rapport: number;
+  created_at: string;
+  name_rapport: string ;
+
 }
 
 
@@ -153,3 +200,50 @@ interface ECGPlotModalProps {
   ecgData: LeadData[]; // Now ecgData is an array of LeadData objects
   onClose: () => void;
 }
+
+interface Experience {
+  id_experience?: number;
+  id_analysis_experience: number;
+  name_experience: string;
+  models: (number |undefined)[]; // Tableau des id des modeles de l'experience
+  datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
+  nom_machine: string;
+  nb_gpu: number;
+  nb_processeurs: number;
+  heure_lancement: string; 
+  heure_fin_prevu: string;
+  statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
+  resultat_prediction: number[];
+}
+
+interface PredictionData {
+  nom_experience: string;
+  evluation  : string;
+  analyse_onrigine : string;
+  
+  predictions: { [key: string]: number };
+  f1_score: {
+    precision: number;
+    recall: number;
+    f1_score: number;
+  };
+  matriceConfusion: {
+    vrais_positifs: number;
+    faux_positifs: number;
+    faux_negatifs: number;
+    vrais_negatifs: number;
+  };
+  datasets: {
+    title: string;
+    description: string;
+    ecgCount: number;
+    creationDate: string;
+    type: string;
+  }[];
+  models: {
+    name: string;
+    accuracy: string;
+    trainingTime: string;
+    parameters: string;
+  }[];
+  }

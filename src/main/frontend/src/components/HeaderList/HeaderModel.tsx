@@ -1,32 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faFilter } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import moment from "moment";
 interface HeaderModelProps {
-  onFilter: (typeModel: string, auteurModel: string, nomModel: string) => void;
+  onFilter: (typeModel: string, searchTerm: string, nomModel: string) => void;
 }
 const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
   const [typeModel, setTypeModel] = useState("");
-  const [auteurModel, setAuteurModel] = useState("");
-  const [nomModel, setNomeModel] = useState("");
+  const [searchTerm, setsearchTerm] = useState("");
+  const [nomModel, setNomModel] = useState("");
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTypeModel(e.target.value);
   };
-  const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuteurModel(e.target.value);
+  const handleSearchTermSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setsearchTerm(e.target.value);
   };
   const handleModelNameSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNomeModel(e.target.value);
+    setNomModel(e.target.value);
   };
   const handleFilterClick = () => {
-    onFilter(typeModel, auteurModel, nomModel);
+    onFilter(typeModel, searchTerm, nomModel);
   };
 
   const handleResetFilters = () => {
     // Réinitialiser les états des filtres
     setTypeModel("");
-    setAuteurModel("");
-    setNomeModel("");
+    setsearchTerm("");
+    setNomModel("");
     // Appeler onFilter avec des valeurs vides pour réinitialiser les filtres côté parent
     onFilter("", "", "");
   };
@@ -35,51 +34,70 @@ const HeaderModel: React.FC<HeaderModelProps> = ({ onFilter }) => {
     <div className="filters">
       <div className="row align-items-center">
         <div className="col-auto">
-          <button className="btn shadow-none">
+          <button className="btn shadow-none" onClick={handleResetFilters}>
             <FontAwesomeIcon
-              onClick={handleResetFilters}
               icon={faSync}
-              style={{ fontSize: "1.5em", color: "rgba(226,13,23)" }}
+              style={{
+                fontSize: "1.5em",
+                color: "rgba(59,153,255,255)",
+                background: "var(--background-color)",
+              }}
             />
           </button>
         </div>
         <div className="col">
           <input
             type="text"
-            placeholder="Auteur"
-            className="form-control"
-            style={{ width: "100%" }}
-            onChange={handleAuthorSearch}
+            placeholder="Nom de modéle"
+            className="form-control input-placeholder"
+            style={{
+              width: "100%",
+              background: "var(--background-color)",
+            }}
+            onChange={handleModelNameSearch}
           />
         </div>
         <div className="col">
           <input
             type="text"
-            placeholder="Nom de modéle"
-            className="form-control"
-            style={{ width: "100%" }}
-            onChange={handleModelNameSearch}
+            placeholder="chercher"
+            className="form-control input-placeholder"
+            style={{
+              width: "100%",
+              background: "var(--background-color)",
+            }}
+            onChange={handleSearchTermSearch}
           />
         </div>
+
         <div className="col-auto">
           <select
             className="form-select"
             value={typeModel}
             onChange={handleTypeChange}
+            style={{
+              background: "var(--background-color)",
+              color: "var(--primary-text-color)",
+            }}
           >
-            <option value="">Nature de modéle</option>
-            <option value="Regression">Regression</option>
-            <option value="Binary Classification">Binary Classification</option>
-            <option value="Multi-class Classification">
+            <option value="régression">Regression</option>
+            <option value="classification binaire">
+              Binary Classification
+            </option>
+            <option value="classification multi-class">
               Multi-class Classification
             </option>
           </select>
         </div>
         <div className="col-auto">
           <button
-            className="btn btn-light"
+            className="btn"
             onClick={handleFilterClick}
-            style={{ color: "rgba(226,13,23)" }}
+            style={{
+              background: "var(--background-color)",
+              color: "var(--primary-text-color)",
+              border: "1px solid var(--primary-text-color)",
+            }}
           >
             <FontAwesomeIcon icon={faFilter} />
             Filter

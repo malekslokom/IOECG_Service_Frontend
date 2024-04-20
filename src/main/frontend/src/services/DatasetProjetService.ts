@@ -6,6 +6,7 @@ export async function fetchDatasetProjets(id_project: number): Promise<Dataset[]
       throw new Error('Failed to fetch projets');
     }
     return await response.json()};
+    
 export async function getDatasetProjetWithFilter(startDate: string, endDate: string, searchTerm: string,id_project:number): Promise<Dataset[]> {
     const encodedStartDate = encodeURIComponent(startDate);
     const encodedEndDate = encodeURIComponent(endDate);

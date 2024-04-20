@@ -64,7 +64,33 @@
     margin-top: 20%;
   }
   .no-project-section img {
-    width: 575px;
+    width: 500px;
     height: 365px;
     align-self: center;
+  }
+  .content-section {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .recent-experiences {
+    width: 50%;
+    color:var(--primary-text-color)
+  }
+  
+  .experience-box {
+    background-color: var(--recent-experience-box); /* Couleur de fond légère */
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex; /* Utilise Flexbox pour un meilleur contrôle de l'alignement */
+    align-items: center; /* Centre les éléments verticalement */
+    justify-content: space-between; /* Répartit l'espace entre les éléments */
+    overflow: hidden; /* Empêche le débordement du contenu */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    
+  }
+  .experience-box  span{
+
+    color:var(--primary-text-color)
   }

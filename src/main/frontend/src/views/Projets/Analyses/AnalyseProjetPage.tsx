@@ -4,10 +4,16 @@ import ListPage from "../../../components/ListPage/ListPage";
 import ElementsList from "../../../components/ElementsList/ElementsLits";
 import CreateAnalyseModal from "../../../components/Modals/CreateAnalyseModal";
 import ConfirmationArchiverModal from "../../../components/Modals/ConfirmationArchiverModal";
+
+
 import {
   fetchAnalyseProjets,
   getAnalyseProjetWithFilter,
 } from "../../../services/AnalyseProjetService";
+import { createAnalyse, deleteAnalyseById } from "../../../services/AnalyseService";
+
+
+
 interface AnalyseProjetProps {
   idProjet: number;
 }
@@ -41,9 +47,14 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
     console.log("Bouton Ajouter cliqué !");
   };
 
-  const handleCreateAnalyse = (newAnalyse: Analyse) => {
-    console.log("Nouvelle analyse créée:", newAnalyse);
-    setListAnalyses([...listAnalyses, newAnalyse]);
+  const handleCreateAnalyse = async (newAnalyse: Analyse) => {
+    if (newAnalyse !== null) {
+    //setListAnalyses([...listAnalyses, newAnalyse]);
+    await createAnalyse(newAnalyse);
+      const updatedList = [...listAnalyses, newAnalyse];
+      setListAnalyses(updatedList);
+      console.log("Nouvelle analyse créée:", newAnalyse);
+    }
   };
 
   const handleCloseModal = () => {
@@ -60,13 +71,15 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
   const handleDeleteAnalyse = (index: number) => {
     setSelectedAnalyse(index);
     setShowConfirmationModal(true);
-    console.log("Analyse cliquée et supprimée");
+    console.log("Analyse cliquée, pas encore supprimée");
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedAnalyse !== null) {
-      const updatedList = [...listAnalyses];
-      updatedList.splice(selectedAnalyse, 1);
+      /*const updatedList = [...listAnalyses];
+      updatedList.splice(selectedAnalyse, 1);*/
+      await deleteAnalyseById(selectedAnalyse);
+      const updatedList = listAnalyses.filter(analyse => analyse.id_analysis !== selectedAnalyse);
       setListAnalyses(updatedList);
 
       setSelectedAnalyse(null);
@@ -74,6 +87,8 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
       console.log("Analyse supprimée");
     }
   };
+
+
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
@@ -132,6 +147,7 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
       </div>
       {newAnalyseModal && (
         <CreateAnalyseModal
+          idProjet={idProjet}
           onClose={handleCloseModal}
           onCreate={handleCreateAnalyse}
         />

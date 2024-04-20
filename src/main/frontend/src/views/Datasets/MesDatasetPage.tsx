@@ -4,9 +4,11 @@ import ListPage from "../../components/ListPage/ListPage";
 import ElementsList from "../../components/ElementsList/ElementsLits";
 import ConfirmationArchiverModal from "../../components/Modals/ConfirmationArchiverModal";
 import {
+  addDataset,
   fetchDatasets,
   getDatasetsWithFilter,
 } from "../../services/DatasetService";
+import ImportDatasetModel from "../../components/Modals/Datasets/ImportDatasetModel";
 
 const MesDatasetPage = () => {
   const navigate = useNavigate();
@@ -19,33 +21,27 @@ const MesDatasetPage = () => {
   }, []);
 
   const [columns, setColumns] = useState([
-    "Date création",
     "Nom",
+    "Date création",
     "Description",
     "Nom étude",
     "Nom source",
   ]);
-
+  console.log(listDatasets);
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
     searchTerm: "",
   });
-  const [newDatasetSearchModal, setNewDatasetSearchModal] =
-    useState<boolean>(false);
+  const [importDataset, setImportDataset] = useState<boolean>(false);
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
   const [selectedDataset, setSelectedDataset] = useState<number | null>(null);
 
-  const buttonClick = () => {
-    setNewDatasetSearchModal(true);
-    console.log("Bouton Créer cliqué !");
-  };
-
   const handleShowDataset = (index: number) => {
     navigate(`/projets/datasets/${index}/ecg`);
-    console.log("Dataset ouvert !");
+    console.log("Ecg ouvert !");
   };
   const handleFilter = (
     startDate: string,
@@ -92,14 +88,28 @@ const MesDatasetPage = () => {
         .catch((error) => console.error("Error fetching datasets:", error));
     }
   }, [filters]);
+
+  const handleCloseImportModal = () => {
+    setImportDataset(false);
+  };
+
+  const handleImportDatasetModal = async (dataset: Dataset) => {
+    const newDataset = await addDataset(dataset);
+    setListDatasets([...listDatasets, newDataset]);
+  };
+
+  const handleImportDataset = () => {
+    setImportDataset(true);
+    console.log("Bouton Importer cliqué !");
+  };
   return (
     <div>
       <div className="position-relative">
         <ListPage
           title="Mes Datasets"
-          bouton="Créer"
+          bouton="Importer"
           boutonVisible={true}
-          onClick={buttonClick}
+          onClick={handleImportDataset}
           onFilter={handleFilter}
         />
         <div
@@ -120,6 +130,12 @@ const MesDatasetPage = () => {
         onClose={handleCloseConfirmationModal}
         onConfirm={handleConfirmDelete}
       />
+      {importDataset && (
+        <ImportDatasetModel
+          onCreate={handleImportDatasetModal}
+          onClose={handleCloseImportModal}
+        />
+      )}
     </div>
   );
 };

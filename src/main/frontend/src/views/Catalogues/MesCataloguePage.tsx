@@ -3,8 +3,9 @@ import { fetchModels, getModelsWithFilter } from "../../services/ModelService";
 import ModelCard from "../../components/Card/ModelCard";
 import ModelModal from "../../components/Modals/ModelModal";
 import "./CataloguePage.css";
-import HeaderModel from "../../components/HeaderList/HeaderModel";
 import { isTypeOnlyImportDeclaration } from "typescript";
+
+import HeaderModel from "../../components/HeaderList/HeaderModel";
 const MesCataloguePage: React.FC = () => {
   const [models, setModels] = useState<Model[]>([]);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
@@ -35,7 +36,7 @@ const MesCataloguePage: React.FC = () => {
   const [filters, setFilters] = useState({
     nomModel: "",
     typeModel: "",
-    auteurModel: "",
+    searchTerm: "",
   });
   const handleCardClick = (model: Model) => {
     setSelectedModel(model);
@@ -45,11 +46,11 @@ const MesCataloguePage: React.FC = () => {
     setSelectedModel(null);
   };
   useEffect(() => {
-    if (filters.nomModel || filters.typeModel || filters.auteurModel) {
+    if (filters.nomModel || filters.typeModel || filters.searchTerm) {
       getModelsWithFilter(
         filters.nomModel,
         filters.typeModel,
-        filters.auteurModel
+        filters.searchTerm
       )
         .then(setModels)
         .catch((error) => console.error("Error fetching projects:", error));
@@ -61,16 +62,19 @@ const MesCataloguePage: React.FC = () => {
   }, [filters]); // Écoute les changements de filtres
 
   const handleFilter = (
-    nomModel: string,
     typeModel: string,
-    auteurModel: string
+    searchTerm: string,
+    nomModel: string
   ) => {
-    setFilters({ nomModel, typeModel, auteurModel });
+    setFilters({ typeModel, searchTerm, nomModel });
   };
 
   return (
     <div className="catalog-page">
-      <div className="content-head">
+      <div
+        style={{ color: "var(--primary-text-color)" }}
+        className="content-head"
+      >
         <h2>Catalogue des modéles</h2>
       </div>
       <hr />

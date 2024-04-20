@@ -1,6 +1,4 @@
 import "./NavBar.css";
-import userExemple from "./../../assets/exemple-user.png";
-import logo from "./../../assets/IRD.png";
 import Toggle from "../Toggle/Toggle";
 import useLocalStorage from "use-local-storage";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -23,8 +21,11 @@ const NavBar = ({ theme, onThemeChange }: Props) => {
       }}
     >
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          <img src={logo} style={{ height: "70px", width: "auto" }} />
+        <a className="navbar-brand" href="/home">
+          <img
+            src="/assets/IRD.png"
+            style={{ height: "70px", width: "auto" }}
+          />
         </a>
         <div className="d-flex align-items-center">
           <Toggle
@@ -43,7 +44,7 @@ const NavBar = ({ theme, onThemeChange }: Props) => {
               aria-expanded="false"
             >
               <img
-                src={userExemple}
+                src="/assets/exemple-user.png"
                 alt="User"
                 style={{ width: "40px", height: "40px" }}
               />

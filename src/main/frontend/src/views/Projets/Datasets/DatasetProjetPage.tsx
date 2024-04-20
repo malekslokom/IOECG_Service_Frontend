@@ -37,6 +37,7 @@ const DatasetProjetPage: React.FC<DatasetProjetProps> = ({ idProjet }) => {
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
+    
   const [selectedDataset, setSelectedDataset] = useState<number | null>(null);
   useEffect(() => {
     if (filters.startDate || filters.endDate || filters.searchTerm) {
@@ -100,7 +101,7 @@ const DatasetProjetPage: React.FC<DatasetProjetProps> = ({ idProjet }) => {
         <ListPage
           title="Datasets du projet"
           bouton="Créer"
-          boutonVisible={true}
+          boutonVisible={false}
           onClick={buttonClick}
           onFilter={handleFilter}
         />
