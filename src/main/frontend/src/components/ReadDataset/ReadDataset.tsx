@@ -16,13 +16,18 @@ interface ReadDatasetProps {
 const ReadDataset: React.FC<ReadDatasetProps> = ({ id, dataset, ecg, onClose }) => {
   const [showModal, setShowModal] = useState(false); // État pour contrôler l'affichage du modal
   const [selectedEcg, setSelectedEcg] = useState<PatientEcgData | null>(null);
+console.log(showModal)
 
   const handleShowEcg = (id: number) => {
+    console.log(showModal)
+    console.log(id)
     if (id) {
       fetchEcgLead(id)
         .then((ecgData) => {
           setSelectedEcg(ecgData); // Mettre à jour les données de l'ECG sélectionné
           setShowModal(true); // Afficher le modal une fois les données récupérées
+          console.log("showModal")
+          console.log(showModal)
         })
         .catch((error) => console.error("Error fetching ECG data:", error)); // Gérer les erreurs
     }
@@ -90,11 +95,12 @@ const ReadDataset: React.FC<ReadDatasetProps> = ({ id, dataset, ecg, onClose }) 
       </div>
 
       {/* Modal pour afficher les détails de l'ECG */}
+      {showModal&&
       <ShowECGModal
         show={showModal}
         onClose={() => setShowModal(false)}
         ecg_lead={selectedEcg} // Passer les données de l'ECG au modal
-      />
+      />}
     </>
   );
 };

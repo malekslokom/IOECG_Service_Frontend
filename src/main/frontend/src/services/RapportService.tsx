@@ -11,6 +11,8 @@ export async function fetchRapport(): Promise<Rapport[]> {
 
 
 export async function fetchRapportForAnalysis(id_analysis: number): Promise<Rapport[]> {
+  console.log("id_analysis for rapport")
+  console.log(id_analysis)
     const response = await fetch(`${API_BASE_URL}/analyse/${id_analysis}`);
     if (!response.ok) {
         throw new Error('Failed to get rapport for analysis');
@@ -58,17 +60,17 @@ export async function fetchRapportForProject(id_project: number): Promise<Rappor
 
   
   // Filtre pour les rapport
-  export async function getDatasetsWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Rapport[]> {
-    const encodedStartDate = encodeURIComponent(startDate);
-    const encodedEndDate = encodeURIComponent(endDate);
-    const encodedSearchTerm = encodeURIComponent(searchTerm);
-    const response = await fetch(`${API_BASE_URL}/filter?start_date=${encodedStartDate}&end_date=${encodedEndDate}&search_term=${encodedSearchTerm}`);
-    if (!response.ok) {
-      const errorText = await response.text(); // Tente de lire le message d'erreur de la réponse
-      throw new Error(`Failed to get datasets with filter: ${response.status} ${errorText}`);
-    }
-    return await response.json();
-  }
+  // export async function getDatasetsWithFilter(startDate: string, endDate: string, searchTerm: string): Promise<Rapport[]> {
+  //   const encodedStartDate = encodeURIComponent(startDate);
+  //   const encodedEndDate = encodeURIComponent(endDate);
+  //   const encodedSearchTerm = encodeURIComponent(searchTerm);
+  //   const response = await fetch(`${API_BASE_URL}/filter?start_date=${encodedStartDate}&end_date=${encodedEndDate}&search_term=${encodedSearchTerm}`);
+  //   if (!response.ok) {
+  //     const errorText = await response.text(); // Tente de lire le message d'erreur de la réponse
+  //     throw new Error(`Failed to get datasets with filter: ${response.status} ${errorText}`);
+  //   }
+  //   return await response.json();
+  // }
   
 
 // Recuperer les datas pour les info pour la prediction :  

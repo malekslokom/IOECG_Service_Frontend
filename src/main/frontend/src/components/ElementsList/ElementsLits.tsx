@@ -103,7 +103,35 @@ const ElementsList: React.FC<ListProps> = ({
             </tr>
           </thead>
           <tbody>
-            {paginatedElements.map((item, index) => (
+            {/* {paginatedElements.map((item, index) => ( */}
+
+            {paginatedElements.map((item, index) => {
+              // Déterminer la clé en fonction du module
+              let key;
+              switch (nameModule) {
+                case "analyse":
+                case "mesAnalyses":
+                  key = `analyse-${item.id_analysis}`; // Utiliser id_analysis pour les modules d'analyse
+                  break;
+                case "projet":
+                  key = `projet-${item.id_project}`; // Utiliser id_project pour les modules de projet
+                  break;
+                case "dataset":
+                  key = `dataset-${item.id_dataset}`; // Utiliser id_dataset pour les modules de dataset
+                  break;
+                case "experience":
+                  key = `experience-${item.id_experience}`; // Utiliser id_experience pour les modules d'expérience
+                  break;
+                case "rapport":
+                  key = `rapport-${item.id_rapport}`; // Utiliser id_rapport pour les modules de rapport
+                  break;
+                case "ecg":
+                    key = `ecg-${item.id_ecg}`; // Utiliser id_rapport pour les modules de rapport
+                    break;
+                default:
+                  key = `default-${index}`; // Utiliser l'index comme fallback
+                  break;
+              }return (
               <tr
                 key={
                   item.id_project ||
@@ -111,7 +139,7 @@ const ElementsList: React.FC<ListProps> = ({
                   item.id_dataset ||
                   item.id_experience ||
                   item.id_rapport ||
-                  item.id||
+                  item.id||item.id_ecg ||
                   index
                 }
               >
@@ -223,13 +251,15 @@ const ElementsList: React.FC<ListProps> = ({
                     icon={faEye}
                     onClick={() =>
                       onShow(
+                        item.id_analysis ||
                         item.id_project ||
-                          item.id_analysis ||
+                          
                           item.id_dataset ||
                           item.id_experience ||
                           item.id_rapport ||
-                          item.id||
-                          index
+                          item.id_ecg ||
+                          item.id
+                          
                       )
                     }
                     style={{ cursor: "pointer" }}
@@ -249,7 +279,12 @@ const ElementsList: React.FC<ListProps> = ({
                     }
                     style={{ cursor: "pointer" }}
                   />*/}
-          {nameModule != "ecg" && nameModule != "rapportAnalyse" && nameModule != "experienceAnalyse" && (
+          {/* {nameModule != "ecg" && nameModule != "rapportAnalyse" && nameModule != "experienceAnalyse" && ( */}
+            {nameModule != "ecg" && 
+            nameModule != "rapportAnalyse" &&  
+            nameModule != "experienceAnalyse" && 
+            nameModule != "historique" && 
+            (
                   <td>
                    <FontAwesomeIcon
                     icon={faTrash}
@@ -287,7 +322,7 @@ const ElementsList: React.FC<ListProps> = ({
                 </td>
               )}
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       </div>

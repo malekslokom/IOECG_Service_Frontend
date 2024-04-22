@@ -14,9 +14,6 @@ interface Model {
     batch_size: string;
     learning_rate:Float32Array;
     id:number;
-  //  hyperparameters: { [key: string]: string };
-
-   // architectureImage: string;
     task_nature: string;
   }
 
@@ -88,49 +85,19 @@ interface Model {
   numPatients:number;
   numECGs:number;
 }
-/*interface PatientEcgData {
-  patient_id: number;
-  age: number;
-  height: number;
-  weight: number;
-  sex: string;
-  id_ecg:number;
-  recording_started_at: string;
-  recording_ended_at: string;
-  recording_initial_sampling_rate: number;
-  recording_sampling_rate: number;
-  recording_duration: number;
-  protocol_details: string;
-  ecg_filepath: string;
-  lead_i: string;
-  lead_ii: string;
-  lead_iii: string;
-  lead_avr: string;
-  lead_avf: string;
-  lead_avl: string;
-  lead_v1: string;
-  lead_v2: string;
-  lead_v3: string;
-  lead_v4: string;
-  lead_v5: string;
-  lead_v6: string;
-  lead_x: string;
-  lead_y: string;
-  lead_z: string;
-  lead_es: string;
-  lead_as: string;
-  lead_ai: string;
-  id_dataset: number;
-  created_at: string;
-  name_dataset: string;
+interface DatasetProjet {
+  id_dataset :number;
+  created_at : string;
+  name_dataset : string;
   description_dataset: string;
-  type_dataset: string;
-  leads_name: string;
+  type_dataset : 'search_results' | 'standard';
+  leads_name ?: string;
   study_name: string;
-  study_details: string;
-  source_name: string;
-  source_details: string;
-}*/
+  study_details?: string;
+  source_name : string;
+  source_details? : string;
+  id_analysis:(number |null);
+}
 interface PatientEcgData {
   patient_id: number|null;
   age: number|null;
@@ -205,15 +172,15 @@ interface Experience {
   id_experience?: number;
   id_analysis_experience: number;
   name_experience: string;
-  models: (number |undefined)[]; // Tableau des id des modeles de l'experience
-  datasets: (number | undefined)[]; // Tableau des id des datasets de l'experience
+  models: (number)[]; // Tableau des id des modeles de l'experience
+  datasets: (number)[]; // Tableau des id des datasets de l'experience
   nom_machine: string;
   nb_gpu: number;
   nb_processeurs: number;
   heure_lancement: string; 
   heure_fin_prevu: string;
   statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
-  resultat_prediction: number[];
+  resultat_prediction: { [key: string]: number };
 }
 
 interface PredictionData {

@@ -1,13 +1,13 @@
 const API_BASE_URL = "http://localhost:8080/api/projets";
 
-export async function fetchDatasetProjets(id_project: number): Promise<Dataset[]> {
+export async function fetchDatasetProjets(id_project: number): Promise<DatasetProjet[]> {
     const response = await fetch(`${API_BASE_URL}/${id_project}/datasets`);
     if (!response.ok) {
       throw new Error('Failed to fetch projets');
     }
     return await response.json()};
-    
-export async function getDatasetProjetWithFilter(startDate: string, endDate: string, searchTerm: string,id_project:number): Promise<Dataset[]> {
+
+export async function getDatasetProjetWithFilter(startDate: string, endDate: string, searchTerm: string,id_project:number): Promise<DatasetProjet[]> {
     const encodedStartDate = encodeURIComponent(startDate);
     const encodedEndDate = encodeURIComponent(endDate);
     const encodedSearchTerm = encodeURIComponent(searchTerm);
@@ -18,4 +18,4 @@ export async function getDatasetProjetWithFilter(startDate: string, endDate: str
         throw new Error(`Failed to get datasets with filter: ${response.status} ${errorText}`);
     }
     return await response.json();
-    }
+}

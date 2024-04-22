@@ -77,6 +77,16 @@ export async function fetchAnalyseModels(id_analyse:number): Promise<Model[]> {
     return await response.json();
 }
 
+export async function deleteDatasetAnalyse (id_analyse:number,id_dataset:number): Promise<Dataset[]> {
+
+  const response = await fetch(`${API_BASE_URL}/${id_analyse}/datasets/${id_dataset}`,{method:'DELETE'});
+  if (!response.ok) {
+      throw new Error('Failed to delete model from analyse');
+  }
+  return await response.json();
+
+}
+
 
   
 

@@ -1,4 +1,4 @@
-import { faPlusCircle, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
@@ -10,13 +10,12 @@ import ElementsList from "../ElementsList/ElementsLits";
 import CreateExperienceModal from "../Modals/Analyse/CreateExperienceModal";
 import InfoExperienceModal from "../Modals/Analyse/InfoExperienceModal";
 import ConfirmationArchiverModal from "../Modals/ConfirmationArchiverModal";
-import AnalyseModelModal from "../Modals/Analyse/AnalyseModelModal";
 import ReportComparisonModal from "../Rapport/ReportComparisonModals";
+
 import {
   fetchExperienceForAnalysis,
   createExperience,
   updateExperienceStatus,
-  updateExperienceResultat,
 } from "../../services/ExperienceService";
 import {
   fetchRapportForAnalysis,
@@ -27,19 +26,23 @@ import {
   deleteModelAnalyse,
   getAnalyseById,
 } from "../../services/AnalyseService";
+import AnalyseModelModal from "../Modals/Analyse/AnalyseModelModal";
 import { Numbers } from "@mui/icons-material";
 import "./AnalyseShow.css";
 import moment from "moment";
+interface AnalyseShowProps {
+  projectId: any;
+  analyseId:any;
+}
+// const AnalyseShow=() => {
 
-
-const AnalyseShow = () => {
+const AnalyseShow : React.FC<AnalyseShowProps> = ({ projectId,analyseId })=> {
   const [showModalDataset, setShowModalDataset] = useState(false);
   const [ShowModalSearchDataset, setShowModalSearchDataset] = useState(false);
   const [showModalModel, setShowModalModel] = useState(false);
   const [showModalExperience, setShowModalExperience] = useState(false);
   const [showModalInfoExperience, setShowModalInfoExperience] = useState(false);
-  const [showReportComparisonModal, setShowReportComparisonModal] = useState(false);
-
+  const [showModalRapport, setShowModalRapport] = useState(false);
   const [analyse, setAnalyse] = useState<Analyse>({
     created_at: "",
     name_analysis: "",
@@ -58,11 +61,29 @@ const AnalyseShow = () => {
   const [itemTypeToDelete, setItemTypeToDelete] = useState<
     "dataset" | "model" | null
   >(null);
-
-  //const [datasets, setDatasets] = useState<Dataset[]>(selectedDatasets);
-  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null); //Experience selectionnée pour visualiser les informations
   const [selectedReports, setSelectedReports] = useState<number[]>([]); 
+  const [showReportComparisonModal, setShowReportComparisonModal] = useState(false);
 
+console.log(projectId)
+console.log("analyseId")
+
+console.log(analyseId)
+const id  = analyseId;
+  //const [datasets, setDatasets] = useState<Dataset[]>(selectedDatasets);
+  const [selectedExperience, setSelectedExperience] = useState<Experience>({
+    id_experience: 1,
+    id_analysis_experience: 1,
+    name_experience: "Test",
+    models: [],
+    datasets: [],
+    nom_machine: "",
+    nb_gpu: 0,
+    nb_processeurs: 0,
+    heure_lancement: "",
+    heure_fin_prevu: "",
+    statut: "En cours",
+    resultat_prediction: {},
+  }); //Experience selectionnée pour visualiser les informations
   const navigate = useNavigate();
 
   const [columnsExperience, setColumnsExperience] = useState([
@@ -77,21 +98,21 @@ const AnalyseShow = () => {
     "Date Creation",
   ]);
 
-  const { id } = useParams();
+   
   const [datasets, setDatasets] = useState<DatasetAnalyse[]>([]);
   const [models, setModels] = useState<Model[]>([]);
-  console.log(id);
+  // console.log(id);
   useEffect(() => {
-    const analyseId = id ? parseInt(id, 10) : -1;
-    getAnalyseById(analyseId)
+    const idAnalyse = analyseId ? parseInt(analyseId, 10) : -1;
+    getAnalyseById(idAnalyse)
       .then((data) => setAnalyse(data))
       .catch((error) => console.error("Error fetching analyse", error));
-  }, [id]);
+  }, [analyseId]);
 
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
-        const response = await fetch(`/api/analyses/${id}/datasets`);
+        const response = await fetch(`/api/analyses/${analyseId}/datasets`);
         if (!response.ok) {
           throw new Error("Failed to fetch datasets");
         }
@@ -104,7 +125,7 @@ const AnalyseShow = () => {
 
     const fetchAnalyseModels = async () => {
       try {
-        const response = await fetch(`/api/analyses/${id}/models`);
+        const response = await fetch(`/api/analyses/${analyseId}/models`);
         if (!response.ok) {
           throw new Error("Failed to fetch models");
         }
@@ -118,9 +139,8 @@ const AnalyseShow = () => {
 
     fetchDatasets();
     fetchAnalyseModels();
-  }, [id]);
+  }, [analyseId]);
 
-  ////////////////////////////////////////////////DATASET  & MODELS FUNCTIONS////////////////////////////////////////////////////////////
   const handleOpenModalDataset = () => {
     setShowModalDataset(true);
   };
@@ -145,7 +165,7 @@ const AnalyseShow = () => {
   // Function to add new datasets
   const handleAddDatasetToAnalyse = async (newDatasets: Dataset[]) => {
     try {
-      const response = await fetch(`/api/analyses/${id}/datasets`, {
+      const response = await fetch(`/api/analyses/${analyseId}/datasets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -194,7 +214,7 @@ const AnalyseShow = () => {
   const handleDeleteDatasetAnalyse = async (datasetId: number) => {
     try {
       const response = await fetch(
-        `/api/analyses/${id}/datasets/${datasetId}`,
+        `/api/analyses/${analyseId}/datasets/${datasetId}`,
         {
           method: "DELETE",
         }
@@ -210,7 +230,6 @@ const AnalyseShow = () => {
       console.error("Error deleting dataset:", error);
     }
   };
-
   const handleDatasetCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, dataset: Dataset) => {
     const isChecked = e.target.checked;
   
@@ -220,7 +239,6 @@ const AnalyseShow = () => {
       setSelectedDatasets((prevSelectedDatasets) => prevSelectedDatasets.filter((dataset) => dataset.id_dataset !== dataset.id_dataset));
     }
   };
-
   const handleModelCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, model: Model) => {
     const isChecked = e.target.checked;
   
@@ -426,6 +444,8 @@ const AnalyseShow = () => {
             Recherche
           </button>
         </div>
+
+
         <div className="row ">
           <div className="col-md-6">
             <div
@@ -450,7 +470,7 @@ const AnalyseShow = () => {
                   >
                     Exécuter
                   </button>
-                </div>
+                  </div>
               </div>
               <hr style={{ color: "#555" }} />
               <div className="overflow-auto">
@@ -475,7 +495,7 @@ const AnalyseShow = () => {
                 <div className="mt-1 me-2" onClick={handleOpenModalDataset}>
                   <FontAwesomeIcon
                     icon={faPlusCircle}
-                    style={{ color: "#E30613", fontSize: "1.2em", cursor: "pointer" }}
+                    style={{ color: "#E30613", fontSize: "1.2em" }}
                   />
                 </div>
               </div>
@@ -511,11 +531,12 @@ const AnalyseShow = () => {
                           }
                           style={{ cursor: "pointer" }}
                         />
-                      </td>
+                        </td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
+              
             </div>
           </div>
         </div>
@@ -636,7 +657,7 @@ const AnalyseShow = () => {
                         <FontAwesomeIcon
                           icon={faTrash}
                           className="icon-trash"
-                          onClick={() => handleDeleteModelToAnalyse(model.id)}
+                          onClick={() => handleDeleteModelClick(model.id)}
                           style={{ cursor: "pointer" }}
                         />
                       </td>
@@ -682,6 +703,12 @@ const AnalyseShow = () => {
           onClose={handleCloseInfoExperience}
         />
       )}
+
+<ConfirmationArchiverModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        onConfirm={confirmDeleteItem}
+      />
 
     </div>
   );

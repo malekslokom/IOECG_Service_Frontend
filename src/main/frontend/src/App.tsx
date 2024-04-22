@@ -17,7 +17,7 @@ import ConsulterProjetPage from "./views/Projets/ListProjets/ConsulterProjetPage
 import ListEcgPage from "./views/Projets/Ecg/ListEcgPage";
 import ConsulterRapport from "./views/Projets/Rapports/ConsulterRapport";
 import MesAnalysesPage from "./views/Analyses/MesAnalysesPage";
-
+import ConsulterDataset from "./views/Projets/Datasets/ConsulterDataset";
 function App() {
   const [isDark, setIsDark] = useState(() => {
     const themePreference = localStorage.getItem("themePreference");
@@ -53,8 +53,9 @@ function App() {
             <Route path="/mes-datasets" element={<MesDatasetPage />} />
             <Route path="/historique" element={<HistoriquePage />} />
             {/* Autres routes */}
-            <Route path="projets/:id/analyses/:id" element={<ConsulterAnalyse />} />
-            <Route path="projets/datasets/:id/ecg" element={<ListEcgPage />} />
+            <Route path="projets/:projectId/analyses/:analyseId" element={<ConsulterAnalyse />} />
+            {/* <Route path="projets/datasets/:id/ecg" element={<ListEcgPage />} /> */}
+            <Route path="projets/datasets/:id/ecg" element={<ConsulterDataset />} />
             <Route path="projets/analyse/:id/rapport" element={<ConsulterRapport />} />
             <Route path="projets/:id/rapports/:id" element={<ConsulterRapport />} />
           </Routes>

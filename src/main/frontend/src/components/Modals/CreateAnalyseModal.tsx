@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
@@ -30,8 +31,9 @@ const CreateAnalyseModal: React.FC<CreateAnalyseModalProps> = ({
 
     const newAnalyse: Analyse = {
       id_project: idProjet,
-      created_at: new Date().toLocaleDateString("fr-FR"),
-      last_updated_at: new Date().toLocaleDateString("fr-FR"),
+      // created_at: new Date().toLocaleDateString("fr-FR"),
+      created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+      last_updated_at: moment().format("YYYY-MM-DD HH:mm:ss"),
       name_analysis: name,
       description_analysis: description,
       created_by: "Andy", // Vous pouvez remplacer par le nom de l'utilisateur actuel

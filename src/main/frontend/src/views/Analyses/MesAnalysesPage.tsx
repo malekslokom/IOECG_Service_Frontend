@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ListPage from "../../components/ListPage/ListPage";
 import CreateAnalyseModal from "../../components/Modals/CreateAnalyseModal";
 import ElementsList from "../../components/ElementsList/ElementsLits";
@@ -44,10 +44,10 @@ const MesAnalysesPage = () => {
     setNewAnalyseSearchModal(true);
     console.log("Bouton Créer cliqué !");
   };
-
+  const { id } = useParams();
   const handleShowAnalyse = (index: number) => {
    //navigate(`/projets/analyses/${index}`);
-    navigate(`/projets/1/analyses/${index}`);
+    navigate(`/projets/${id}/analyses/${index}`);
     console.log("Analyse ouverte !");
   };
   const handleFilter = (

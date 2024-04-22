@@ -16,6 +16,7 @@ import { createAnalyse, deleteAnalyseById } from "../../../services/AnalyseServi
 
 interface AnalyseProjetProps {
   idProjet: number;
+
 }
 const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
   const [listAnalyses, setListAnalyses] = useState<Analyse[]>([]);
@@ -51,10 +52,15 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
     if (newAnalyse !== null) {
     //setListAnalyses([...listAnalyses, newAnalyse]);
     await createAnalyse(newAnalyse);
-      const updatedList = [...listAnalyses, newAnalyse];
-      setListAnalyses(updatedList);
+      // const updatedList = [...listAnalyses, newAnalyse];
+      // setListAnalyses(updatedList);
       console.log("Nouvelle analyse créée:", newAnalyse);
-    }
+    
+    
+     await fetchAnalyseProjets(idProjet)
+        .then((data) => setListAnalyses(data))
+        .catch((error) => console.error("Error fetching analyses:", error));
+      }
   };
 
   const handleCloseModal = () => {
@@ -63,7 +69,11 @@ const AnalyseProjetPage: React.FC<AnalyseProjetProps> = ({ idProjet }) => {
 
   /*Ouvrir une analyse */
   const handleShowAnalyse = (index: number) => {
+
+    console.log("index")
+    console.log(index)
     navigate(`/projets/${idProjet}/analyses/${index}`);
+    
     console.log("Analyse ouverte");
   };
 

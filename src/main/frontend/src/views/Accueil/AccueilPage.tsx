@@ -108,7 +108,7 @@ const AccueilPage = () => {
           {recentExperiences.map((exp) => (
             <div className="experience-box" key={exp.id_experience}>
               <span>
-                {exp.name_experience} - résultat: {exp.resultat_prediction}-
+                {exp.name_experience} -
                 status : {exp.statut}
               </span>
             </div>
