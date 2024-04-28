@@ -41,5 +41,6 @@ export async function createProject(newProjet: Projet): Promise<Projet> {
   if (!response.ok) {
       throw new Error('Failed to create project');
   }
-  return await response.json();
+  const responseData = await response.json();
+  return responseData.id_project; 
 }

@@ -8,7 +8,6 @@ console.log( useParams())
     	 <div> 
             <AnalyseShow projectId={projectId} analyseId={analyseId} />
          </div>
-// idProjet={idProjet} idAnalyse={idAnalyse}
      );
 }
 

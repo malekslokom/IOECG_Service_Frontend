@@ -112,24 +112,24 @@ interface PatientEcgData {
   recording_duration: number|null;
   protocol_details: string|null;
   ecg_filepath: string|null;
-  lead_i:  number[]; // Modification ici
-  lead_ii: number[]; // Modification ici
-  lead_iii: number[]; // Modification ici
-  lead_avr:  number[]; // Modification ici
-  lead_avf: number[]; // Modification ici
-  lead_avl:  number[]; // Modification ici
-  lead_v1:  number[]; // Modification ici
-  lead_v2: number[]; // Modification ici
-  lead_v3:  number[]; // Modification ici
-  lead_v4:number[]; // Modification ici
-  lead_v5:  number[]; // Modification ici
-  lead_v6:  number[]; // Modification ici
-  lead_x: number[]; // Modification ici
-  lead_y:number[]; // Modification ici
-  lead_z:  number[]; // Modification ici
-  lead_es: number[]; // Modification ici
-  lead_as:  number[]; // Modification ici
-  lead_ai: number[]; // Modification ici
+  lead_i:  number[]; 
+  lead_ii: number[]; 
+  lead_iii: number[]; 
+  lead_avr:  number[]; 
+  lead_avf: number[]; 
+  lead_avl:  number[]; 
+  lead_v1:  number[]; 
+  lead_v2: number[]; 
+  lead_v3:  number[]; 
+  lead_v4:number[]; 
+  lead_v5:  number[]; 
+  lead_v6:  number[]; 
+  lead_x: number[]; 
+  lead_y:number[]; 
+  lead_z:  number[]; 
+  lead_es: number[]; 
+  lead_as:  number[]; 
+  lead_ai: number[]; 
   id_dataset: number;
   created_at: string|null;
   name_dataset: string|null;
@@ -179,7 +179,7 @@ interface Experience {
   nb_processeurs: number;
   heure_lancement: string; 
   heure_fin_prevu: string;
-  statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours' ou 'Terminé'
+  statut: 'En cours' | 'Terminé'; // Statut doit être soit 'En cours', soit 'Terminé'
   resultat_prediction: { [key: string]: number };
 }
 

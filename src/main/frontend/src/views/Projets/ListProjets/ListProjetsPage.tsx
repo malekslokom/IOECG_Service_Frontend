@@ -74,7 +74,10 @@ const ListProjetsPage = () => {
     console.log("Nouveau projet créé:", newProjet);
     const createdProjet = await createProject(newProjet);
     console.log("Projet créé avec succès:", createdProjet);
-    setListProjets([...listProjets, newProjet]);
+    await fetchProjets()
+      .then((data) => setListProjets(data))
+      .catch((error) => console.error("Error fetching projets:", error));
+    //setListProjets([...listProjets, newProjet]);
   };
 
   const handleCloseModal = () => {
